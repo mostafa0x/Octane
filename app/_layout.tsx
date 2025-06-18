@@ -1,7 +1,8 @@
-import { View, Text, SafeAreaView } from 'react-native';
+import { View, Text } from 'react-native';
 import { Stack } from 'expo-router';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { PaperProvider } from 'react-native-paper';
+import '../global.css';
 
 export default function RootLayout() {
   return (
