@@ -1,21 +1,15 @@
-import { View, Text, TouchableOpacity } from 'react-native';
-import React from 'react';
-import { Image } from 'expo-image';
-import InputField from 'components/form/InputField';
-import { Button } from 'react-native-paper';
-import { MotiView } from 'moti'; // ✨ هنا
-
-const logo = require('../../../../assets/logo.png');
+import { View, Text, TouchableOpacity } from 'react-native'
+import React from 'react'
+import { Image } from 'expo-image'
+import InputField from 'components/form/InputField'
+import { Button } from 'react-native-paper'
+const logo = require('../../../../assets/logo.png')
 
 export default function SignIn() {
   return (
-    <MotiView
-      from={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 700 }}
-      className="flex-1 justify-between">
+    <View className="flex-1 justify-between">
       <View className="flex-2 mb-[90px] items-center p-10 pt-20">
-        <Image source={logo} contentFit="fill" style={{ width: 200, height: 125 }} />
+        <Image source={logo} contentFit="contain" style={{ width: 200, height: 125 }} />
       </View>
 
       <View className="flex-1 bg-white px-5 pt-16">
@@ -42,6 +36,6 @@ export default function SignIn() {
           </TouchableOpacity>
         </View>
       </View>
-    </MotiView>
-  );
+    </View>
+  )
 }
