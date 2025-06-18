@@ -7,12 +7,13 @@ interface props {
   lable: string
   name: string
   formik: any
+  errorMes: string | null
 }
 
-function InputField({ lable, name, formik }: props) {
+function InputField({ lable, name, formik, errorMes }: props) {
   const [showPassword, setShowPassword] = useState(false)
   const isPassword = name === 'password'
-  const isError: boolean = formik.touched?.[name] && !!formik.errors?.[name]
+  const isError: boolean = errorMes ? errorMes : formik.touched?.[name] && !!formik.errors?.[name]
 
   return (
     <View className="gap-4">

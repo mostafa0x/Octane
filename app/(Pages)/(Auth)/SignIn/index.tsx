@@ -6,19 +6,23 @@ import { ActivityIndicator, Button, HelperText } from 'react-native-paper'
 import { useFormik } from 'formik'
 import { LoginSchema } from 'lib/Vaildtions/SignInValid'
 import axios from 'axios'
+import { storeUserInfo } from 'Services/Storage'
+import { useRouter } from 'expo-router'
 const logo = require('../../../../assets/logo.png')
 
 export default function SignIn() {
   const [errorMes, setErrorMes] = useState<string | null>(null)
   const [isLoadingBtn, setIsLoadingBtn] = useState(false)
-
+  const router = useRouter()
   async function handleLogin(formValues: any) {
     if (!isLoadingBtn) {
       setErrorMes(null)
       setIsLoadingBtn(true)
       try {
         const res = await axios.post('https://octane-nine.vercel.app/api/auth/login', formValues)
-        console.log(res.data)
+        const data = res.data
+        console.log(data)
+        await storeUserInfo(data.token, data.user, router)
       } catch (err: any) {
         setIsLoadingBtn(false)
         console.log(err.response.data.message ?? 'Error Login')
@@ -47,8 +51,8 @@ export default function SignIn() {
         </View>
 
         <View className="gap-10">
-          <InputField lable="Email Address" name="email" formik={formik} />
-          <InputField lable="Password" name="password" formik={formik} />
+          <InputField lable="Email Address" name="email" errorMes={errorMes} formik={formik} />
+          <InputField lable="Password" name="password" errorMes={errorMes} formik={formik} />
         </View>
 
         <View className="mt-10 gap-12">
