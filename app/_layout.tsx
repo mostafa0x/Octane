@@ -5,16 +5,19 @@ import { PaperProvider } from 'react-native-paper'
 import '../global.css'
 import { Provider } from 'react-redux'
 import { Store } from 'lib/Store'
+import ProtectRoutingProvider from 'Providers/ProtectRouting'
 export default function RootLayout() {
   return (
     <Provider store={Store}>
-      <SafeAreaProvider>
-        <PaperProvider>
-          <SafeAreaView style={{ flex: 1 }}>
-            <Stack screenOptions={{ headerShown: false }} />
-          </SafeAreaView>
-        </PaperProvider>
-      </SafeAreaProvider>
+      <PaperProvider>
+        <SafeAreaProvider>
+          <ProtectRoutingProvider>
+            <SafeAreaView style={{ flex: 1 }}>
+              <Stack screenOptions={{ headerShown: false }} />
+            </SafeAreaView>
+          </ProtectRoutingProvider>
+        </SafeAreaProvider>
+      </PaperProvider>
     </Provider>
   )
 }

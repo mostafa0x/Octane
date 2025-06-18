@@ -2,6 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.backgroundColor {
+.bgColor {
   background-color: white;
 }

@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
+import React, { useCallback, useState } from 'react'
 import { Image } from 'expo-image'
 import InputField from 'components/form/InputField'
 import { ActivityIndicator, Button, HelperText } from 'react-native-paper'
@@ -7,8 +7,9 @@ import { useFormik } from 'formik'
 import { LoginSchema } from 'lib/Vaildtions/SignInValid'
 import axios from 'axios'
 import { storeUserInfo } from 'Services/Storage'
-import { useRouter } from 'expo-router'
-const logo = require('../../../../assets/logo.png')
+import { useFocusEffect, useRouter } from 'expo-router'
+import { API_BASE_URL } from 'config'
+const logo = require('../../../../assets/mainLogo.png')
 
 export default function SignIn() {
   const [errorMes, setErrorMes] = useState<string | null>(null)
@@ -19,7 +20,7 @@ export default function SignIn() {
       setErrorMes(null)
       setIsLoadingBtn(true)
       try {
-        const res = await axios.post('https://octane-nine.vercel.app/api/auth/login', formValues)
+        const res = await axios.post(`${API_BASE_URL}/auth/login`, formValues)
         const data = res.data
         console.log(data)
         await storeUserInfo(data.token, data.user, router)
@@ -30,6 +31,7 @@ export default function SignIn() {
       }
     }
   }
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -39,46 +41,74 @@ export default function SignIn() {
     onSubmit: handleLogin,
   })
 
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        formik.resetForm()
+        setIsLoadingBtn(false)
+        setErrorMes(null)
+      }
+    }, [])
+  )
+
   return (
-    <View className="flex-1 justify-between">
-      <View className="flex-2 mb-[90px] items-center p-10 pt-20">
-        <Image source={logo} contentFit="contain" style={{ width: 200, height: 125 }} />
-      </View>
-
-      <View className="flex-1 bg-white px-5 pt-16">
-        <View className="mb-8">
-          <Text className="text-4xl text-[#562b6a]">Welcome!</Text>
+    <ScrollView contentContainerStyle={{ flexGrow: 1, flex: 1, backgroundColor: 'white' }}>
+      <View className="flex-1">
+        <View style={{ width: '100%', height: 300 }}>
+          <Image source={logo} contentFit="contain" style={{ width: '100%', height: '100%' }} />
         </View>
 
-        <View className="gap-10">
-          <InputField lable="Email Address" name="email" errorMes={errorMes} formik={formik} />
-          <InputField lable="Password" name="password" errorMes={errorMes} formik={formik} />
-        </View>
-
-        <View className="mt-10 gap-12">
-          {isLoadingBtn ? (
-            <ActivityIndicator size={50} />
-          ) : (
-            <Button
-              onPress={() => formik.handleSubmit()}
-              style={{ backgroundColor: '#562b6a', height: 75, borderRadius: 30 }}
-              contentStyle={{ height: 75, alignItems: 'center', justifyContent: 'center' }}
-              labelStyle={{ fontSize: 20, fontWeight: 'bold' }}
-              textColor="white">
-              Login
-            </Button>
-          )}
-          <View className="items-center">
-            <HelperText style={{ fontSize: 20 }} type="error" visible={!!errorMes}>
-              {errorMes}
-            </HelperText>
+        <View className="px-5 pt-10">
+          <View className="mb-8">
+            <Text style={{ color: '#721d59' }} className="text-4xl ">
+              Welcome!
+            </Text>
           </View>
 
-          <TouchableOpacity className="items-center">
-            <Text className="w-[245px] text-xl text-[#562b6a]">Not a member? Register now</Text>
-          </TouchableOpacity>
+          <View className="mt-10 gap-4">
+            <InputField lable="Email Address" name="email" errorMes={errorMes} formik={formik} />
+            <InputField lable="Password" name="password" errorMes={errorMes} formik={formik} />
+          </View>
+
+          <View className="mt-10 gap-8">
+            {isLoadingBtn ? (
+              <ActivityIndicator size={70} />
+            ) : (
+              <Button
+                onPress={() => formik.handleSubmit()}
+                style={{
+                  backgroundColor: '#721d59',
+                  height: 75,
+                  borderRadius: 30,
+                }}
+                contentStyle={{
+                  height: 75,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                labelStyle={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
+                Login
+              </Button>
+            )}
+            <View className="items-center">
+              <HelperText
+                style={{ fontSize: 20, color: '#e03c3c' }}
+                type="error"
+                visible={!!errorMes}>
+                {errorMes}
+              </HelperText>
+            </View>
+
+            <TouchableOpacity
+              onPress={() => !isLoadingBtn && router.push('/SignUp')}
+              className="items-center">
+              <Text style={{ color: '#721d59' }} className={` w-[245px] text-xl`}>
+                Not a member? Register now
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   )
 }

@@ -1,5 +1,5 @@
 import { UserSliceFace } from './UserSliceFace'
 
-interface StateFace {
+export interface StateFace {
   UserReducer: UserSliceFace
 }
