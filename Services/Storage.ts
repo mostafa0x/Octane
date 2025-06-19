@@ -15,8 +15,10 @@ export const storeUserInfo = async (
       ['@userData', JSON.stringify(userData)],
       ['@userToken', userToken],
     ])
-    dispatch(changeAuthLoading(1))
-    // router.replace('/')
+
+    dispatch(fillUserInfo({ userToken, userData }))
+
+    router.replace('/')
   } catch (error) {
     console.error('Error saving user info:', error)
   }

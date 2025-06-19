@@ -13,7 +13,15 @@ interface props {
 function InputField({ lable, name, formik, errorMes }: props) {
   const [showPassword, setShowPassword] = useState(false)
   const isPassword = ['password', 'repassword'].includes(name)
-  const isError: boolean = errorMes ? errorMes : formik.touched?.[name] && !!formik.errors?.[name]
+  const isError: boolean =
+    errorMes !== 'User already exists' && errorMes
+      ? errorMes
+      : formik.touched?.[name] && !!formik.errors?.[name]
+  const isErrorEmail = errorMes == 'User already exists' && name == 'email'
+
+  // useEffect(() => {
+  //   return () => {}
+  // }, [formik.handleChange('email')])
 
   return (
     <>
@@ -23,7 +31,7 @@ function InputField({ lable, name, formik, errorMes }: props) {
         style={{
           borderRadius: 10,
           borderWidth: 2,
-          borderColor: isError ? '#e03c3c' : '#EDF1F3',
+          borderColor: isError || isErrorEmail ? '#e03c3c' : '#EDF1F3',
         }}>
         <TextInput
           onSubmitEditing={() => isPassword && formik.handleSubmit()}

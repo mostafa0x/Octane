@@ -10,37 +10,40 @@ import { storeUserInfo } from 'Services/Storage'
 import { useFocusEffect, useRouter } from 'expo-router'
 import { API_BASE_URL } from 'config'
 import { useDispatch } from 'react-redux'
+import { SignUpvalidationSchema } from 'lib/Vaildtions/SignupSchema'
 const logo = require('../../../../assets/mainLogo.png')
+const backImg = require('../../../../assets/backn.png')
 
 export default function SignUp() {
   const [errorMes, setErrorMes] = useState<string | null>(null)
   const [isLoadingBtn, setIsLoadingBtn] = useState(false)
   const router = useRouter()
   const dispatch = useDispatch()
-  async function handleLogin(formValues: any) {
+  async function handleSignUp(formValues: any) {
     if (!isLoadingBtn) {
       setErrorMes(null)
       setIsLoadingBtn(true)
       try {
-        const res = await axios.post(`${API_BASE_URL}/auth/login`, formValues)
+        const res = await axios.post(`${API_BASE_URL}/auth/signup`, formValues)
         const data = res.data
         console.log(data)
         await storeUserInfo(data.token, data.user, router, dispatch)
       } catch (err: any) {
         setIsLoadingBtn(false)
-        console.log(err.response.data.message ?? 'Error Login')
-        setErrorMes(err.response.data.message ?? 'Error Login')
+        console.log(err.response.data.message ?? 'Error Sign up')
+        setErrorMes(err.response.data.message ?? 'Error Sign up')
       }
     }
   }
 
   const formik = useFormik({
     initialValues: {
+      name: 'adam',
       email: 'sasa@octane-tech.io',
       password: '123456789',
     },
-    validationSchema: LoginSchema,
-    onSubmit: handleLogin,
+    validationSchema: SignUpvalidationSchema,
+    onSubmit: handleSignUp,
   })
 
   useFocusEffect(
@@ -56,16 +59,18 @@ export default function SignUp() {
   return (
     <ScrollView
       contentContainerStyle={{
-        paddingBottom: 100,
         backgroundColor: '#661534',
       }}
       style={{ flex: 1 }}
       keyboardShouldPersistTaps="handled">
+      <View className="absolute left-[0] top-[200px] " style={{ width: '100%' }}>
+        <Image style={{ width: '100%', height: 200 }} contentFit="fill" source={backImg} />
+      </View>
       <View className="flex-1">
-        <View style={{ width: '100%', height: 350 }}>
+        <View style={{ width: '100%', height: 300 }}>
           <Image source={logo} contentFit="fill" style={{ width: '100%', height: '100%' }} />
         </View>
-        <View className="h-full rounded-2xl bg-white  p-6 pb-[85px]">
+        <View className="h-full rounded-[40px] bg-white  p-6 pb-[85px]">
           <View className="h-[60px] flex-row items-center justify-center space-x-2 rounded-[7px] border-2 border-[#F5F6F9] bg-[#F5F6F9] p-0.5">
             <Button
               onPress={() => router.push('/SignIn')}
@@ -101,12 +106,7 @@ export default function SignUp() {
           </View>
           <View className="mt-15">
             <View className="mt-10">
-              <InputField
-                lable={'Usernmae'}
-                name={'username'}
-                formik={formik}
-                errorMes={errorMes}
-              />
+              <InputField lable={'Usernmae'} name={'name'} formik={formik} errorMes={errorMes} />
               <InputField lable={'Email'} name={'email'} formik={formik} errorMes={errorMes} />
               <InputField
                 lable={'Password'}
@@ -114,14 +114,8 @@ export default function SignUp() {
                 formik={formik}
                 errorMes={errorMes}
               />
-              <InputField
-                lable={'Confirm Password'}
-                name={'repassword'}
-                formik={formik}
-                errorMes={errorMes}
-              />
             </View>
-            <View className="mt-[40px]">
+            <View className="mt-[10px]">
               {isLoadingBtn ? (
                 <ActivityIndicator size={70} />
               ) : (

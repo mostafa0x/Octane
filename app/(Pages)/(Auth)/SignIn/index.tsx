@@ -11,6 +11,7 @@ import { useFocusEffect, useRouter } from 'expo-router'
 import { API_BASE_URL } from 'config'
 import { useDispatch } from 'react-redux'
 const logo = require('../../../../assets/mainLogo.png')
+const backImg = require('../../../../assets/backn.png')
 
 export default function SignIn() {
   const [errorMes, setErrorMes] = useState<string | null>(null)
@@ -60,11 +61,16 @@ export default function SignIn() {
       }}
       style={{ flex: 1 }}
       keyboardShouldPersistTaps="handled">
+      <View className="absolute left-[0] top-[200px] " style={{ width: '100%' }}>
+        <Image style={{ width: '100%', height: 200 }} contentFit="fill" source={backImg} />
+      </View>
+
       <View className="flex-1">
-        <View style={{ width: '100%', height: 350 }}>
+        <View style={{ width: '100%', height: 300 }}>
           <Image source={logo} contentFit="fill" style={{ width: '100%', height: '100%' }} />
         </View>
-        <View className="h-full rounded-2xl bg-white  p-6 pb-[85px]">
+
+        <View className="h-full rounded-[40px] bg-white  p-6 pb-[85px]">
           <View className="h-[60px] flex-row items-center justify-center space-x-2 rounded-[7px] border-2 border-[#F5F6F9] bg-[#F5F6F9] p-0.5">
             <Button
               mode="contained"
