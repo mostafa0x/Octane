@@ -6,16 +6,17 @@ import '../global.css'
 import { Provider } from 'react-redux'
 import { Store } from 'lib/Store'
 import ProtectRoutingProvider from 'Providers/ProtectRouting'
+import Providers from 'Providers/Providers'
 export default function RootLayout() {
   return (
     <Provider store={Store}>
       <PaperProvider>
         <SafeAreaProvider>
-          <ProtectRoutingProvider>
+          <Providers>
             <SafeAreaView style={{ flex: 1 }}>
               <Stack screenOptions={{ headerShown: false }} />
             </SafeAreaView>
-          </ProtectRoutingProvider>
+          </Providers>
         </SafeAreaProvider>
       </PaperProvider>
     </Provider>

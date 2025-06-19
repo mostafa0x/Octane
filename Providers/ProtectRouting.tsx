@@ -14,6 +14,16 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
   const pathName = usePathname()
 
   useEffect(() => {
+    console.log('runApp')
+    async function handleGetInfo() {
+      await getUserInfo(dispatch)
+      setAuthLoading(0)
+    }
+    handleGetInfo()
+    return () => {}
+  }, [])
+
+  useEffect(() => {
     if (authLoading == 0 || authLoading == 1) {
       if (pathName == '/') {
         if (userToken) {
@@ -31,22 +41,6 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
       }
     }
   }, [userToken, authLoading, pathName])
-
-  useFocusEffect(
-    useCallback(() => {
-      console.log('runApp')
-      async function handleGetInfo() {
-        await getUserInfo(dispatch)
-        setAuthLoading(0)
-      }
-
-      handleGetInfo()
-
-      return () => {
-        console.log('CloseApp')
-      }
-    }, [userToken])
-  )
 
   return authLoading == -1 ? (
     <View className="flex-1 items-center justify-center">
