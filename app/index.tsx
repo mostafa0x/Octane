@@ -7,7 +7,7 @@ export default function Home() {
 
   return (
     <View style={{ flex: 1 }}>
-      <IconButton icon="menu" onPress={openDrawer} />
+      <IconButton size={30} icon="menu" onPress={openDrawer} />
 
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text variant="titleLarge">Home Screen</Text>

@@ -1,16 +1,22 @@
 // src/services/storage.ts
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Router } from 'expo-router'
-import { fillUserInfo } from 'lib/Store/Slices/UserSlice'
+import { changeAuthLoading, fillUserInfo } from 'lib/Store/Slices/UserSlice'
 import { userDataFace } from 'Types/Store/UserSliceFace'
 
-export const storeUserInfo = async (userToken: string, userData: userDataFace, router: Router) => {
+export const storeUserInfo = async (
+  userToken: string,
+  userData: userDataFace,
+  router: Router,
+  dispatch: any
+) => {
   try {
     await AsyncStorage.multiSet([
       ['@userData', JSON.stringify(userData)],
       ['@userToken', userToken],
     ])
-    router.replace('/')
+    dispatch(changeAuthLoading(1))
+    // router.replace('/')
   } catch (error) {
     console.error('Error saving user info:', error)
   }

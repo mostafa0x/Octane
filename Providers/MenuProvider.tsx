@@ -9,6 +9,9 @@ import {
 } from 'react-native'
 import React, { createContext, useCallback, useContext, useRef, useState } from 'react'
 import { Drawer } from 'react-native-paper'
+import handleLoutOut from 'Services/handleLogOut'
+import { useDispatch } from 'react-redux'
+import { useRouter } from 'expo-router'
 
 export const MenuContext = createContext({
   openDrawer: () => {},
@@ -23,6 +26,11 @@ export default function MenuProvider({ children }: { children: React.ReactNode }
   const translateX = useRef(new Animated.Value(-drawerWidth)).current
   const [active, setActive] = useState('home')
   const [isOpen, setIsOpen] = useState(false)
+  const dispatch = useDispatch()
+  const router = useRouter()
+  async function callLogOut() {
+    await handleLoutOut(dispatch, router)
+  }
 
   const openDrawer = useCallback(() => {
     setIsOpen(true)
@@ -35,7 +43,7 @@ export default function MenuProvider({ children }: { children: React.ReactNode }
 
   const closeDrawer = useCallback(() => {
     Animated.timing(translateX, {
-      toValue: -drawerWidth,
+      toValue: -drawerWidth - 100,
       duration: 250,
       useNativeDriver: true,
     }).start(() => setIsOpen(false))
@@ -44,7 +52,7 @@ export default function MenuProvider({ children }: { children: React.ReactNode }
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: (_, gestureState) => {
-        return gestureState.dx > 15 && gestureState.moveX < 30
+        return gestureState.dx > 15 && gestureState.moveX < 40
       },
       onPanResponderMove: (_, gestureState) => {
         if (gestureState.dx > 0 && gestureState.dx <= drawerWidth) {
@@ -87,8 +95,9 @@ export default function MenuProvider({ children }: { children: React.ReactNode }
               />
               <Drawer.Item
                 label="Log out"
-                active={active === 'profile'}
+                active={active === 'logout'}
                 onPress={() => {
+                  callLogOut()
                   setActive('Log out')
                   closeDrawer()
                 }}

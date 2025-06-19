@@ -3,14 +3,15 @@ import { userDataFace, UserSliceFace } from 'Types/Store/UserSliceFace'
 
 interface ActionInfo {
   payload: {
-    userToken: string
-    userData: userDataFace
+    userToken: string | null
+    userData: userDataFace | null
   }
   type: string
 }
 const initialState: UserSliceFace = {
   userToken: null,
   userData: null,
+  authLoading: -1,
 }
 const UserSlice = createSlice({
   name: 'UserSlice',
@@ -20,8 +21,11 @@ const UserSlice = createSlice({
       state.userToken = action.payload.userToken
       state.userData = action.payload.userData
     },
+    changeAuthLoading: (state, action) => {
+      state.authLoading = action.payload
+    },
   },
 })
 
 export const UserReducer = UserSlice.reducer
-export const { fillUserInfo } = UserSlice.actions
+export const { fillUserInfo, changeAuthLoading } = UserSlice.actions

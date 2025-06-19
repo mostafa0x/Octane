@@ -12,34 +12,35 @@ interface props {
 
 function InputField({ lable, name, formik, errorMes }: props) {
   const [showPassword, setShowPassword] = useState(false)
-  const isPassword = name === 'password'
+  const isPassword = ['password', 'repassword'].includes(name)
   const isError: boolean = errorMes ? errorMes : formik.touched?.[name] && !!formik.errors?.[name]
 
   return (
     <>
-      <Text className="text-xl text-[#721d59]">{lable}</Text>
+      <Text className="mb-2 text-[16px] text-[#6C7278]">{lable}</Text>
       <View
-        className="flex-row items-center rounded-3xl px-4 py-2"
+        className="flex-row items-center  px-4 py-2"
         style={{
+          borderRadius: 10,
           borderWidth: 2,
-          borderColor: isError ? '#e03c3c' : '#721d59',
+          borderColor: isError ? '#e03c3c' : '#EDF1F3',
         }}>
         <TextInput
           onSubmitEditing={() => isPassword && formik.handleSubmit()}
           onChangeText={formik.handleChange(name)}
           onBlur={formik.handleBlur(name)}
           value={formik.values?.[name]}
-          style={{ flex: 1, height: 50 }}
+          style={{ flex: 1, height: 50, fontSize: 14 }}
           placeholder={lable}
           secureTextEntry={isPassword && !showPassword}
         />
         {isPassword && (
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-            <Feather name={showPassword ? 'eye' : 'eye-off'} size={24} color="white" />
+            <Feather name={showPassword ? 'eye' : 'eye-off'} color={'#ACB5BB'} size={20} />
           </TouchableOpacity>
         )}
       </View>
-      <HelperText style={{ fontSize: 16, color: 'red' }} type="error" visible={isError}>
+      <HelperText style={{ fontSize: 14, color: 'red' }} type="error" visible={isError}>
         {formik.errors?.[name]}
       </HelperText>
     </>

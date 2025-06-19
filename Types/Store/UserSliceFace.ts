@@ -1,6 +1,7 @@
 export interface UserSliceFace {
   userToken: string | null
   userData: userDataFace | null
+  authLoading: number
 }
 
 export interface userDataFace {
