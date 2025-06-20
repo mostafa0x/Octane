@@ -8,8 +8,8 @@ import { getUserInfo } from 'Services/Storage'
 
 export default function ProtectRoutingProvider({ children }: { children: React.ReactNode }) {
   const { userToken } = useSelector((state: StateFace) => state.UserReducer)
-  const [loading, setLoading] = useState(true)
-
+  const [isMountApp, setMountApp] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const dispatch = useDispatch()
   const router = useRouter()
   const pathName = usePathname()
@@ -17,26 +17,28 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
   useEffect(() => {
     async function init() {
       await getUserInfo(dispatch)
-      setLoading(false)
+      setMountApp(true)
     }
     init()
   }, [])
 
   useEffect(() => {
-    if (!loading) {
+    if (isMountApp) {
       if (userToken) {
-        if (pathName === '/SignIn' || pathName === '/SignUp') {
+        if (pathName === '/Auth') {
           router.replace('/')
         }
       } else {
         if (pathName === '/') {
-          router.replace('/SignIn')
+          router.replace('/Auth')
+        } else {
         }
       }
+      setIsLoading(false)
     }
-  }, [loading, userToken, pathName])
+  }, [isMountApp, userToken, pathName])
 
-  if (loading) {
+  if (isLoading) {
     return (
       <View className="flex-1 items-center justify-center">
         <ActivityIndicator size={100} />
