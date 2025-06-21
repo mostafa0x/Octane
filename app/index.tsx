@@ -14,7 +14,7 @@ const backImg = require('../assets/backn.png')
 const nfcIcon = require('../assets/nfc.png')
 
 export default function Home() {
-  const { acknowledgments_Current, acknowledgments_Monthly } = useSelector(
+  const { acknowledgments_Current, allocated, submitted } = useSelector(
     (state: StateFace) => state.MainReducer
   )
   const dispatch = useDispatch()
@@ -53,7 +53,7 @@ export default function Home() {
             <View className=" ml-4 mt-2 items-center ">
               <Progress.Circle
                 size={100}
-                progress={0.5}
+                progress={allocated > 0 ? submitted / allocated : 0}
                 showsText={false}
                 color="#0068FF"
                 unfilledColor="#F1FFF3"
@@ -69,16 +69,25 @@ export default function Home() {
           <View className=" ml-[50px] flex-col justify-between">
             <View className=" flex-row items-center gap-3">
               <Icon size={60} source={nfcIcon} />
-              <View className=" flex-col">
-                <Text className="text-[15px]  text-[#052224]">Submitted</Text>
-                <Text style={{ fontSize: 18, color: '#052224', fontWeight: 'bold' }}>5000</Text>
+              <View className=" flex-col items-center">
+                <Text className="text-[15px]  text-[#052224]">Allocated</Text>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    color: '#052224',
+                    fontWeight: 'bold',
+                  }}>
+                  {allocated}
+                </Text>
               </View>
             </View>
             <View className=" flex-row items-center gap-3">
               <Icon size={60} color="#0068FF" source={nfcIcon} />
-              <View className=" flex-col">
+              <View className=" flex-col items-center">
                 <Text className="text-[15px]  text-[#052224]">Submitted</Text>
-                <Text style={{ fontSize: 18, color: '#0068FF', fontWeight: 'bold' }}>+5000</Text>
+                <Text style={{ fontSize: 18, color: '#0068FF', fontWeight: 'bold' }}>
+                  +{submitted}
+                </Text>
               </View>
             </View>
           </View>

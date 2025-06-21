@@ -21,6 +21,12 @@ const MainSlice = createSlice({
   name: 'MainSlice',
   initialState,
   reducers: {
+    SetAllocated: (state, action) => {
+      state.allocated = action.payload
+    },
+    SetSubmitted: (state, action) => {
+      state.submitted = action.payload
+    },
     SetAcknowledgments_Current: (state, action) => {
       if (action.payload == 'daily') {
         state.acknowledgments_Current = state.acknowledgments_Daily
@@ -44,4 +50,5 @@ const MainSlice = createSlice({
 })
 
 export const MainReducer = MainSlice.reducer
-export const { SetAcknowledgments, SetAcknowledgments_Current } = MainSlice.actions
+export const { SetAcknowledgments, SetAcknowledgments_Current, SetAllocated, SetSubmitted } =
+  MainSlice.actions

@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'expo-router'
 import { ActivityIndicator } from 'react-native-paper'
 import { getUserInfo } from 'Services/Storage'
 import { GetAcknowledgments } from 'Services/GetAcknowledgments'
+import { GetNfcs } from 'Services/GetNfs'
 
 export default function ProtectRoutingProvider({ children }: { children: React.ReactNode }) {
   const { userToken } = useSelector((state: StateFace) => state.UserReducer)
@@ -25,6 +26,7 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
 
   useEffect(() => {
     async function handleGetData() {
+      await GetNfcs(dispatch)
       await GetAcknowledgments('monthly', dispatch)
       await GetAcknowledgments('weekly', dispatch)
       await GetAcknowledgments('daily', dispatch)
