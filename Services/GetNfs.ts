@@ -13,6 +13,6 @@ export const GetNfcs = async (dispatch: any) => {
     dispatch(SetAllocated(data.allocated))
     dispatch(SetSubmitted(data.submitted))
   } catch (err: any) {
-    console.log(err)
+    throw err
   }
 }

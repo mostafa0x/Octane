@@ -1,6 +1,6 @@
 import { useMenuContext } from 'Providers/MenuProvider'
 import { TouchableOpacity, View } from 'react-native'
-import { Text, IconButton, Icon, Button } from 'react-native-paper'
+import { Text, IconButton, Icon, Button, Searchbar } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import * as Progress from 'react-native-progress'
 import { Image } from 'expo-image'
@@ -9,7 +9,7 @@ import { FlashList } from '@shopify/flash-list'
 import ItemCard from 'components/List/ItemCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
-import { SetAcknowledgments_Current } from 'lib/Store/Slices/MainSlice'
+import { SearchAcknowledgments, SetAcknowledgments_Current } from 'lib/Store/Slices/MainSlice'
 const backImg = require('../assets/backn.png')
 const nfcIcon = require('../assets/nfc.png')
 
@@ -17,9 +17,16 @@ export default function Home() {
   const { acknowledgments_Current, allocated, submitted } = useSelector(
     (state: StateFace) => state.MainReducer
   )
+  const [searchQuery, setSearchQuery] = useState('')
+
   const dispatch = useDispatch()
   const { openDrawer } = useMenuContext()
   const [activeList, setActiveList] = useState('daily')
+
+  function handleSerach(text: string) {
+    setSearchQuery(text)
+    dispatch(SearchAcknowledgments(text))
+  }
 
   function handleActive(period: string) {
     const nameLower = period.toLocaleLowerCase()
@@ -147,6 +154,7 @@ export default function Home() {
             </Button>
           </TouchableOpacity>
         </View>
+        <Searchbar placeholder="Search" onChangeText={handleSerach} value={searchQuery} />
         {/* List */}
         <View style={{ height: 320, width: '100%' }}>
           <FlashList
@@ -155,6 +163,11 @@ export default function Home() {
             keyExtractor={(item, index) => index.toString()}
             contentContainerStyle={{ paddingBottom: 20 }}
             renderItem={({ item }) => <ItemCard item={item} />}
+            ListEmptyComponent={() => (
+              <View className="mt-32 items-center justify-center">
+                <Text className="text-2xl opacity-70">Empty</Text>
+              </View>
+            )}
           />
         </View>
       </View>

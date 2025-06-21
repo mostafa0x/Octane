@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { View } from 'react-native'
 import { Text, Icon, Avatar } from 'react-native-paper'
 import { acknowledgmentsFace } from 'Types/Store/MainSliceFace'
@@ -13,6 +13,12 @@ const ItemCard = ({ item }: Props) => {
     if (item.delivery_method.length <= 20) return 12
     return 10
   }, [item.delivery_method])
+
+  // useEffect(() => {
+  //   console.log(item.image)
+
+  //   return () => {}
+  // }, [])
 
   return (
     <View className="flex-row items-center gap-5 border-b border-gray-200 p-4">

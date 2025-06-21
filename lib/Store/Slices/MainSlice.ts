@@ -21,6 +21,18 @@ const MainSlice = createSlice({
   name: 'MainSlice',
   initialState,
   reducers: {
+    SearchAcknowledgments: (state, action) => {
+      const keyword = action.payload.toLowerCase()
+      const sourceList = state.acknowledgments_Current
+
+      const filtered = sourceList.filter(
+        (item: any) =>
+          item.company.name.toLowerCase().includes(keyword) ||
+          item.company.id.toLowerCase().includes(keyword)
+      )
+
+      state.acknowledgments_Current = filtered
+    },
     SetAllocated: (state, action) => {
       state.allocated = action.payload
     },
@@ -50,5 +62,10 @@ const MainSlice = createSlice({
 })
 
 export const MainReducer = MainSlice.reducer
-export const { SetAcknowledgments, SetAcknowledgments_Current, SetAllocated, SetSubmitted } =
-  MainSlice.actions
+export const {
+  SetAcknowledgments,
+  SetAcknowledgments_Current,
+  SetAllocated,
+  SetSubmitted,
+  SearchAcknowledgments,
+} = MainSlice.actions

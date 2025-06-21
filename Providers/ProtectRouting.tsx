@@ -1,9 +1,9 @@
-import { View } from 'react-native'
+import { View, Text } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
 import { usePathname, useRouter } from 'expo-router'
-import { ActivityIndicator } from 'react-native-paper'
+import { ActivityIndicator, Button } from 'react-native-paper'
 import { getUserInfo } from 'Services/Storage'
 import { GetAcknowledgments } from 'Services/GetAcknowledgments'
 import { GetNfcs } from 'Services/GetNfs'
@@ -12,6 +12,7 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
   const { userToken } = useSelector((state: StateFace) => state.UserReducer)
   const [isMountApp, setMountApp] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [isError, setIsError] = useState<string | null>(null)
   const dispatch = useDispatch()
   const router = useRouter()
   const pathName = usePathname()
@@ -24,13 +25,25 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
     init()
   }, [])
 
-  useEffect(() => {
-    async function handleGetData() {
-      await GetNfcs(dispatch)
+  async function GetData() {
+    setIsLoading(true)
+    setIsError(null)
+    try {
+      console.log('load data...')
       await GetAcknowledgments('monthly', dispatch)
+      await GetNfcs(dispatch)
       await GetAcknowledgments('weekly', dispatch)
       await GetAcknowledgments('daily', dispatch)
       setIsLoading(false)
+    } catch (err: any) {
+      setIsError(err?.response?.data?.message ?? 'Error Loading !')
+      console.log(err?.response?.data?.message ?? 'error')
+    }
+  }
+
+  useEffect(() => {
+    async function handleGetData() {
+      GetData()
     }
     if (isMountApp) {
       if (userToken) {
@@ -48,6 +61,17 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
       //  setIsLoading(false)
     }
   }, [isMountApp, userToken, pathName])
+
+  if (isError) {
+    return (
+      <View className="flex-1 items-center justify-center gap-4">
+        <Text style={{ fontSize: 18, color: 'red', textAlign: 'center' }}>{isError}</Text>
+        <Button mode="contained" onPress={() => setIsLoading(true)}>
+          Try Again
+        </Button>
+      </View>
+    )
+  }
 
   if (isLoading) {
     return (
