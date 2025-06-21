@@ -4,7 +4,7 @@ import { Text, IconButton, Icon, Button, Searchbar } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import * as Progress from 'react-native-progress'
 import { Image } from 'expo-image'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { FlashList } from '@shopify/flash-list'
 import ItemCard from 'components/List/ItemCard'
 import { useDispatch, useSelector } from 'react-redux'
@@ -19,6 +19,7 @@ export default function Home() {
     (state: StateFace) => state.MainReducer
   )
   const { userData } = useSelector((state: StateFace) => state.UserReducer)
+
   const [searchQuery, setSearchQuery] = useState('')
   const dispatch = useDispatch()
   const { openDrawer } = useMenuContext()
@@ -34,6 +35,10 @@ export default function Home() {
     setActiveList(nameLower)
     dispatch(SetAcknowledgments_Current(nameLower))
   }
+  useEffect(() => {
+    handleActive('daily')
+    return () => {}
+  }, [])
 
   return (
     <Animatable.View

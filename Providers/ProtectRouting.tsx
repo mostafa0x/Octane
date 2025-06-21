@@ -49,7 +49,7 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
     if (isMountApp) {
       if (userToken) {
         if (pathName === '/Auth') {
-          router.replace('/')
+          //router.replace('/')
         }
         handleGetData()
       } else {

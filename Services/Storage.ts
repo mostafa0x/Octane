@@ -15,7 +15,6 @@ export const storeUserInfo = async (
       ['@userData', JSON.stringify(userData)],
       ['@userToken', userToken],
     ])
-
     dispatch(fillUserInfo({ userToken, userData }))
   } catch (error) {
     console.error('Error saving user info:', error)
