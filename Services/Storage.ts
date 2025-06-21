@@ -17,8 +17,6 @@ export const storeUserInfo = async (
     ])
 
     dispatch(fillUserInfo({ userToken, userData }))
-
-    router.replace('/')
   } catch (error) {
     console.error('Error saving user info:', error)
   }

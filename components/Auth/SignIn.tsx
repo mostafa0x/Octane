@@ -28,6 +28,7 @@ export default function SignIn() {
         const data = res.data
         console.log(data)
         await storeUserInfo(data.token, data.user, router, dispatch)
+        // router.replace('/')
       } catch (err: any) {
         setIsLoadingBtn(false)
         console.log(err.response.data.message ?? 'Error Login')

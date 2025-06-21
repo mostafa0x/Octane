@@ -8,7 +8,7 @@ interface dataFace {
 }
 export const GetNfcs = async (dispatch: any) => {
   try {
-    const res = await axiosClient(`${API_BASE_URL}/users/nfcs`)
+    const res = await axiosClient.get(`${API_BASE_URL}/users/nfcs`)
     const data: dataFace = res.data
     dispatch(SetAllocated(data.allocated))
     dispatch(SetSubmitted(data.submitted))

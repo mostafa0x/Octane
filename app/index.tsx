@@ -1,10 +1,10 @@
 import { useMenuContext } from 'Providers/MenuProvider'
-import { TouchableOpacity, View } from 'react-native'
+import { Animated, TouchableOpacity, View } from 'react-native'
 import { Text, IconButton, Icon, Button, Searchbar } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import * as Progress from 'react-native-progress'
 import { Image } from 'expo-image'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { FlashList } from '@shopify/flash-list'
 import ItemCard from 'components/List/ItemCard'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,20 +12,21 @@ import { StateFace } from 'Types/Store/StateFace'
 import { SearchAcknowledgments, SetAcknowledgments_Current } from 'lib/Store/Slices/MainSlice'
 const backImg = require('../assets/backn.png')
 const nfcIcon = require('../assets/nfc.png')
+import { Appbar } from 'react-native-paper'
 
 export default function Home() {
   const { acknowledgments_Current, allocated, submitted } = useSelector(
     (state: StateFace) => state.MainReducer
   )
+  const { userData } = useSelector((state: StateFace) => state.UserReducer)
   const [searchQuery, setSearchQuery] = useState('')
-
   const dispatch = useDispatch()
   const { openDrawer } = useMenuContext()
   const [activeList, setActiveList] = useState('daily')
 
   function handleSerach(text: string) {
     setSearchQuery(text)
-    dispatch(SearchAcknowledgments(text))
+    dispatch(SearchAcknowledgments({ keyword: text, period: activeList }))
   }
 
   function handleActive(period: string) {
@@ -40,14 +41,22 @@ export default function Home() {
       animation="fadeIn"
       duration={800}
       easing="ease-in-out">
-      <View className="absolute left-[0] top-[200px] " style={{ width: '100%' }}>
-        <Image style={{ width: '100%', height: 200 }} contentFit="fill" source={backImg} />
+      <View className="absolute left-[0] top-[0px] " style={{ width: '100%', height: '100%' }}>
+        <Image style={{ width: '100%', height: '100%' }} contentFit="fill" source={backImg} />
       </View>
       {/* Lines */}
       <View className=" absolute left-[233] top-[350] z-50 h-[145px] w-[2px]  rounded-2xl bg-white"></View>
       <View className=" absolute left-[258] top-[425] z-50 h-0.5 w-[161] rounded-2xl bg-white"></View>
       {/* Info */}
-      <View className=" absolute left-[0px] top-[0px] z-50"></View>
+      <View className=" absolute left-[0px] top-[0px] z-50 w-full">
+        <View className="h-[60px] w-full bg-black opacity-30"></View>
+        <Text style={{ color: '#F1FFF3', fontSize: 24 }}>
+          Hi, Welcome Back{' '}
+          <Text style={{ color: '#F1FFF3', fontSize: 24 }}> {userData?.name}</Text>{' '}
+        </Text>
+      </View>
+      {/*App Bar */}
+
       {/*Body */}
       <View style={{ height: 300 }}>
         <Image source={backImg} contentFit="fill" style={{ width: '100%', height: '100%' }} />
@@ -154,7 +163,9 @@ export default function Home() {
             </Button>
           </TouchableOpacity>
         </View>
-        <Searchbar placeholder="Search" onChangeText={handleSerach} value={searchQuery} />
+        <View className="m-4  w-[400px]">
+          <Searchbar placeholder="Search" value={searchQuery} onChangeText={handleSerach} />
+        </View>
         {/* List */}
         <View style={{ height: 320, width: '100%' }}>
           <FlashList

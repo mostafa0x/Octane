@@ -10,10 +10,11 @@ import { storeUserInfo } from 'Services/Storage'
 import { useFocusEffect, useRouter } from 'expo-router'
 import { API_BASE_URL } from 'config'
 import { useDispatch } from 'react-redux'
-import SignIn from '../../../components/Auth/SignIn'
-import SignUp from '../../../components/Auth/SignUp'
-const logo = require('../../../assets/mainLogo.png')
-const backImg = require('../../../assets/backn.png')
+import SignIn from 'components/Auth/SignIn'
+import SignUp from 'components/Auth/SignUp'
+
+const logo = require('assets/mainLogo.png')
+const backImg = require('assets/backn.png')
 
 export default function Auth() {
   const router = useRouter()

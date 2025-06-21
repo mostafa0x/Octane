@@ -28,16 +28,17 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
   async function GetData() {
     setIsLoading(true)
     setIsError(null)
+
     try {
       console.log('load data...')
-      await GetAcknowledgments('monthly', dispatch)
       await GetNfcs(dispatch)
+      await GetAcknowledgments('monthly', dispatch)
       await GetAcknowledgments('weekly', dispatch)
       await GetAcknowledgments('daily', dispatch)
       setIsLoading(false)
     } catch (err: any) {
-      setIsError(err?.response?.data?.message ?? 'Error Loading !')
-      console.log(err?.response?.data?.message ?? 'error')
+      setIsError(err?.response?.data?.message ?? 'Something went wrong !')
+      console.log(err ?? 'Something went wrong')
     }
   }
 
@@ -64,9 +65,9 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
 
   if (isError) {
     return (
-      <View className="flex-1 items-center justify-center gap-4">
-        <Text style={{ fontSize: 18, color: 'red', textAlign: 'center' }}>{isError}</Text>
-        <Button mode="contained" onPress={() => setIsLoading(true)}>
+      <View className="flex-1 items-center justify-center gap-10">
+        <Text style={{ fontSize: 26, color: 'red', textAlign: 'center' }}>{isError}</Text>
+        <Button mode="contained" onPress={GetData}>
           Try Again
         </Button>
       </View>
