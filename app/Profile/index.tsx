@@ -4,12 +4,21 @@ import { Avatar, Button, Icon } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
 import { useRouter } from 'expo-router'
+import { useDispatch, useSelector } from 'react-redux'
+import { StateFace } from 'Types/Store/StateFace'
+import handleLoutOut from 'Services/handleLogOut'
 
 const backImg = require('../../assets/backn.png')
 const nfcIcon = require('../../assets/nfc.png')
 
 export default function Profile() {
+  const { userData } = useSelector((state: StateFace) => state.UserReducer)
   const router = useRouter()
+  const dispatch = useDispatch()
+
+  async function callLogOut() {
+    await handleLoutOut(dispatch, router)
+  }
   return (
     <Animatable.View
       animation="fadeIn"
@@ -29,11 +38,8 @@ export default function Profile() {
             <Icon size={40} color="white" source={'keyboard-backspace'} />
           </View>
         </TouchableOpacity>
-        <View className=" absolute left-[60px] top-[10px] z-10">
-          <Text style={{ color: '#F1FFF3', fontSize: 24 }}>
-            Profile
-            <Text style={{ color: '#F1FFF3', fontSize: 24 }}> sasa</Text>
-          </Text>
+        <View className=" absolute left-[60px] top-[10px] z-10 w-full">
+          <Text style={{ color: '#F1FFF3', fontSize: 24, width: '100%' }}>Profile</Text>
         </View>
         <View className="h-[60px] w-full rounded-b-3xl bg-black opacity-40"></View>
       </View>
@@ -59,33 +65,22 @@ export default function Profile() {
       <View className="h-full rounded-t-[70px] bg-white  p-20  px-6 pb-[85px] pt-28">
         {/* Header */}
         <View className="items-center">
-          <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Username</Text>
-          <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
-            ID: <Text style={{ fontSize: 12 }}>5454</Text>
-          </Text>
+          <Text style={{ fontSize: 28, fontWeight: 'bold' }}>{userData?.name}</Text>
+          {/* <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
+            ID: <Text style={{ fontSize: 12 }}>{userData?.id}</Text>
+          </Text> */}
         </View>
         <View className="mt-10 gap-10">
           <View className="flex-row items-center gap-4">
             <View className="h-[60px] w-[60px] items-center justify-center rounded-[22px] bg-[#6DB6FE]">
               <Icon size={40} source={'email-outline'} />
             </View>
-            <Text style={{ width: '100%', fontSize: 16 }}>sasa@gmail.com</Text>
+            <Text style={{ width: '100%', fontSize: 16 }}>{userData?.email}</Text>
           </View>
-          <View className="flex-row items-center gap-4">
-            <View className="h-[60px] w-[60px] items-center justify-center rounded-[22px] bg-[#6DB6FE]">
-              <Icon size={40} source={'information-outline'} />
-            </View>
-            <Text style={{ width: '100%', fontSize: 16 }}>About me !</Text>
-          </View>
-          <TouchableOpacity className="flex-row items-center  gap-4">
-            <View className="h-[60px] w-[60px] items-center justify-center rounded-[22px] bg-[#6DB6FE]">
-              <Icon size={40} source={'help'} />
-            </View>
-            <Text style={{ width: '100%', fontSize: 16 }}>Help</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className="flex-row items-center  gap-4">
+
+          <TouchableOpacity onPress={callLogOut} className="flex-row items-center  gap-4">
             <View className="h-[60px] w-[60px] items-center justify-center rounded-[22px] bg-[#eb9053]">
-              <Icon size={40} source={'information-outline'} />
+              <Icon size={40} source={'logout'} />
             </View>
             <Text style={{ width: '100%', fontSize: 16 }}>Log Out</Text>
           </TouchableOpacity>

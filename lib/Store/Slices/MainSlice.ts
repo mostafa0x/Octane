@@ -19,34 +19,7 @@ const initialState: MainSliceFace = {
   allocated: 0,
   submitted: 0,
   acknowledgments_Current: [],
-  acknowledgments_Daily: [
-    {
-      submission_date: '2025-06-17',
-      company: {
-        id: 2,
-        code: 456,
-        name: 'company 2',
-      },
-      cards_submitted: 25,
-      submission_type: 'replacement',
-      delivery_method: 'octane_employee',
-      image: 'https://example-image.com',
-      state_time: 'on-Time',
-    },
-    {
-      submission_date: '2025-06-07',
-      company: {
-        id: 1,
-        code: 123,
-        name: 'company 1',
-      },
-      cards_submitted: 10,
-      submission_type: 'existing_customer',
-      delivery_method: 'office_receival',
-      image: 'https://example-image.com',
-      state_time: 'on-Time',
-    },
-  ],
+  acknowledgments_Daily: [],
   acknowledgments_Weekly: [],
   acknowledgments_Monthly: [],
 }

@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
 import { usePathname, useRouter } from 'expo-router'
@@ -7,9 +7,10 @@ import { ActivityIndicator, Button } from 'react-native-paper'
 import { getUserInfo } from 'Services/Storage'
 import { GetAcknowledgments } from 'Services/GetAcknowledgments'
 import { GetNfcs } from 'Services/GetNfs'
+import { ChangeLoadedData } from 'lib/Store/Slices/UserSlice'
 
 export default function ProtectRoutingProvider({ children }: { children: React.ReactNode }) {
-  const { userToken } = useSelector((state: StateFace) => state.UserReducer)
+  const { userToken, isLoadedData } = useSelector((state: StateFace) => state.UserReducer)
   const [isMountApp, setMountApp] = useState(false)
   const [isGetData, setIsGetData] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -28,9 +29,10 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
     init()
   }, [])
 
-  async function GetData() {
+  const GetData = useCallback(async () => {
     setIsLoading(true)
     setIsError(null)
+    dispatch(ChangeLoadedData(true))
 
     try {
       console.log('load data...')
@@ -39,12 +41,12 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
       await GetAcknowledgments('weekly', dispatch)
       await GetAcknowledgments('daily', dispatch)
       setIsLoading(false)
-      setIsGetData(true)
+      // setIsGetData(true)
     } catch (err: any) {
       setIsError(err?.response?.data?.message ?? 'Something went wrong !')
       console.log(err ?? 'Something went wrong')
     }
-  }
+  }, [])
 
   useEffect(() => {
     async function handleGetData() {
@@ -53,9 +55,9 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
     if (isMountApp) {
       if (userToken) {
         if (pathName === '/Auth') {
-          //router.replace('/')
+          isLoadedData && router.replace('/')
         }
-        !isGetData && handleGetData()
+        !isLoadedData && handleGetData()
       } else {
         if (pathName === '/' && '/Profile') {
           router.replace('/Auth')

@@ -12,11 +12,15 @@ const initialState: UserSliceFace = {
   userToken: null,
   userData: null,
   authLoading: -1,
+  isLoadedData: false,
 }
 const UserSlice = createSlice({
   name: 'UserSlice',
   initialState,
   reducers: {
+    ChangeLoadedData: (state, action) => {
+      state.isLoadedData = action.payload
+    },
     fillUserInfo: (state, action: ActionInfo) => {
       state.userToken = action.payload.userToken
       state.userData = action.payload.userData
@@ -28,4 +32,4 @@ const UserSlice = createSlice({
 })
 
 export const UserReducer = UserSlice.reducer
-export const { fillUserInfo, changeAuthLoading } = UserSlice.actions
+export const { fillUserInfo, changeAuthLoading, ChangeLoadedData } = UserSlice.actions

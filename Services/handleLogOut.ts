@@ -1,16 +1,17 @@
-import { changeAuthLoading, fillUserInfo } from 'lib/Store/Slices/UserSlice'
+import { changeAuthLoading, ChangeLoadedData, fillUserInfo } from 'lib/Store/Slices/UserSlice'
 import { clearUserInfo } from './Storage'
 import { Router } from 'expo-router'
 import { ClearMainData } from 'lib/Store/Slices/MainSlice'
 
-export default async function handleLoutOut(dispath: any, router: Router) {
+export default async function handleLoutOut(dispatch: any, router: Router) {
   try {
-    dispath(changeAuthLoading(-2))
+    dispatch(changeAuthLoading(-2))
     await clearUserInfo()
-    dispath(ClearMainData(null))
-    dispath(fillUserInfo({ userData: null, userToken: null }))
+    dispatch(ClearMainData(null))
+    dispatch(fillUserInfo({ userData: null, userToken: null }))
+    dispatch(ChangeLoadedData(false))
     router.replace('/Auth')
-    dispath(changeAuthLoading(0))
+    dispatch(changeAuthLoading(0))
   } catch (err: any) {
     console.log(err)
   }
