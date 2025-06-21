@@ -19,7 +19,7 @@ export const MenuContext = createContext({
 })
 
 const screenWidth = Dimensions.get('window').width
-const drawerWidth = screenWidth * 0.65
+const drawerWidth = screenWidth * 0.7
 export const useMenuContext = () => useContext(MenuContext)
 
 export default function MenuProvider({ children }: { children: React.ReactNode }) {
@@ -84,15 +84,17 @@ export default function MenuProvider({ children }: { children: React.ReactNode }
             },
           ]}>
           <View>
-            <Drawer.Section title="User">
+            <Drawer.Section title="Profile">
+              <Text style={{ marginLeft: 26 }}>email@gmail.com</Text>
               <Drawer.Item
-                label="Home"
+                label="upload Photo"
                 active={active === 'home'}
                 onPress={() => {
                   setActive('home')
                   closeDrawer()
                 }}
               />
+
               <Drawer.Item
                 label="Log out"
                 active={active === 'logout'}

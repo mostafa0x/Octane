@@ -63,21 +63,28 @@ export default function Home() {
       <View className=" absolute left-[258] top-[425] z-50 h-0.5 w-[161] rounded-2xl bg-white"></View>
       {/* Info */}
       <View className=" absolute left-[0px] top-[0px] z-50 w-full">
-        <View className=" absolute left-0 top-0 z-10">
+        <TouchableOpacity onPress={() => openDrawer()} className=" absolute left-[10px] top-0 z-10">
           <Image
             style={{ width: 50, height: 50 }}
             contentFit="cover"
             source={require('../assets/LogowithoutTXT.png')}
           />
-        </View>
-        <View className=" absolute left-[50px] top-[10px] z-10">
+        </TouchableOpacity>
+        <View className=" absolute left-[60px] top-[10px] z-10">
           <Text style={{ color: '#F1FFF3', fontSize: 24 }}>
             Hi, Welcome Back
             <Text style={{ color: '#F1FFF3', fontSize: 24 }}> {userData?.name}</Text>
           </Text>
         </View>
         <View className="h-[60px] w-full rounded-b-3xl bg-black opacity-40"></View>
+        <View className="mt-10 gap-2 p-10">
+          <Text style={{ color: '#EEEEEE', fontSize: 26, fontWeight: 'bold' }}>Made for You</Text>
+          <Text style={{ color: '#EEEEEE', fontSize: 18, marginLeft: 15 }}>
+            Get Things Done Efficiently and Accurately
+          </Text>
+        </View>
       </View>
+
       {/*App Bar */}
 
       {/*Body */}
@@ -86,8 +93,7 @@ export default function Home() {
       </View>
       {/* Card */}
       <View className="h-full items-center rounded-t-[70px] bg-white px-[36px]  py-[28px] pb-[85px]">
-        <View className="h-[200px] w-[400px] flex-row  rounded-[31px] bg-[#00D09E] px-[36px] py-[28px]">
-          <View></View>
+        <View className="h-[200px] w-[400px] flex-row  rounded-[31px] bg-[#8d1c47] px-[36px] py-[28px]">
           <View className=" justify-center">
             <View className=" ml-4 mt-2 items-center ">
               <Progress.Circle
@@ -99,21 +105,25 @@ export default function Home() {
                 borderWidth={0}
                 thickness={3.25}
               />
-              <View className=" absolute left-[3] top-[2]">
-                <Icon source={nfcIcon} size={100} />
+              <View className=" absolute left-[1.7] top-[2]">
+                <Icon source={nfcIcon} color="white" size={100} />
               </View>
-              <Text className="mt-2 text-xl text-[#093030]">NFC tracker</Text>
+              <Text style={{ color: '#bdcdce' }} className="mt-2 text-xl ">
+                NFC tracker
+              </Text>
             </View>
           </View>
           <View className=" ml-[50px] flex-col justify-between">
             <View className=" flex-row items-center gap-3">
-              <Icon size={60} source={nfcIcon} />
+              <Icon size={60} color="#bdcdce" source={nfcIcon} />
               <View className=" flex-col items-center">
-                <Text className="text-[15px]  text-[#052224]">Allocated</Text>
+                <Text style={{ color: '#bdcdce' }} className="text-[15px]  ">
+                  Allocated
+                </Text>
                 <Text
                   style={{
                     fontSize: 18,
-                    color: '#052224',
+                    color: '#f7f7f7',
                     fontWeight: 'bold',
                   }}>
                   {allocated}
@@ -121,10 +131,12 @@ export default function Home() {
               </View>
             </View>
             <View className=" flex-row items-center gap-3">
-              <Icon size={60} color="#0068FF" source={nfcIcon} />
+              <Icon size={60} color="#5c9dff" source={nfcIcon} />
               <View className=" flex-col items-center">
-                <Text className="text-[15px]  text-[#052224]">Submitted</Text>
-                <Text style={{ fontSize: 18, color: '#0068FF', fontWeight: 'bold' }}>
+                <Text style={{ color: '#bdcdce' }} className="text-[15px] ">
+                  Submitted
+                </Text>
+                <Text style={{ fontSize: 18, color: '#5c9dff', fontWeight: 'bold' }}>
                   +{submitted}
                 </Text>
               </View>
@@ -132,7 +144,7 @@ export default function Home() {
           </View>
         </View>
         {/* SearchBox */}
-        <View className="mt-[46px] h-[90px] w-[400px] flex-row items-center justify-center gap-[20px] rounded-[22px] bg-[#DFF7E2] px-[12.5px] py-[5px]">
+        <View className="mt-[46px] h-[90px] w-[400px] flex-row items-center justify-center gap-[20px] rounded-[22px] bg-[#c47b9f] px-[12.5px] py-[5px]">
           <TouchableOpacity onPress={() => handleActive('daily')}>
             <Button
               contentStyle={{
@@ -140,10 +152,10 @@ export default function Home() {
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
-              buttonColor={activeList == 'daily' ? '#00D09E' : '#DFF7E2'}
+              buttonColor={activeList == 'daily' ? '#8d1c47' : '#c47b9f'}
               labelStyle={{
                 fontSize: 15,
-                color: '#052224',
+                color: activeList == 'daily' ? '#eff1f1' : '#052224',
                 textAlign: 'center',
               }}
               style={{ width: 110, height: 70, borderRadius: 25 }}>
@@ -158,10 +170,10 @@ export default function Home() {
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
-              buttonColor={activeList == 'weekly' ? '#00D09E' : '#DFF7E2'}
+              buttonColor={activeList == 'weekly' ? '#8d1c47' : '#c47b9f'}
               labelStyle={{
                 fontSize: 15,
-                color: '#052224',
+                color: activeList == 'weekly' ? '#eff1f1' : '#052224',
                 textAlign: 'center',
               }}
               style={{ width: 110, height: 70, borderRadius: 25 }}>
@@ -175,10 +187,10 @@ export default function Home() {
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
-              buttonColor={activeList == 'monthly' ? '#00D09E' : '#DFF7E2'}
+              buttonColor={activeList == 'monthly' ? '#8d1c47' : '#c47b9f'}
               labelStyle={{
                 fontSize: 15,
-                color: '#052224',
+                color: activeList == 'monthly' ? '#eff1f1' : '#052224',
                 textAlign: 'center',
               }}
               style={{ width: 110, height: 70, borderRadius: 25 }}>
