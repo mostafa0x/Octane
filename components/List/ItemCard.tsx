@@ -26,11 +26,11 @@ const ItemCard = ({ item }: Props) => {
         onRequestClose={() => setIsVisible(false)}
       />
 
-      <View className="flex-row items-center gap-5 border-b border-gray-200 p-4">
+      <View className="flex-row items-center gap-5  border-b border-gray-200 p-4">
         <TouchableOpacity onPress={() => setIsVisible(true)}>
           <Avatar.Image size={50} source={{ uri: item.image }} />
         </TouchableOpacity>
-        <View className="gap-2">
+        <View className="gap-2 ">
           <Text style={{ fontSize: 18, width: 120, fontWeight: 'bold', color: '#052224' }}>
             {item.company.name.split(' ').splice(0, 2).join(' ')}
           </Text>

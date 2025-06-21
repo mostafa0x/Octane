@@ -1,6 +1,6 @@
 import { useMenuContext } from 'Providers/MenuProvider'
 import { Animated, TouchableOpacity, View } from 'react-native'
-import { Text, IconButton, Icon, Button, Searchbar } from 'react-native-paper'
+import { Text, IconButton, Icon, Button, Searchbar, SearchbarProps } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import * as Progress from 'react-native-progress'
 import { Image } from 'expo-image'
@@ -10,9 +10,10 @@ import ItemCard from 'components/List/ItemCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
 import { SearchAcknowledgments, SetAcknowledgments_Current } from 'lib/Store/Slices/MainSlice'
+type AnimatableView = Animatable.View
+
 const backImg = require('../assets/backn.png')
 const nfcIcon = require('../assets/nfc.png')
-import { Appbar } from 'react-native-paper'
 
 export default function Home() {
   const { acknowledgments_Current, allocated, submitted } = useSelector(
@@ -24,6 +25,8 @@ export default function Home() {
   const dispatch = useDispatch()
   const { openDrawer } = useMenuContext()
   const [activeList, setActiveList] = useState('daily')
+  const searchBoxRef = useRef<React.ComponentRef<typeof Searchbar>>(null)
+  const animRef = useRef<AnimatableView>(null)
 
   function handleSerach(text: string) {
     setSearchQuery(text)
@@ -32,7 +35,13 @@ export default function Home() {
 
   function handleActive(period: string) {
     const nameLower = period.toLocaleLowerCase()
+    setSearchQuery('')
+    searchBoxRef.current && searchBoxRef.current?.blur()
     setActiveList(nameLower)
+    if (animRef.current && animRef.current.fadeIn) {
+      animRef.current.fadeIn()
+    }
+
     dispatch(SetAcknowledgments_Current(nameLower))
   }
   useEffect(() => {
@@ -54,11 +63,20 @@ export default function Home() {
       <View className=" absolute left-[258] top-[425] z-50 h-0.5 w-[161] rounded-2xl bg-white"></View>
       {/* Info */}
       <View className=" absolute left-[0px] top-[0px] z-50 w-full">
-        <View className="h-[60px] w-full bg-black opacity-30"></View>
-        <Text style={{ color: '#F1FFF3', fontSize: 24 }}>
-          Hi, Welcome Back{' '}
-          <Text style={{ color: '#F1FFF3', fontSize: 24 }}> {userData?.name}</Text>{' '}
-        </Text>
+        <View className=" absolute left-0 top-0 z-10">
+          <Image
+            style={{ width: 50, height: 50 }}
+            contentFit="cover"
+            source={require('../assets/LogowithoutTXT.png')}
+          />
+        </View>
+        <View className=" absolute left-[50px] top-[10px] z-10">
+          <Text style={{ color: '#F1FFF3', fontSize: 24 }}>
+            Hi, Welcome Back
+            <Text style={{ color: '#F1FFF3', fontSize: 24 }}> {userData?.name}</Text>
+          </Text>
+        </View>
+        <View className="h-[60px] w-full rounded-b-3xl bg-black opacity-40"></View>
       </View>
       {/*App Bar */}
 
@@ -169,10 +187,20 @@ export default function Home() {
           </TouchableOpacity>
         </View>
         <View className="m-4  w-[400px]">
-          <Searchbar placeholder="Search" value={searchQuery} onChangeText={handleSerach} />
+          <Searchbar
+            ref={searchBoxRef}
+            placeholder="Search"
+            value={searchQuery}
+            onChangeText={handleSerach}
+          />
         </View>
         {/* List */}
-        <View style={{ height: 320, width: '100%' }}>
+        <Animatable.View
+          ref={animRef}
+          animation="fadeIn"
+          duration={400}
+          easing="ease-in-out"
+          style={{ height: 250, width: '100%' }}>
           <FlashList
             data={acknowledgments_Current}
             estimatedItemSize={70}
@@ -185,7 +213,7 @@ export default function Home() {
               </View>
             )}
           />
-        </View>
+        </Animatable.View>
       </View>
     </Animatable.View>
   )
