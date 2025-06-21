@@ -10,6 +10,7 @@ import ItemCard from 'components/List/ItemCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
 import { SearchAcknowledgments, SetAcknowledgments_Current } from 'lib/Store/Slices/MainSlice'
+import { useRouter } from 'expo-router'
 type AnimatableView = Animatable.View
 
 const backImg = require('../assets/backn.png')
@@ -27,7 +28,7 @@ export default function Home() {
   const [activeList, setActiveList] = useState('daily')
   const searchBoxRef = useRef<React.ComponentRef<typeof Searchbar>>(null)
   const animRef = useRef<AnimatableView>(null)
-
+  const router = useRouter()
   function handleSerach(text: string) {
     setSearchQuery(text)
     dispatch(SearchAcknowledgments({ keyword: text, period: activeList }))
@@ -39,7 +40,7 @@ export default function Home() {
     searchBoxRef.current && searchBoxRef.current?.blur()
     setActiveList(nameLower)
     if (animRef.current && animRef.current.fadeIn) {
-      animRef.current.fadeIn()
+      animRef.current.fadeIn(100)
     }
 
     dispatch(SetAcknowledgments_Current(nameLower))
@@ -53,7 +54,7 @@ export default function Home() {
     <Animatable.View
       className=" flex-1 bg-black"
       animation="fadeIn"
-      duration={800}
+      duration={200}
       easing="ease-in-out">
       <View className="absolute left-[0] top-[0px] " style={{ width: '100%', height: '100%' }}>
         <Image style={{ width: '100%', height: '100%' }} contentFit="fill" source={backImg} />
@@ -63,7 +64,9 @@ export default function Home() {
       <View className=" absolute left-[258] top-[425] z-50 h-0.5 w-[161] rounded-2xl bg-white"></View>
       {/* Info */}
       <View className=" absolute left-[0px] top-[0px] z-50 w-full">
-        <TouchableOpacity onPress={() => openDrawer()} className=" absolute left-[10px] top-0 z-10">
+        <TouchableOpacity
+          onPress={() => router.push('/Profile')}
+          className=" absolute left-[10px] top-0 z-10">
           <Image
             style={{ width: 50, height: 50 }}
             contentFit="cover"
@@ -210,7 +213,6 @@ export default function Home() {
         <Animatable.View
           ref={animRef}
           animation="fadeIn"
-          duration={400}
           easing="ease-in-out"
           style={{ height: 250, width: '100%' }}>
           <FlashList

@@ -4,9 +4,5 @@ import ProtectRoutingProvider from './ProtectRouting'
 import MenuProvider from './MenuProvider'
 
 export default function Providers({ children }: { children: React.ReactNode }) {
-  return (
-    <ProtectRoutingProvider>
-      <MenuProvider>{children}</MenuProvider>
-    </ProtectRoutingProvider>
-  )
+  return <ProtectRoutingProvider>{children}</ProtectRoutingProvider>
 }

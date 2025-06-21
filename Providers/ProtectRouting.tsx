@@ -11,6 +11,7 @@ import { GetNfcs } from 'Services/GetNfs'
 export default function ProtectRoutingProvider({ children }: { children: React.ReactNode }) {
   const { userToken } = useSelector((state: StateFace) => state.UserReducer)
   const [isMountApp, setMountApp] = useState(false)
+  const [isGetData, setIsGetData] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [isError, setIsError] = useState<string | null>(null)
   const dispatch = useDispatch()
@@ -22,6 +23,8 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
       await getUserInfo(dispatch)
       setMountApp(true)
     }
+    console.log('run app')
+
     init()
   }, [])
 
@@ -36,6 +39,7 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
       await GetAcknowledgments('weekly', dispatch)
       await GetAcknowledgments('daily', dispatch)
       setIsLoading(false)
+      setIsGetData(true)
     } catch (err: any) {
       setIsError(err?.response?.data?.message ?? 'Something went wrong !')
       console.log(err ?? 'Something went wrong')
@@ -51,9 +55,9 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
         if (pathName === '/Auth') {
           //router.replace('/')
         }
-        handleGetData()
+        !isGetData && handleGetData()
       } else {
-        if (pathName === '/') {
+        if (pathName === '/' && '/Profile') {
           router.replace('/Auth')
         } else {
         }

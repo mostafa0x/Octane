@@ -85,7 +85,7 @@ export default function MenuProvider({ children }: { children: React.ReactNode }
           ]}>
           <View>
             <Drawer.Section title="Profile">
-              <Text style={{ marginLeft: 26 }}>email@gmail.com</Text>
+              <Text style={{ marginLeft: 26, marginVertical: 20 }}>email@gmail.com</Text>
               <Drawer.Item
                 label="upload Photo"
                 active={active === 'home'}
