@@ -6,25 +6,25 @@ import * as Progress from 'react-native-progress'
 import { Image } from 'expo-image'
 import { useState } from 'react'
 import { FlashList } from '@shopify/flash-list'
+import ItemCard from 'components/List/ItemCard'
+import { useDispatch, useSelector } from 'react-redux'
+import { StateFace } from 'Types/Store/StateFace'
+import { SetAcknowledgments_Current } from 'lib/Store/Slices/MainSlice'
 const backImg = require('../assets/backn.png')
 const nfcIcon = require('../assets/nfc.png')
 
-const data = [
-  { id: 1, name: 'svcxva', type: 'dsadsa' },
-  { id: 2, name: 'sasscxada', type: 'dsadsa' },
-  { id: 25, name: 'sasscxada', type: '123fd123fd123fd123fdx' },
-  { id: 24, name: 'sasscxada', type: 'dsadsa' },
-  { id: 222, name: 'sasscxada', type: 'dsadsa' },
-  { id: 228, name: 'sasscxada', type: 'dsadsa' },
-  { id: 248, name: 'sasscxada', type: 'dsadsa' },
-]
 export default function Home() {
+  const { acknowledgments_Current, acknowledgments_Monthly } = useSelector(
+    (state: StateFace) => state.MainReducer
+  )
+  const dispatch = useDispatch()
   const { openDrawer } = useMenuContext()
   const [activeList, setActiveList] = useState('daily')
 
-  function handleActive(name: string) {
-    const nameLower = name.toLocaleLowerCase()
-    setActiveList(name)
+  function handleActive(period: string) {
+    const nameLower = period.toLocaleLowerCase()
+    setActiveList(nameLower)
+    dispatch(SetAcknowledgments_Current(nameLower))
   }
 
   return (
@@ -141,51 +141,11 @@ export default function Home() {
         {/* List */}
         <View style={{ height: 320, width: '100%' }}>
           <FlashList
-            contentContainerStyle={{ paddingBottom: 20 }}
-            data={data}
+            data={acknowledgments_Current}
             estimatedItemSize={70}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <View style={{ height: 320, width: '100%' }}>
-                <FlashList
-                  contentContainerStyle={{ paddingBottom: 20 }}
-                  data={data}
-                  estimatedItemSize={70}
-                  keyExtractor={(item) => item.id.toString()}
-                  renderItem={({ item }) => (
-                    <View className="w-full flex-row items-center gap-5  border-b border-gray-200 p-4">
-                      <Icon size={50} source={'play'} />
-                      <View className="gap-2">
-                        <Text
-                          style={{
-                            fontSize: 18,
-                            width: 100,
-                            fontWeight: 'bold',
-                            color: '#052224',
-                          }}>
-                          {item.name}
-                        </Text>
-                        <Text style={{ fontSize: 15, color: '#0068FF' }}>434</Text>
-                      </View>
-                      <View className="h-10 w-[1px] bg-[#00D09E]"></View>
-                      <Text style={{ padding: 0 }}>4000</Text>
-                      <View className="h-10 w-[1px] bg-[#00D09E]"></View>
-                      <View className=" gap-2">
-                        <Text
-                          style={{
-                            fontSize: item.type.length > 15 ? 12 : 15,
-                            fontWeight: 'bold',
-                            color: '#052224',
-                          }}>
-                          {item.type}
-                        </Text>
-                        <Text style={{ fontSize: 15, color: '#052224' }}>434</Text>
-                      </View>
-                    </View>
-                  )}
-                />
-              </View>
-            )}
+            keyExtractor={(item, index) => index.toString()}
+            contentContainerStyle={{ paddingBottom: 20 }}
+            renderItem={({ item }) => <ItemCard item={item} />}
           />
         </View>
       </View>

@@ -5,6 +5,7 @@ import { StateFace } from 'Types/Store/StateFace'
 import { usePathname, useRouter } from 'expo-router'
 import { ActivityIndicator } from 'react-native-paper'
 import { getUserInfo } from 'Services/Storage'
+import { GetAcknowledgments } from 'Services/GetAcknowledgments'
 
 export default function ProtectRoutingProvider({ children }: { children: React.ReactNode }) {
   const { userToken } = useSelector((state: StateFace) => state.UserReducer)
@@ -23,18 +24,26 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
   }, [])
 
   useEffect(() => {
+    async function handleGetData() {
+      await GetAcknowledgments('monthly', dispatch)
+      await GetAcknowledgments('weekly', dispatch)
+      await GetAcknowledgments('daily', dispatch)
+      setIsLoading(false)
+    }
     if (isMountApp) {
       if (userToken) {
         if (pathName === '/Auth') {
           router.replace('/')
         }
+        handleGetData()
       } else {
         if (pathName === '/') {
           router.replace('/Auth')
         } else {
         }
+        setIsLoading(false)
       }
-      setIsLoading(false)
+      //  setIsLoading(false)
     }
   }, [isMountApp, userToken, pathName])
 
