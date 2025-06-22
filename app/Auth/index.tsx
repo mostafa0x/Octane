@@ -42,14 +42,15 @@ export default function Auth() {
         <View style={{ width: '100%', height: 300 }}>
           <Image source={logo} contentFit="fill" style={{ width: '100%', height: '100%' }} />
         </View>
-
         <View className="h-full rounded-t-[70px]  bg-white  px-6 pb-[85px]">
-          <View className="border-3 mt-10 h-[60px] flex-row items-center justify-center space-x-2 rounded-[7px] border-[#F5F6F9] bg-[#e2e4e9] p-0.5">
+          <View
+            style={{ borderRadius: 30, padding: 8 }}
+            className="border-3 mt-10 h-[70px] flex-row items-center justify-center  border-[#F5F6F9] bg-[#e2e4e9] ">
             <Button
               onPress={() => setAuthMode(1)}
               mode={authMode == 1 ? 'contained' : 'text'}
               buttonColor={authMode == 1 ? 'white' : ''}
-              style={{ flex: 1, borderRadius: 6 }}
+              style={{ flex: 1, borderRadius: 20 }}
               contentStyle={{
                 height: 56,
                 alignItems: 'center',
@@ -67,7 +68,7 @@ export default function Auth() {
               onPress={() => setAuthMode(2)}
               mode={authMode == 2 ? 'contained' : 'text'}
               buttonColor={authMode == 2 ? 'white' : ''}
-              style={{ flex: 1, borderRadius: 6 }}
+              style={{ flex: 1, borderRadius: 20 }}
               contentStyle={{
                 height: 56,
                 alignItems: 'center',

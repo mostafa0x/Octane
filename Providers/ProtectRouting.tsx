@@ -10,9 +10,9 @@ import { GetNfcs } from 'Services/GetNfs'
 import { ChangeLoadedData } from 'lib/Store/Slices/UserSlice'
 import { useInitApp } from 'Hooks/useInitApp'
 import SpinnerLoading from 'components/SpinnerLoading'
+import ErrorScreen from 'components/Error Screen'
 
 export default function ProtectRoutingProvider({ children }: { children: React.ReactNode }) {
-  console.log('Protect render')
   const { userToken, isLoadedData, isLoadedUserData } = useSelector(
     (state: StateFace) => state.UserReducer
   )
@@ -27,8 +27,8 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
     if (isLoadedUserData) return
 
     const initApp = async () => {
+      console.log('✅ run app ✅')
       await getUserInfo(dispatch)
-      console.log('✅ run app')
     }
 
     initApp()
@@ -44,7 +44,7 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
       setIsLoading(false)
     } catch (err: any) {
       setIsError(err?.response?.data?.message ?? 'Something went wrong !')
-      console.log(err ?? 'Something went wrong')
+      console.log(err.response ?? 'Something went wrong')
     }
   }, [init])
 
@@ -55,7 +55,6 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
         if (isLoadedData) {
           router.replace('/')
         } else {
-          console.log('xxx')
         }
       }
       if (!isLoadedData) {
@@ -70,24 +69,11 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
   }, [isLoadedUserData, isLoadedData, userToken, pathName])
 
   if (isError) {
-    return (
-      <View className="flex-1 items-center justify-center gap-10">
-        <Text style={{ fontSize: 26, color: 'red', textAlign: 'center', width: '100%' }}>
-          {isError}
-        </Text>
-        <Button mode="contained" onPress={GetData}>
-          Try Again
-        </Button>
-      </View>
-    )
+    return <ErrorScreen isError={isError} GetData={GetData} />
   }
 
   if (isLoading) {
-    return (
-      <View className="flex-1 items-center justify-center">
-        <SpinnerLoading />
-      </View>
-    )
+    return <SpinnerLoading />
   }
 
   return children
