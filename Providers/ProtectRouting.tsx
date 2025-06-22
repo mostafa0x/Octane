@@ -43,8 +43,8 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
       await init()
       setIsLoading(false)
     } catch (err: any) {
-      setIsError(err?.response?.data?.message ?? 'Something went wrong !')
-      console.log(err.response ?? 'Something went wrong')
+      setIsError(err?.response?.data?.message ?? err.message ?? 'Something went wrong !')
+      console.log(err.message ?? 'Something went wrong')
     }
   }, [init])
 
