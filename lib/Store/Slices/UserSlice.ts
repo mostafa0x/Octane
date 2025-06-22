@@ -11,7 +11,7 @@ interface ActionInfo {
 const initialState: UserSliceFace = {
   userToken: null,
   userData: null,
-  authLoading: -1,
+  isLoadedUserData: false,
   isLoadedData: false,
 }
 const UserSlice = createSlice({
@@ -25,11 +25,11 @@ const UserSlice = createSlice({
       state.userToken = action.payload.userToken
       state.userData = action.payload.userData
     },
-    changeAuthLoading: (state, action) => {
-      state.authLoading = action.payload
+    changeIsLoadedUserData: (state, action) => {
+      state.isLoadedUserData = action.payload
     },
   },
 })
 
 export const UserReducer = UserSlice.reducer
-export const { fillUserInfo, changeAuthLoading, ChangeLoadedData } = UserSlice.actions
+export const { fillUserInfo, changeIsLoadedUserData, ChangeLoadedData } = UserSlice.actions

@@ -10,6 +10,8 @@ export const GetNfcs = async (dispatch: any) => {
   try {
     const res = await axiosClient.get(`${API_BASE_URL}/users/nfcs`)
     const data: dataFace = res.data
+    console.log('loaded info')
+
     dispatch(SetAllocated(data.allocated))
     dispatch(SetSubmitted(data.submitted))
   } catch (err: any) {

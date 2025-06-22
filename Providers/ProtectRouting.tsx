@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
 import { usePathname, useRouter } from 'expo-router'
@@ -8,40 +8,39 @@ import { getUserInfo } from 'Services/Storage'
 import { GetAcknowledgments } from 'Services/GetAcknowledgments'
 import { GetNfcs } from 'Services/GetNfs'
 import { ChangeLoadedData } from 'lib/Store/Slices/UserSlice'
+import { useInitApp } from 'Hooks/useInitApp'
 
 export default function ProtectRoutingProvider({ children }: { children: React.ReactNode }) {
-  const { userToken, isLoadedData } = useSelector((state: StateFace) => state.UserReducer)
-  const [isMountApp, setMountApp] = useState(false)
-  const [isGetData, setIsGetData] = useState(false)
+  console.log('Protect render')
+  const { userToken, isLoadedData, isLoadedUserData } = useSelector(
+    (state: StateFace) => state.UserReducer
+  )
   const [isLoading, setIsLoading] = useState(true)
   const [isError, setIsError] = useState<string | null>(null)
   const dispatch = useDispatch()
   const router = useRouter()
   const pathName = usePathname()
+  const { init } = useInitApp()
 
   useEffect(() => {
-    async function init() {
-      await getUserInfo(dispatch)
-      setMountApp(true)
-    }
-    console.log('run app')
+    if (isLoadedUserData) return
 
-    init()
+    const initApp = async () => {
+      await getUserInfo(dispatch)
+      console.log('✅ run app')
+    }
+
+    initApp()
   }, [])
 
   const GetData = useCallback(async () => {
     setIsLoading(true)
     setIsError(null)
-    dispatch(ChangeLoadedData(true))
 
     try {
-      console.log('load data...')
-      await GetNfcs(dispatch)
-      await GetAcknowledgments('monthly', dispatch)
-      await GetAcknowledgments('weekly', dispatch)
-      await GetAcknowledgments('daily', dispatch)
+      console.log('loading data...')
+      init()
       setIsLoading(false)
-      // setIsGetData(true)
     } catch (err: any) {
       setIsError(err?.response?.data?.message ?? 'Something went wrong !')
       console.log(err ?? 'Something went wrong')
@@ -49,25 +48,25 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
   }, [])
 
   useEffect(() => {
-    async function handleGetData() {
-      GetData()
-    }
-    if (isMountApp) {
-      if (userToken) {
-        if (pathName === '/Auth') {
-          isLoadedData && router.replace('/')
-        }
-        !isLoadedData && handleGetData()
-      } else {
-        if (pathName === '/' && '/Profile') {
-          router.replace('/Auth')
+    if (!isLoadedUserData) return
+    if (userToken) {
+      if (pathName == '/Auth') {
+        if (isLoadedData) {
+          router.replace('/')
         } else {
+          console.log('xxx')
         }
-        setIsLoading(false)
       }
-      //  setIsLoading(false)
+      if (!isLoadedData) {
+        GetData()
+      }
+    } else {
+      if (pathName === '/' || pathName === '/Profile') {
+        router.replace('/Auth')
+      }
+      setIsLoading(false)
     }
-  }, [isMountApp, userToken, pathName])
+  }, [isLoadedUserData, isLoadedData, userToken, pathName])
 
   if (isError) {
     return (

@@ -11,10 +11,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
 import { SearchAcknowledgments, SetAcknowledgments_Current } from 'lib/Store/Slices/MainSlice'
 import { useRouter } from 'expo-router'
-type AnimatableView = Animatable.View
-
 const backImg = require('../assets/backn.png')
 const nfcIcon = require('../assets/nfc.png')
+type AnimatableView = Animatable.View
 
 export default function Home() {
   const { acknowledgments_Current, allocated, submitted } = useSelector(

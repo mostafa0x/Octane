@@ -1,8 +1,13 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import ProtectRoutingProvider from './ProtectRouting'
-import MenuProvider from './MenuProvider'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-export default function Providers({ children }: { children: React.ReactNode }) {
-  return <ProtectRoutingProvider>{children}</ProtectRoutingProvider>
+const Providers = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <ProtectRoutingProvider>
+      <SafeAreaView style={{ flex: 1 }}>{children}</SafeAreaView>
+    </ProtectRoutingProvider>
+  )
 }
+
+export default React.memo(Providers)
