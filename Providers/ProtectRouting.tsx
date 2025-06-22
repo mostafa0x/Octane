@@ -9,6 +9,7 @@ import { GetAcknowledgments } from 'Services/GetAcknowledgments'
 import { GetNfcs } from 'Services/GetNfs'
 import { ChangeLoadedData } from 'lib/Store/Slices/UserSlice'
 import { useInitApp } from 'Hooks/useInitApp'
+import SpinnerLoading from 'components/SpinnerLoading'
 
 export default function ProtectRoutingProvider({ children }: { children: React.ReactNode }) {
   console.log('Protect render')
@@ -39,13 +40,13 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
 
     try {
       console.log('loading data...')
-      init()
+      await init()
       setIsLoading(false)
     } catch (err: any) {
       setIsError(err?.response?.data?.message ?? 'Something went wrong !')
       console.log(err ?? 'Something went wrong')
     }
-  }, [])
+  }, [init])
 
   useEffect(() => {
     if (!isLoadedUserData) return
@@ -71,7 +72,9 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
   if (isError) {
     return (
       <View className="flex-1 items-center justify-center gap-10">
-        <Text style={{ fontSize: 26, color: 'red', textAlign: 'center' }}>{isError}</Text>
+        <Text style={{ fontSize: 26, color: 'red', textAlign: 'center', width: '100%' }}>
+          {isError}
+        </Text>
         <Button mode="contained" onPress={GetData}>
           Try Again
         </Button>
@@ -82,7 +85,7 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
   if (isLoading) {
     return (
       <View className="flex-1 items-center justify-center">
-        <ActivityIndicator size={100} />
+        <SpinnerLoading />
       </View>
     )
   }
