@@ -1,19 +1,19 @@
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 import React, { memo } from 'react'
 import { Image } from 'expo-image'
-import { ActivityIndicator } from 'react-native-paper'
+import { useWindowDimensions } from 'react-native'
 
 function SpinnerLoading() {
+  const { width, height } = useWindowDimensions()
+  const imageSize = Math.min(width, height) * 0.5
+
   return (
-    <View className="flex-1 items-center justify-center">
+    <View className="flex-1 items-center justify-center bg-white">
       <Image
-        contentFit="cover"
-        style={{ height: 525, width: 525 }}
+        contentFit="contain"
+        style={{ width: imageSize, height: imageSize }}
         source={require('assets/loadingLogo.gif')}
       />
-      <View className=" absolute left-[410px] top-[705px]">
-        <ActivityIndicator size={20} />
-      </View>
     </View>
   )
 }
