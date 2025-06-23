@@ -1,6 +1,5 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React from 'react'
-import { Avatar, Button, Icon } from 'react-native-paper'
+import { View, Text, TouchableOpacity, useWindowDimensions, ScrollView } from 'react-native'
+import { Avatar, Icon } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
 import { useRouter } from 'expo-router'
@@ -9,9 +8,9 @@ import { StateFace } from 'Types/Store/StateFace'
 import handleLoutOut from 'Services/handleLogOut'
 
 const backImg = require('../../assets/backn.png')
-const nfcIcon = require('../../assets/nfc.png')
 
 export default function Profile() {
+  const { width, height } = useWindowDimensions()
   const { userData } = useSelector((state: StateFace) => state.UserReducer)
   const router = useRouter()
   const dispatch = useDispatch()
@@ -19,112 +18,123 @@ export default function Profile() {
   async function callLogOut() {
     await handleLoutOut(dispatch, router)
   }
+
+  const avatarSize = width * 0.4
+
   return (
-    <Animatable.View
-      animation="fadeIn"
-      duration={200}
-      easing="ease-in-out"
-      style={{ flex: 1, height: '100%' }}>
-      <View className=" absolute left-[0px] top-[0px] z-50 w-full">
+    <Animatable.View animation="fadeIn" duration={200} easing="ease-in-out" style={{ flex: 1 }}>
+      {/* الهيدر */}
+      <View style={{ position: 'absolute', top: 0, left: 0, zIndex: 50, width: width }}>
         <TouchableOpacity
           onPress={() => router.back()}
-          className=" absolute left-[10px] top-0 z-10">
-          {/* <Image
-            style={{ width: 50, height: 50 }}
-            contentFit="cover"
-            source={require('../../assets/LogowithoutTXT.png')}
-          /> */}
-          <View className="mt-2">
-            <Icon size={40} color="white" source={'keyboard-backspace'} />
+          style={{ position: 'absolute', left: 10, top: 0, zIndex: 10 }}>
+          <View style={{ marginTop: 8 }}>
+            <Icon size={40} color="white" source="keyboard-backspace" />
           </View>
         </TouchableOpacity>
-        <View className=" absolute left-[60px] top-[10px] z-10 w-full">
-          <Text style={{ color: '#F1FFF3', fontSize: 24, width: '100%' }}>Profile</Text>
+        <View style={{ position: 'absolute', left: 60, top: 10, zIndex: 10 }}>
+          <Text style={{ color: '#F1FFF3', fontSize: 24, width: width }}>Profile</Text>
         </View>
-        <View className="h-[60px] w-full rounded-b-3xl bg-black opacity-40"></View>
+        <View
+          style={{
+            height: 60,
+            width: '100%',
+            borderBottomLeftRadius: 30,
+            borderBottomRightRadius: 30,
+            backgroundColor: 'black',
+            opacity: 0.4,
+          }}
+        />
       </View>
-      {/* BackImages */}
-      <View className="absolute left-[0] top-[200px] " style={{ width: '100%' }}>
-        <Image style={{ width: '100%', height: 200 }} contentFit="fill" source={backImg} />
+
+      {/* خلفية */}
+      <View style={{ position: 'absolute', top: height * 0.2, width: '100%' }}>
+        <Image
+          style={{ width: '100%', height: height * 0.25 }}
+          contentFit="fill"
+          source={backImg}
+        />
       </View>
-      <View style={{ width: '100%', height: 300 }}>
+
+      {/* الصورة العلوية */}
+      <View style={{ width: '100%', height: height * 0.3 }}>
         <Image source={backImg} contentFit="fill" style={{ width: '100%', height: '100%' }} />
       </View>
-      {/********/}
-      <View className=" absolute left-[157] top-[180px] z-10">
+
+      {/* الصورة الشخصية */}
+      <View
+        style={{
+          position: 'absolute',
+          top: height * 0.2,
+          left: (width - avatarSize) / 2,
+          zIndex: 10,
+        }}>
         <TouchableOpacity activeOpacity={0.8}>
           <Avatar.Image
             source={{
-              uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkqE4v4MvZzIxhYbK1Lesgd_2stB50hahczw&s',
+              uri:
+                userData?.avatar ||
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkqE4v4MvZzIxhYbK1Lesgd_2stB50hahczw&s',
             }}
-            size={200}
+            size={avatarSize}
           />
         </TouchableOpacity>
       </View>
 
-      <View className="h-full rounded-t-[70px] bg-white  p-20  px-6 pb-[85px] pt-28">
-        {/* Header */}
-        <View className="items-center">
+      {/* محتوى الصفحة */}
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+          paddingHorizontal: 24,
+          paddingBottom: 100,
+        }}
+        style={{
+          flex: 1,
+          borderTopLeftRadius: 50,
+          borderTopRightRadius: 50,
+          backgroundColor: 'white',
+          paddingTop: height * 0.12,
+        }}>
+        {/* الاسم */}
+        <View style={{ alignItems: 'center', marginBottom: 30 }}>
           <Text style={{ fontSize: 28, fontWeight: 'bold' }}>{userData?.name}</Text>
-          {/* <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
-            ID: <Text style={{ fontSize: 12 }}>{userData?.id}</Text>
-          </Text> */}
         </View>
-        <View className="mt-10 gap-10">
-          <View className="flex-row items-center gap-4">
-            <View className="h-[60px] w-[60px] items-center justify-center rounded-[22px] bg-[#6DB6FE]">
-              <Icon size={40} source={'email-outline'} />
+
+        {/* المعلومات */}
+        <View style={{ gap: 30 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+            <View
+              style={{
+                height: 60,
+                width: 60,
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius: 22,
+                backgroundColor: '#6DB6FE',
+              }}>
+              <Icon size={40} source="email-outline" />
             </View>
-            <Text style={{ width: '100%', fontSize: 16 }}>{userData?.email}</Text>
+            <Text style={{ fontSize: 16 }}>{userData?.email}</Text>
           </View>
 
-          <TouchableOpacity onPress={callLogOut} className="flex-row items-center  gap-4">
-            <View className="h-[60px] w-[60px] items-center justify-center rounded-[22px] bg-[#eb9053]">
-              <Icon size={40} source={'logout'} />
+          <TouchableOpacity
+            onPress={callLogOut}
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+            <View
+              style={{
+                height: 60,
+                width: 60,
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius: 22,
+                backgroundColor: '#eb9053',
+              }}>
+              <Icon size={40} source="logout" />
             </View>
-            <Text style={{ width: '100%', fontSize: 16 }}>Log Out</Text>
+            <Text style={{ fontSize: 16 }}>Log Out</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </Animatable.View>
   )
 }
-
-//  <View className="bgColor flex-1">
-//       <View className="h-[80px] w-full flex-row items-center border-b-2 border-gray-200 ">
-//         <Icon size={50} source={'keyboard-backspace'} />
-//         <Text style={{ width: '100%', fontSize: 22 }}>Profile</Text>
-//       </View>
-//       <View className="mt-10 p-7 ">
-//         <View className="items-center gap-10">
-//           <Avatar.Image size={200} />
-//           <Button labelStyle={{ fontSize: 22, color: 'green' }}>Edit</Button>
-//         </View>
-//         <View className="mt-5 gap-10">
-//           <View className="flex-row items-center gap-5">
-//             <Icon size={30} source={'account-outline'} />
-//             <View>
-//               <Text style={{ fontSize: 20 }}>Name</Text>
-//               <Text style={{ color: '#474646' }}>Sasa</Text>
-//             </View>
-//           </View>
-//           <View className="flex-row items-center gap-5">
-//             <Icon size={30} source={'information-outline'} />
-//             <View>
-//               <Text style={{ fontSize: 20 }}>About</Text>
-//               <Text style={{ color: '#474646' }}>front dev X</Text>
-//             </View>
-//           </View>
-//           <View className="flex-row items-center gap-5">
-//             <Icon size={30} source={'email-outline'} />
-//             <View>
-//               <Text style={{ fontSize: 20 }}>Email</Text>
-//               <Text style={{ color: '#474646' }}>testemail@gmail.com</Text>
-//             </View>
-//           </View>
-//         </View>
-//       </View>
-//       <View className="mt-[100px] justify-end">
-//         <Button buttonColor="red">Log Out</Button>
-//       </View>
-//     </View>

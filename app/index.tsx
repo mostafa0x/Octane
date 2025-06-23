@@ -1,6 +1,6 @@
 import { useMenuContext } from 'Providers/MenuProvider'
-import { Animated, TouchableOpacity, View } from 'react-native'
-import { Text, IconButton, Icon, Button, Searchbar, SearchbarProps } from 'react-native-paper'
+import { Animated, TouchableOpacity, View, useWindowDimensions, ScrollView } from 'react-native'
+import { Text, IconButton, Icon, Button, Searchbar } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import * as Progress from 'react-native-progress'
 import { Image } from 'expo-image'
@@ -11,16 +11,17 @@ import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
 import { SearchAcknowledgments, SetAcknowledgments_Current } from 'lib/Store/Slices/MainSlice'
 import { useRouter } from 'expo-router'
-const backImg = require('../assets/backn.png')
-const nfcIcon = require('../assets/nfc.png')
 type AnimatableView = Animatable.View
 
+const backImg = require('../assets/backn.png')
+const nfcIcon = require('../assets/nfc.png')
+
 export default function Home() {
+  const { width, height } = useWindowDimensions()
   const { acknowledgments_Current, allocated, submitted } = useSelector(
     (state: StateFace) => state.MainReducer
   )
   const { userData } = useSelector((state: StateFace) => state.UserReducer)
-
   const [searchQuery, setSearchQuery] = useState('')
   const dispatch = useDispatch()
   const { openDrawer } = useMenuContext()
@@ -28,179 +29,188 @@ export default function Home() {
   const searchBoxRef = useRef<React.ComponentRef<typeof Searchbar>>(null)
   const animRef = useRef<AnimatableView>(null)
   const router = useRouter()
+
   function handleSerach(text: string) {
     setSearchQuery(text)
     dispatch(SearchAcknowledgments({ keyword: text, period: activeList }))
   }
 
   function handleActive(period: string) {
-    const nameLower = period.toLocaleLowerCase()
+    const nameLower = period.toLowerCase()
     setSearchQuery('')
-    searchBoxRef.current && searchBoxRef.current?.blur()
+    searchBoxRef.current?.blur()
     setActiveList(nameLower)
-    if (animRef.current && animRef.current.fadeIn) {
-      animRef.current.fadeIn(100)
-    }
-
+    if (animRef.current && animRef.current.fadeIn) animRef.current?.fadeIn(100)
     dispatch(SetAcknowledgments_Current(nameLower))
   }
+
   useEffect(() => {
     handleActive('daily')
-    return () => {}
   }, [])
+
+  const cardWidth = width * 0.9
+  const cardHeight = height * 0.22
+  const progressSize = Math.min(width, height) * 0.18
+  const searchHeight = height * 0.07
+  const sectionPadding = width * 0.05
 
   return (
     <Animatable.View
-      className=" flex-1 bg-black"
+      style={{ flex: 1, backgroundColor: 'black' }}
       animation="fadeIn"
       duration={200}
       easing="ease-in-out">
-      <View className="absolute left-[0] top-[0px] " style={{ width: '100%', height: '100%' }}>
-        <Image style={{ width: '100%', height: '100%' }} contentFit="fill" source={backImg} />
-      </View>
-      {/* Lines */}
-      <View className=" absolute left-[233] top-[350] z-50 h-[145px] w-[2px]  rounded-2xl bg-white"></View>
-      <View className=" absolute left-[258] top-[425] z-50 h-0.5 w-[161] rounded-2xl bg-white"></View>
-      {/* Info */}
-      <View className=" absolute left-[0px] top-[0px] z-50 w-full">
+      <Image
+        style={{ position: 'absolute', width: '100%', height: '100%' }}
+        contentFit="fill"
+        source={backImg}
+      />
+
+      <View
+        style={{
+          position: 'absolute',
+          top: height * 0.4,
+          left: width * 0.6,
+          zIndex: 50,
+          height: 145,
+          width: 2,
+          backgroundColor: 'white',
+          borderRadius: 16,
+        }}
+      />
+      <View
+        style={{
+          position: 'absolute',
+          top: height * 0.5,
+          left: width * 0.65,
+          zIndex: 50,
+          height: 1,
+          width: width * 0.4,
+          backgroundColor: 'white',
+          borderRadius: 16,
+        }}
+      />
+
+      <View style={{ position: 'absolute', top: 0, left: 0, zIndex: 50, width: '100%' }}>
         <TouchableOpacity
           onPress={() => router.push('/Profile')}
-          className=" absolute left-[10px] top-0 z-10">
+          style={{ position: 'absolute', left: 10, top: 0, zIndex: 10 }}>
           <Image
             style={{ width: 50, height: 50 }}
             contentFit="cover"
             source={require('../assets/LogowithoutTXT.png')}
           />
         </TouchableOpacity>
-        <View className=" absolute left-[60px] top-[10px] z-10">
-          <Text style={{ color: '#F1FFF3', fontSize: 24 }}>
-            Hi, Welcome Back
-            <Text style={{ color: '#F1FFF3', fontSize: 24 }}> {userData?.name}</Text>
-          </Text>
+        <View style={{ position: 'absolute', left: 60, top: 10, zIndex: 10 }}>
+          <Text style={{ color: '#F1FFF3', fontSize: 24 }}>Hi, Welcome Back {userData?.name}</Text>
         </View>
-        <View className="h-[60px] w-full rounded-b-3xl bg-black opacity-40"></View>
-        <View className="mt-10 gap-2 p-10">
+        <View
+          style={{
+            height: 60,
+            width: '100%',
+            borderBottomLeftRadius: 30,
+            borderBottomRightRadius: 30,
+            backgroundColor: 'black',
+            opacity: 0.4,
+          }}
+        />
+        <View style={{ marginTop: 10, gap: 8, padding: sectionPadding }}>
           <Text style={{ color: '#EEEEEE', fontSize: 26, fontWeight: 'bold' }}>Made for You</Text>
-          <Text style={{ color: '#EEEEEE', fontSize: 18, marginLeft: 15 }}>
+          <Text style={{ color: '#EEEEEE', fontSize: 18 }}>
             Get Things Done Efficiently and Accurately
           </Text>
         </View>
       </View>
 
-      {/*App Bar */}
-
-      {/*Body */}
-      <View style={{ height: 300 }}>
+      <View style={{ height: height * 0.3 }}>
         <Image source={backImg} contentFit="fill" style={{ width: '100%', height: '100%' }} />
       </View>
-      {/* Card */}
-      <View className="h-full items-center rounded-t-[70px] bg-white px-[36px]  py-[28px] pb-[85px]">
-        <View className="h-[200px] w-[400px] flex-row  rounded-[31px] bg-[#8d1c47] px-[36px] py-[28px]">
-          <View className=" justify-center">
-            <View className=" ml-4 mt-2 items-center ">
-              <Progress.Circle
-                size={100}
-                progress={allocated > 0 ? submitted / allocated : 0}
-                showsText={false}
-                color="#0068FF"
-                unfilledColor="#F1FFF3"
-                borderWidth={0}
-                thickness={3.25}
-              />
-              <View className=" absolute left-[1.7] top-[2]">
-                <Icon source={nfcIcon} color="white" size={100} />
-              </View>
-              <Text style={{ color: '#bdcdce' }} className="mt-2 text-xl ">
-                NFC tracker
+
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          borderTopLeftRadius: 70,
+          borderTopRightRadius: 70,
+          backgroundColor: 'white',
+          padding: sectionPadding,
+        }}>
+        <View
+          style={{
+            height: cardHeight,
+            width: cardWidth,
+            flexDirection: 'row',
+            borderRadius: 31,
+            backgroundColor: '#8d1c47',
+            padding: 20,
+          }}>
+          <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+            <Progress.Circle
+              size={progressSize}
+              progress={allocated > 0 ? submitted / allocated : 0}
+              showsText={false}
+              color="#0068FF"
+              unfilledColor="#F1FFF3"
+              borderWidth={0}
+              thickness={3.25}
+            />
+            <View style={{ position: 'absolute' }}>
+              <Icon source={nfcIcon} color="white" size={progressSize} />
+            </View>
+            <Text style={{ color: '#bdcdce', marginTop: 8, fontSize: 18 }}>NFC tracker</Text>
+          </View>
+
+          <View style={{ flex: 1, justifyContent: 'space-between', paddingLeft: 20 }}>
+            <View style={{ alignItems: 'center' }}>
+              <Icon size={50} color="#bdcdce" source={nfcIcon} />
+              <Text style={{ color: '#bdcdce', fontSize: 15 }}>Allocated</Text>
+              <Text style={{ fontSize: 18, color: '#f7f7f7', fontWeight: 'bold' }}>
+                {allocated}
+              </Text>
+            </View>
+            <View style={{ alignItems: 'center' }}>
+              <Icon size={50} color="#5c9dff" source={nfcIcon} />
+              <Text style={{ color: '#bdcdce', fontSize: 15 }}>Submitted</Text>
+              <Text style={{ fontSize: 18, color: '#5c9dff', fontWeight: 'bold' }}>
+                +{submitted}
               </Text>
             </View>
           </View>
-          <View className=" ml-[50px] flex-col justify-between">
-            <View className=" flex-row items-center gap-3">
-              <Icon size={60} color="#bdcdce" source={nfcIcon} />
-              <View className=" flex-col items-center">
-                <Text style={{ color: '#bdcdce' }} className="text-[15px]  ">
-                  Allocated
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: '#f7f7f7',
-                    fontWeight: 'bold',
-                  }}>
-                  {allocated}
-                </Text>
-              </View>
-            </View>
-            <View className=" flex-row items-center gap-3">
-              <Icon size={60} color="#5c9dff" source={nfcIcon} />
-              <View className=" flex-col items-center">
-                <Text style={{ color: '#bdcdce' }} className="text-[15px] ">
-                  Submitted
-                </Text>
-                <Text style={{ fontSize: 18, color: '#5c9dff', fontWeight: 'bold' }}>
-                  +{submitted}
-                </Text>
-              </View>
-            </View>
-          </View>
         </View>
-        {/* SearchBox */}
-        <View className="mt-[46px] h-[90px] w-[400px] flex-row items-center justify-center gap-[20px] rounded-[22px] bg-[#c47b9f] px-[12.5px] py-[5px]">
-          <TouchableOpacity onPress={() => handleActive('daily')}>
-            <Button
-              contentStyle={{
-                height: 70,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-              buttonColor={activeList == 'daily' ? '#8d1c47' : '#c47b9f'}
-              labelStyle={{
-                fontSize: 15,
-                color: activeList == 'daily' ? '#eff1f1' : '#052224',
-                textAlign: 'center',
-              }}
-              style={{ width: 110, height: 70, borderRadius: 25 }}>
-              Daily
-            </Button>
-          </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => handleActive('weekly')}>
+        <View
+          style={{
+            marginTop: 20,
+            height: searchHeight,
+            width: cardWidth,
+            borderRadius: 22,
+            backgroundColor: '#c47b9f',
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+          }}>
+          {['daily', 'weekly', 'monthly'].map((item) => (
             <Button
-              contentStyle={{
-                height: 70,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-              buttonColor={activeList == 'weekly' ? '#8d1c47' : '#c47b9f'}
+              key={item}
+              onPress={() => handleActive(item)}
+              mode={activeList === item ? 'contained' : 'text'}
+              style={{ width: cardWidth / 3 - 10, height: searchHeight * 0.8, borderRadius: 25 }}
               labelStyle={{
                 fontSize: 15,
-                color: activeList == 'weekly' ? '#eff1f1' : '#052224',
-                textAlign: 'center',
+
+                color: activeList === item ? '#eff1f1' : '#052224',
               }}
-              style={{ width: 110, height: 70, borderRadius: 25 }}>
-              Weekly
-            </Button>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleActive('monthly')}>
-            <Button
+              buttonColor={activeList === item ? '#8d1c47' : '#c47b9f'}
               contentStyle={{
-                height: 70,
                 justifyContent: 'center',
-                alignItems: 'center',
-              }}
-              buttonColor={activeList == 'monthly' ? '#8d1c47' : '#c47b9f'}
-              labelStyle={{
-                fontSize: 15,
-                color: activeList == 'monthly' ? '#eff1f1' : '#052224',
-                textAlign: 'center',
-              }}
-              style={{ width: 110, height: 70, borderRadius: 25 }}>
-              Monthly
+                height: searchHeight * 0.8,
+              }}>
+              {item.charAt(0).toUpperCase() + item.slice(1)}
             </Button>
-          </TouchableOpacity>
+          ))}
         </View>
-        <View className="m-4  w-[400px]">
+
+        <View style={{ marginTop: 20, width: cardWidth }}>
           <Searchbar
             ref={searchBoxRef}
             placeholder="Search"
@@ -208,12 +218,12 @@ export default function Home() {
             onChangeText={handleSerach}
           />
         </View>
-        {/* List */}
+
         <Animatable.View
           ref={animRef}
           animation="fadeIn"
           easing="ease-in-out"
-          style={{ height: 250, width: '100%' }}>
+          style={{ height: height * 0.3, width: '100%', marginTop: 20 }}>
           <FlashList
             data={acknowledgments_Current}
             estimatedItemSize={70}
@@ -221,8 +231,8 @@ export default function Home() {
             contentContainerStyle={{ paddingBottom: 20 }}
             renderItem={({ item }) => <ItemCard item={item} />}
             ListEmptyComponent={() => (
-              <View className="mt-32 items-center justify-center">
-                <Text className="text-2xl opacity-70">Empty</Text>
+              <View style={{ marginTop: 50, alignItems: 'center' }}>
+                <Text style={{ fontSize: 20, opacity: 0.7 }}>Empty</Text>
               </View>
             )}
           />
