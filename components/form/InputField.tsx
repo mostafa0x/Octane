@@ -44,11 +44,14 @@ function InputField({ lable, name, formik, errorMes }: props) {
         />
         {isPassword && (
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-            <Feather name={showPassword ? 'eye' : 'eye-off'} color={'#ACB5BB'} size={20} />
+            <Feather name={showPassword ? 'eye' : 'eye-off'} color={'#ACB5BB'} size={25} />
           </TouchableOpacity>
         )}
       </View>
-      <HelperText style={{ fontSize: 14, color: 'red' }} type="error" visible={isError}>
+      <HelperText
+        style={{ fontSize: 14, color: 'red' }}
+        type="error"
+        visible={formik.touched?.[name] && !!formik.errors?.[name]}>
         {formik.errors?.[name]}
       </HelperText>
     </>

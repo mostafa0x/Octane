@@ -1,4 +1,4 @@
-import { View, ScrollView } from 'react-native'
+import { View, ScrollView, useWindowDimensions } from 'react-native'
 import { useCallback, useState } from 'react'
 import { Image } from 'expo-image'
 import { Button } from 'react-native-paper'
@@ -13,6 +13,7 @@ const backImg = require('assets/backn.png')
 export default function Auth() {
   const router = useRouter()
   const dispatch = useDispatch()
+  const { width, height } = useWindowDimensions()
   const [authMode, setAuthMode] = useState(1)
 
   useFocusEffect(
@@ -22,24 +23,28 @@ export default function Auth() {
   )
 
   return (
-    <ScrollView
-      contentContainerStyle={{
+    <View
+      style={{
         backgroundColor: '#661534',
-      }}
-      style={{ flex: 1, height: '100%' }}
-      keyboardShouldPersistTaps="handled">
-      <View className="absolute left-[0] top-[200px] " style={{ width: '100%' }}>
-        <Image style={{ width: '100%', height: 200 }} contentFit="fill" source={backImg} />
+        flexGrow: 1,
+      }}>
+      {/* الخلفية */}
+      <View style={{ position: 'absolute', top: height * 0.2, width: width }}>
+        <Image style={{ width: width, height: height * 0.25 }} contentFit="fill" source={backImg} />
       </View>
 
+      {/* الشعار + المحتوى */}
       <View className="flex-1">
-        <View style={{ width: '100%', height: 300 }}>
-          <Image source={logo} contentFit="fill" style={{ width: '100%', height: '100%' }} />
+        <View style={{ width: width, height: height * 0.3 }}>
+          <Image source={logo} contentFit="contain" style={{ width: '100%', height: '100%' }} />
         </View>
-        <View className="h-full rounded-t-[70px]  bg-white  px-6 pb-[85px]">
+
+        {/* البوكس الأبيض */}
+        <View style={{ minHeight: height }} className="rounded-t-[50px] bg-white px-6 pb-[85px]">
+          {/* الأزرار */}
           <View
             style={{ borderRadius: 30, padding: 8 }}
-            className="border-3 mt-10 h-[70px] flex-row items-center justify-center  border-[#F5F6F9] bg-[#e2e4e9] ">
+            className="border-3 mt-10 h-[70px] flex-row items-center justify-center border-[#F5F6F9] bg-[#e2e4e9]">
             <Button
               onPress={() => setAuthMode(1)}
               mode={authMode == 1 ? 'contained' : 'text'}
@@ -76,9 +81,11 @@ export default function Auth() {
               Sign Up
             </Button>
           </View>
+
+          {/* النموذج */}
           {authMode === 1 ? <SignIn /> : <SignUp />}
         </View>
       </View>
-    </ScrollView>
+    </View>
   )
 }
