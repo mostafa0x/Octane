@@ -12,7 +12,7 @@ function ErrorScreen({ isError, GetData }: props) {
   return (
     <View className="flex-1 items-center justify-center gap-24  ">
       <Image style={{ height: 250, width: 250 }} source={require('assets/noWif.png')} />
-      <View className="items-center gap-2">
+      <View className="items-center gap-10">
         <Text style={{ fontSize: 26, color: 'black', textAlign: 'center', width: '100%' }}>
           {isError}
         </Text>

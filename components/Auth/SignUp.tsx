@@ -1,10 +1,8 @@
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
-import React, { useCallback, useState } from 'react'
-import { Image } from 'expo-image'
+import { View } from 'react-native'
+import { useCallback, useState } from 'react'
 import InputField from 'components/form/InputField'
 import { ActivityIndicator, Button, HelperText } from 'react-native-paper'
 import { useFormik } from 'formik'
-import { LoginSchema } from 'lib/Vaildtions/SignInValid'
 import axios from 'axios'
 import { storeUserInfo } from 'Services/Storage'
 import { useFocusEffect, useRouter } from 'expo-router'
@@ -12,9 +10,6 @@ import { API_BASE_URL } from 'config'
 import { useDispatch } from 'react-redux'
 import { SignUpvalidationSchema } from 'lib/Vaildtions/SignupSchema'
 import * as Animatable from 'react-native-animatable'
-
-const logo = require('../../assets/mainLogo.png')
-const backImg = require('../../assets/backn.png')
 
 export default function SignUp() {
   const [errorMes, setErrorMes] = useState<string | null>(null)
