@@ -43,11 +43,11 @@ export default function SignIn() {
     onSubmit: handleLogin,
   })
 
-  useEffect(() => {
-    router.push('/')
+  // useEffect(() => {
+  //   router.push('/')
 
-    return () => {}
-  }, [router])
+  //   return () => {}
+  // }, [router])
 
   useFocusEffect(
     useCallback(() => {

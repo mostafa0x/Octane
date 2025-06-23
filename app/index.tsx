@@ -4,7 +4,7 @@ import { Text, IconButton, Icon, Button, Searchbar } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import * as Progress from 'react-native-progress'
 import { Image } from 'expo-image'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { FlashList } from '@shopify/flash-list'
 import ItemCard from 'components/List/ItemCard'
 import { useDispatch, useSelector } from 'react-redux'
@@ -32,19 +32,19 @@ export default function Home() {
   const animRef = useRef<AnimatableView>(null)
   const router = useRouter()
 
-  function handleSerach(text: string) {
+  const handleSerach = useCallback((text: string) => {
     setSearchQuery(text)
     dispatch(SearchAcknowledgments({ keyword: text, period: activeList }))
-  }
+  }, [])
 
-  function handleActive(period: string) {
+  const handleActive = useCallback((period: string) => {
     const nameLower = period.toLowerCase()
     setSearchQuery('')
     searchBoxRef.current?.blur()
     setActiveList(nameLower)
     if (animRef.current && animRef.current.fadeIn) animRef.current?.fadeIn(100)
     dispatch(SetAcknowledgments_Current(nameLower))
-  }
+  }, [])
 
   useEffect(() => {
     handleActive('daily')

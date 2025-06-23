@@ -62,7 +62,7 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
       }
     } else {
       if (pathName === '/' || pathName === '/Profile') {
-        //  router.replace('/Auth')
+        router.replace('/Auth')
       }
       setIsLoading(false)
     }
