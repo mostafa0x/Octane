@@ -49,7 +49,7 @@ export default function Home() {
   }, [])
 
   const cardWidth = width * 0.9
-  const cardHeight = height * 0.22
+  const cardHeight = height * 0.18
   const progressSize = Math.min(width, height) * 0.18
   const searchHeight = height * 0.07
   const sectionPadding = width * 0.05
@@ -66,7 +66,7 @@ export default function Home() {
         source={backImg}
       />
 
-      <View
+      {/* <View
         style={{
           position: 'absolute',
           top: height * 0.4,
@@ -89,7 +89,7 @@ export default function Home() {
           backgroundColor: 'white',
           borderRadius: 16,
         }}
-      />
+      /> */}
 
       <View style={{ position: 'absolute', top: 0, left: 0, zIndex: 50, width: '100%' }}>
         <TouchableOpacity
@@ -152,28 +152,46 @@ export default function Home() {
               color="#0068FF"
               unfilledColor="#F1FFF3"
               borderWidth={0}
-              thickness={3.25}
+              thickness={4.25}
             />
-            <View style={{ position: 'absolute' }}>
+
+            <View style={{ position: 'absolute', top: 12 }}>
               <Icon source={nfcIcon} color="white" size={progressSize} />
             </View>
             <Text style={{ color: '#bdcdce', marginTop: 8, fontSize: 18 }}>NFC tracker</Text>
           </View>
-
-          <View style={{ flex: 1, justifyContent: 'space-between', paddingLeft: 20 }}>
-            <View style={{ alignItems: 'center' }}>
+          <View
+            style={{
+              backgroundColor: '#ffffff',
+              width: width * 0.004,
+              height: height * 0.15,
+              borderRadius: 50,
+            }}></View>
+          <View style={{ flex: 1, justifyContent: 'space-between', paddingLeft: 40 }}>
+            <View style={{ alignItems: 'center', flexDirection: 'row' }}>
               <Icon size={50} color="#bdcdce" source={nfcIcon} />
-              <Text style={{ color: '#bdcdce', fontSize: 15 }}>Allocated</Text>
-              <Text style={{ fontSize: 18, color: '#f7f7f7', fontWeight: 'bold' }}>
-                {allocated}
-              </Text>
+              <View style={{ alignItems: 'center' }}>
+                <Text style={{ color: '#bdcdce', fontSize: 15 }}>Allocated</Text>
+                <Text style={{ fontSize: 18, color: '#f7f7f7', fontWeight: 'bold' }}>
+                  {allocated}
+                </Text>
+              </View>
             </View>
-            <View style={{ alignItems: 'center' }}>
+            <View
+              style={{
+                backgroundColor: '#ffffff',
+                width: width * 0.3,
+                height: height * 0.002,
+                borderRadius: 50,
+              }}></View>
+            <View style={{ alignItems: 'center', flexDirection: 'row' }}>
               <Icon size={50} color="#5c9dff" source={nfcIcon} />
-              <Text style={{ color: '#bdcdce', fontSize: 15 }}>Submitted</Text>
-              <Text style={{ fontSize: 18, color: '#5c9dff', fontWeight: 'bold' }}>
-                +{submitted}
-              </Text>
+              <View style={{ alignItems: 'center' }}>
+                <Text style={{ color: '#bdcdce', fontSize: 15 }}>Submitted</Text>
+                <Text style={{ fontSize: 18, color: '#5c9dff', fontWeight: 'bold' }}>
+                  +{submitted}
+                </Text>
+              </View>
             </View>
           </View>
         </View>
