@@ -38,7 +38,7 @@ function InputField({ lable, name, formik, errorMes }: props) {
           onChangeText={formik.handleChange(name)}
           onBlur={formik.handleBlur(name)}
           value={formik.values?.[name]}
-          style={{ flex: 1, height: 50, fontSize: 14 }}
+          style={{ flex: 1, height: 50, fontSize: 14, color: 'black' }}
           placeholder={lable}
           secureTextEntry={isPassword && !showPassword}
         />

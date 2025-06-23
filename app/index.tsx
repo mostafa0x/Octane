@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
 import { SearchAcknowledgments, SetAcknowledgments_Current } from 'lib/Store/Slices/MainSlice'
 import { useRouter } from 'expo-router'
+import NfcCard from 'components/NFC Card'
+import ListButtonHistory from 'components/List Button History'
 type AnimatableView = Animatable.View
 
 const backImg = require('../assets/backn.png')
@@ -135,7 +137,22 @@ export default function Home() {
           backgroundColor: 'white',
           padding: sectionPadding,
         }}>
-        <View
+        <NfcCard
+          submitted={submitted}
+          allocated={allocated}
+          cardWidth={cardWidth}
+          cardHeight={cardHeight}
+          progressSize={progressSize}
+          height={height}
+          width={width}
+        />
+        <ListButtonHistory
+          activeList={activeList}
+          searchHeight={searchHeight}
+          cardWidth={cardWidth}
+          handleActive={handleActive}
+        />
+        {/* <View
           style={{
             height: cardHeight,
             width: cardWidth,
@@ -194,8 +211,8 @@ export default function Home() {
               </View>
             </View>
           </View>
-        </View>
-
+        </View> */}
+        {/* 
         <View
           style={{
             marginTop: 20,
@@ -226,7 +243,7 @@ export default function Home() {
               {item.charAt(0).toUpperCase() + item.slice(1)}
             </Button>
           ))}
-        </View>
+        </View> */}
 
         <View style={{ marginTop: 20, width: cardWidth }}>
           <Searchbar

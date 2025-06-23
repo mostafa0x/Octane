@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
 import handleLoutOut from 'Services/handleLogOut'
-
+const avatarIcon = require('../../assets/avatar.png')
 const backImg = require('../../assets/backn.png')
 
 export default function Profile() {
@@ -71,11 +71,13 @@ export default function Profile() {
         }}>
         <TouchableOpacity activeOpacity={0.8}>
           <Avatar.Image
-            source={{
-              uri:
-                userData?.avatar ||
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkqE4v4MvZzIxhYbK1Lesgd_2stB50hahczw&s',
-            }}
+            source={
+              userData?.avatar
+                ? {
+                    uri: userData?.avatar,
+                  }
+                : avatarIcon
+            }
             size={avatarSize}
           />
         </TouchableOpacity>
@@ -97,7 +99,7 @@ export default function Profile() {
         }}>
         {/* الاسم */}
         <View style={{ alignItems: 'center', marginBottom: 30 }}>
-          <Text style={{ fontSize: 28, fontWeight: 'bold' }}>{userData?.name}</Text>
+          <Text style={{ fontSize: 28, fontWeight: 'bold', width: width }}>{userData?.name}</Text>
         </View>
 
         {/* المعلومات */}
@@ -114,7 +116,9 @@ export default function Profile() {
               }}>
               <Icon size={40} source="email-outline" />
             </View>
-            <Text style={{ fontSize: 16 }}>{userData?.email}</Text>
+            <Text style={{ fontSize: 16, width: width }}>
+              {userData?.email ?? 'loading email...'}
+            </Text>
           </View>
 
           <TouchableOpacity
@@ -131,7 +135,7 @@ export default function Profile() {
               }}>
               <Icon size={40} source="logout" />
             </View>
-            <Text style={{ fontSize: 16 }}>Log Out</Text>
+            <Text style={{ fontSize: 16, width: width }}>Log Out</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

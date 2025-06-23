@@ -1,5 +1,5 @@
 import { View, ScrollView, useWindowDimensions } from 'react-native'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import InputField from 'components/form/InputField'
 import { ActivityIndicator, Button, HelperText } from 'react-native-paper'
 import { useFormik } from 'formik'
@@ -29,7 +29,7 @@ export default function SignIn() {
         // router.replace('/');
       } catch (err: any) {
         setIsLoadingBtn(false)
-        setErrorMes(err.response?.data?.message ?? 'Error Login')
+        setErrorMes(err.response?.data?.message ?? err.message ?? 'Error Login')
       }
     }
   }
@@ -42,6 +42,12 @@ export default function SignIn() {
     validationSchema: LoginSchema,
     onSubmit: handleLogin,
   })
+
+  useEffect(() => {
+    router.push('/')
+
+    return () => {}
+  }, [router])
 
   useFocusEffect(
     useCallback(() => {
@@ -100,7 +106,7 @@ export default function SignIn() {
         {errorMes && (
           <View style={{ marginTop: 30, alignItems: 'center' }}>
             <HelperText
-              style={{ fontSize: height * 0.022, color: '#e03c3c' }}
+              style={{ fontSize: height * 0.022, height: height * 0.032, color: '#e03c3c' }}
               type="error"
               visible={!!errorMes}>
               {errorMes}
