@@ -21,6 +21,7 @@ function SegmentedBtn({ name, lable, width, height, formik }: props) {
   const delivery_MethodBtns = useRef<btnArray[]>([{ name: 'octane_employee' }, { name: 'test' }])
 
   useEffect(() => {
+    formik.setFieldTouched(name, false)
     if (name === 'submission_type') setCurrentBtns(cards_SubmittedBtns.current)
     else if (name === 'state_time') setCurrentBtns(state_TimeBtns.current)
     else if (name === 'delivery_method') setCurrentBtns(delivery_MethodBtns.current)
@@ -31,7 +32,12 @@ function SegmentedBtn({ name, lable, width, height, formik }: props) {
       <Text style={{ fontSize: width * 0.042, marginBottom: height * 0.008 }}>{lable}</Text>
       <SegmentedButtons
         value={formik.values?.[name]}
-        onValueChange={formik.handleChange(name)}
+        onValueChange={(val) => {
+          if (!formik.touched[name]) {
+            formik.setFieldTouched(name, true)
+          }
+          formik.setFieldValue(name, val)
+        }}
         style={{ height: height * 0.05 }}
         buttons={currentBtns.map((btn) => ({
           value: btn.name,

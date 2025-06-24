@@ -20,9 +20,10 @@ function InputField({ lable, name, formik, errorMes }: props) {
   const isErrorEmail = errorMes == 'User already exists' && name == 'email'
   const isNumberField = ['cards_submitted'].includes(name)
 
-  // useEffect(() => {
-  //   return () => {}
-  // }, [formik.handleChange('email')])
+  useEffect(() => {
+    formik.setFieldTouched(name, false)
+    return () => {}
+  }, [])
 
   return (
     <>

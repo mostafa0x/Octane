@@ -15,7 +15,6 @@ export default function Upload() {
   const [value, setValue] = React.useState('')
 
   async function handleUpload(formValues: any) {}
-
   const formik = useFormik({
     initialValues: {
       submission_type: '',
@@ -33,7 +32,7 @@ export default function Upload() {
       duration={200}
       easing="ease-in-out"
       style={{ flex: 1, backgroundColor: 'black' }}>
-      <View style={{ width: '100%', height: height * 0.2 }}></View>
+      <View style={{ width: '100%', height: height * 0.1 }}></View>
 
       <View
         style={{
