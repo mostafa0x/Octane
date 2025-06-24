@@ -123,6 +123,7 @@ export default function Home() {
             placeholder="Search"
             value={searchQuery}
             onChangeText={handleSerach}
+            onClearIconPress={() => handleActive(activeList)}
           />
         </View>
         <ListCard acknowledgments_Current={acknowledgments_Current} height={height} width={width} />

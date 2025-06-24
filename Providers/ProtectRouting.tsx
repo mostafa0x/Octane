@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
 import { usePathname, useRouter } from 'expo-router'
@@ -13,7 +13,7 @@ import SpinnerLoading from 'components/SpinnerLoading'
 import ErrorScreen from 'components/Error Screen'
 import { ChangeIsMountApp } from 'lib/Store/Slices/AppSlice'
 
-export default function ProtectRoutingProvider({ children }: { children: React.ReactNode }) {
+function ProtectRoutingProvider({ children }: { children: React.ReactNode }) {
   const { userToken, isLoadedData, isLoadedUserData } = useSelector(
     (state: StateFace) => state.UserReducer
   )
@@ -24,6 +24,16 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
   const router = useRouter()
   const pathName = usePathname()
   const { init } = useInitApp()
+
+  const shouldRedirectToAuth = useMemo(
+    () => !userToken && (pathName === '/' || pathName === '/Profile'),
+    [userToken, pathName]
+  )
+
+  const shouldRedirectToHome = useMemo(
+    () => userToken && pathName === '/Auth' && isLoadedData,
+    [userToken, pathName, isLoadedData]
+  )
 
   useEffect(() => {
     if (isLoadedUserData || isMountApp) return
@@ -49,12 +59,12 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
       setIsError(err?.response?.data?.message ?? err.message ?? 'Something went wrong !')
       console.log(err.message ?? 'Something went wrong')
     }
-  }, [])
+  }, [init])
 
   useEffect(() => {
     if (!isMountApp) return
     if (userToken) {
-      if (pathName == '/Auth') {
+      if (shouldRedirectToHome) {
         if (isLoadedData) {
           router.replace('/')
         } else {
@@ -64,12 +74,19 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
         GetData()
       }
     } else {
-      if (pathName === '/' || pathName === '/Profile') {
+      if (shouldRedirectToAuth) {
         router.replace('/Auth')
       }
       setIsLoading(false)
     }
-  }, [isMountApp, isLoadedUserData, isLoadedData, userToken, pathName])
+  }, [
+    isMountApp,
+    isLoadedUserData,
+    isLoadedData,
+    userToken,
+    shouldRedirectToHome,
+    shouldRedirectToAuth,
+  ])
 
   if (isError) {
     return <ErrorScreen isError={isError} GetData={GetData} />
@@ -81,3 +98,5 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
 
   return children
 }
+
+export default memo(ProtectRoutingProvider)
