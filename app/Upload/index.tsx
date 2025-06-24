@@ -51,6 +51,21 @@ export default function Upload() {
           width={width}
           formik={formik}
         />
+        <SegmentedBtn
+          name={'delivery_method'}
+          lable={'delivery method'}
+          height={height}
+          width={width}
+          formik={formik}
+        />
+        <SegmentedBtn
+          name={'state_time'}
+          lable={'state time'}
+          height={height}
+          width={width}
+          formik={formik}
+        />
+
         <InputField
           lable={'cards submitted'}
           name={'cards_submitted'}

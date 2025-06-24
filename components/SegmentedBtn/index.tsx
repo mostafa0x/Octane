@@ -1,10 +1,9 @@
 import { View, Text } from 'react-native'
-import React, { memo, useEffect, useState } from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import { HelperText, SegmentedButtons } from 'react-native-paper'
 
 export interface btnArray {
   name: string
-  icon: string
 }
 
 interface props {
@@ -17,13 +16,14 @@ interface props {
 
 function SegmentedBtn({ name, lable, width, height, formik }: props) {
   const [currentBtns, setCurrentBtns] = useState<btnArray[]>([])
-  const cards_submittedBtns: btnArray[] = [
-    { name: 'hi', icon: 'play' },
-    { name: 'see', icon: 'play' },
-  ]
+  const cards_SubmittedBtns = useRef<btnArray[]>([{ name: 'hi' }, { name: 'see' }])
+  const state_TimeBtns = useRef<btnArray[]>([{ name: 'onTime' }, { name: 'late' }])
+  const delivery_MethodBtns = useRef<btnArray[]>([{ name: 'octane_employee' }, { name: 'test' }])
 
   useEffect(() => {
-    if (name === 'submission_type') setCurrentBtns(cards_submittedBtns)
+    if (name === 'submission_type') setCurrentBtns(cards_SubmittedBtns.current)
+    else if (name === 'state_time') setCurrentBtns(state_TimeBtns.current)
+    else if (name === 'delivery_method') setCurrentBtns(delivery_MethodBtns.current)
   }, [])
 
   return (
@@ -35,7 +35,7 @@ function SegmentedBtn({ name, lable, width, height, formik }: props) {
         style={{ height: height * 0.05 }}
         buttons={currentBtns.map((btn) => ({
           value: btn.name,
-          label: btn.name,
+          label: btn.name.split('_').join(' '),
           icon: formik.values?.[name] == btn.name ? 'check-bold' : '',
           checkedColor: 'green',
           uncheckedColor: 'red',
@@ -43,7 +43,7 @@ function SegmentedBtn({ name, lable, width, height, formik }: props) {
           labelStyle: {
             textAlignVertical: 'center',
             height: height * 0.03,
-            fontSize: width * 0.046,
+            fontSize: btn.name.length <= 10 ? width * 0.046 : width * 0.036,
 
             color: 'black',
           },

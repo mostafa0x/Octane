@@ -41,7 +41,7 @@ function InputField({ lable, name, formik, errorMes }: props) {
           onBlur={formik.handleBlur(name)}
           value={formik.values?.[name]}
           style={{ flex: 1, height: 50, fontSize: 14, color: 'black' }}
-          placeholder={lable}
+          placeholder={isNumberField ? '0' : lable}
           secureTextEntry={isPassword && !showPassword}
         />
         {isPassword && (

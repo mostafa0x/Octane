@@ -13,5 +13,8 @@ export const UploadvalidationSchema = yup.object().shape({
     .required('Required!'),
   delivery_method: yup.string().oneOf(['octane_employee', 'test']).required('Required!'),
   image: yup.string().required('Required!'),
-  state_time: yup.string().oneOf(['onTime', 'late']).required('Required!'),
+  state_time: yup
+    .string()
+    .oneOf(['onTime', 'late'], 'It must be an option : onTime OR late')
+    .required('Required!'),
 })
