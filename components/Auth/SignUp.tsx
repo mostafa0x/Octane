@@ -61,16 +61,14 @@ export default function SignUp() {
         paddingHorizontal: 20,
         paddingVertical: 40,
       }}>
-      <Animatable.View className="flex-1" animation="fadeIn" duration={600} easing="ease-in-out">
-        {/* مدخلات */}
+      <Animatable.View className="flex-1" animation="fadeIn" duration={400} easing="ease-in-out">
         <View style={{ marginBottom: 40 }}>
           <InputField lable={'Username'} name={'name'} formik={formik} errorMes={errorMes} />
           <InputField lable={'Email'} name={'email'} formik={formik} errorMes={errorMes} />
           <InputField lable={'Password'} name={'password'} formik={formik} errorMes={errorMes} />
         </View>
 
-        {/* زرار التسجيل */}
-        <View>
+        <View style={{ alignItems: 'center' }}>
           {isLoadingBtn ? (
             <ActivityIndicator size={height * 0.05} />
           ) : (
@@ -78,7 +76,8 @@ export default function SignUp() {
               onPress={() => formik.handleSubmit()}
               style={{
                 borderRadius: 20,
-                height: height * 0.09,
+                height: height * 0.06,
+                width: width * 0.5,
                 justifyContent: 'center',
               }}
               contentStyle={{
@@ -88,6 +87,7 @@ export default function SignUp() {
               }}
               labelStyle={{
                 fontSize: height * 0.025,
+                height: height * 0.09,
                 textAlignVertical: 'center',
               }}
               textColor="#FFFFFF"
@@ -97,7 +97,6 @@ export default function SignUp() {
           )}
         </View>
 
-        {/* رسالة الخطأ */}
         {errorMes && (
           <View style={{ marginTop: 30, alignItems: 'center' }}>
             <HelperText

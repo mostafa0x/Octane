@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import React, { useEffect, useRef } from 'react'
+import React, { memo, useEffect, useRef } from 'react'
 import * as Animatable from 'react-native-animatable'
 import { FlashList } from '@shopify/flash-list'
 import ItemCard from './ItemCard'
@@ -12,7 +12,7 @@ interface props {
   width: number
 }
 
-export default function ListCard({ acknowledgments_Current, height, width }: props) {
+function ListCard({ acknowledgments_Current, height, width }: props) {
   const animRef = useRef<AnimatableView>(null)
 
   useEffect(() => {
@@ -44,3 +44,5 @@ export default function ListCard({ acknowledgments_Current, height, width }: pro
     </Animatable.View>
   )
 }
+
+export default memo(ListCard)

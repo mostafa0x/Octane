@@ -31,20 +31,16 @@ export default function Auth() {
         backgroundColor: '#661534',
         flexGrow: 1,
       }}>
-      {/* الخلفية */}
       <View style={{ position: 'absolute', top: height * 0.2, width: width }}>
         <Image style={{ width: width, height: height * 0.25 }} contentFit="fill" source={backImg} />
       </View>
 
-      {/* الشعار + المحتوى */}
       <View className="flex-1">
         <View style={{ width: width, height: height * 0.3 }}>
           <Image source={logo} contentFit="contain" style={{ width: '100%', height: '100%' }} />
         </View>
 
-        {/* البوكس الأبيض */}
         <View style={{ minHeight: height }} className="rounded-t-[50px] bg-white px-6 pb-[85px]">
-          {/* الأزرار */}
           <View
             style={{ borderRadius: 30, padding: 8 }}
             className="border-3 mt-10 h-[70px] flex-row items-center justify-center border-[#F5F6F9] bg-[#e2e4e9]">
@@ -85,7 +81,6 @@ export default function Auth() {
             </Button>
           </View>
 
-          {/* النموذج */}
           {authMode === 1 ? <SignIn /> : <SignUp />}
         </View>
       </View>

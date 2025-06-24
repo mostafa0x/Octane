@@ -5,11 +5,13 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
 import { SearchAcknowledgments, SetAcknowledgments_Current } from 'lib/Store/Slices/MainSlice'
-import { useRouter } from 'expo-router'
+import { Href, Route, RouteInputParams, useRouter } from 'expo-router'
 import NfcCard from 'components/NFC Card'
 import ListButtonHistory from 'components/List Button History'
 import * as Animatable from 'react-native-animatable'
 import ListCard from 'components/List/ListCard'
+import AppBar from 'components/App Bar'
+import { NavigationOptions } from 'expo-router/build/global-state/routing'
 
 const backImg = require('../assets/backn.png')
 
@@ -85,37 +87,7 @@ export default function Home() {
         }}
       /> */}
 
-      <View style={{ position: 'absolute', top: 0, left: 0, zIndex: 50, width: '100%' }}>
-        <TouchableOpacity
-          onPress={() => router.push('/Profile')}
-          style={{ position: 'absolute', left: 10, top: 0, zIndex: 10 }}>
-          <Image
-            style={{ width: 50, height: 50 }}
-            contentFit="cover"
-            source={require('../assets/LogowithoutTXT.png')}
-          />
-        </TouchableOpacity>
-        <View style={{ position: 'absolute', left: 60, top: 10, zIndex: 10 }}>
-          <Text style={{ color: '#F1FFF3', fontSize: 24 }}>Hi, Welcome Back {userData?.name}</Text>
-        </View>
-        <View
-          style={{
-            height: 60,
-            width: '100%',
-            borderBottomLeftRadius: 30,
-            borderBottomRightRadius: 30,
-            backgroundColor: 'black',
-            opacity: 0.4,
-          }}
-        />
-        <View style={{ marginTop: 40, gap: 8, padding: sectionPadding }}>
-          <Text style={{ color: '#EEEEEE', fontSize: 26, fontWeight: 'bold' }}>Made for You</Text>
-          <Text style={{ color: '#EEEEEE', fontSize: 18 }}>
-            Get Things Done Efficiently and Accurately
-          </Text>
-        </View>
-      </View>
-
+      <AppBar sectionPadding={sectionPadding} router={router} userData={userData} width={width} />
       <View style={{ height: height * 0.3 }}>
         <Image source={backImg} contentFit="fill" style={{ width: '100%', height: '100%' }} />
       </View>
