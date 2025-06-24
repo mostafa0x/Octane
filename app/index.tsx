@@ -12,6 +12,7 @@ import * as Animatable from 'react-native-animatable'
 import ListCard from 'components/List/ListCard'
 import AppBar from 'components/App Bar'
 import { NavigationOptions } from 'expo-router/build/global-state/routing'
+import SwipeBtn from 'components/SwipeBtn'
 
 const backImg = require('../assets/backn.png')
 
@@ -127,6 +128,7 @@ export default function Home() {
           />
         </View>
         <ListCard acknowledgments_Current={acknowledgments_Current} height={height} width={width} />
+        <SwipeBtn width={width} height={height} />
       </View>
     </Animatable.View>
   )
