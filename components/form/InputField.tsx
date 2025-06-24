@@ -18,6 +18,7 @@ function InputField({ lable, name, formik, errorMes }: props) {
       ? errorMes
       : formik.touched?.[name] && !!formik.errors?.[name]
   const isErrorEmail = errorMes == 'User already exists' && name == 'email'
+  const isNumberField = ['cards_submitted'].includes(name)
 
   // useEffect(() => {
   //   return () => {}
@@ -34,6 +35,7 @@ function InputField({ lable, name, formik, errorMes }: props) {
           borderColor: isError || isErrorEmail ? '#e03c3c' : '#EDF1F3',
         }}>
         <TextInput
+          keyboardType={isNumberField ? 'numeric' : 'default'}
           onSubmitEditing={() => isPassword && formik.handleSubmit()}
           onChangeText={formik.handleChange(name)}
           onBlur={formik.handleBlur(name)}
