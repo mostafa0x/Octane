@@ -3,15 +3,16 @@ import React, { memo, useEffect, useRef } from 'react'
 import * as Animatable from 'react-native-animatable'
 import { FlashList } from '@shopify/flash-list'
 import { CompanyFace } from 'Types/ItemList'
+import ItemCard_CS from './ItemCard'
 type AnimatableView = Animatable.View
 
 interface props {
   height: number
   width: number
-  companys: CompanyFace[]
+  currentcompanys: CompanyFace[]
 }
 
-function SerachCompanys({ height, width, companys }: props) {
+function SerachCompanys({ height, width, currentcompanys }: props) {
   const animRef = useRef<AnimatableView>(null)
 
   return (
@@ -21,11 +22,11 @@ function SerachCompanys({ height, width, companys }: props) {
       easing="ease-in-out"
       style={{ height: height * 0.24, width: '100%', marginTop: 20 }}>
       <FlashList
-        data={companys}
+        data={currentcompanys}
         estimatedItemSize={70}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={{ paddingBottom: 20 }}
-        renderItem={({ item }) => <Text>{item.name}</Text>}
+        renderItem={({ item }) => <ItemCard_CS item={item} height={height} width={width} />}
         ListEmptyComponent={() => (
           <View style={{ marginTop: 50, alignItems: 'center' }}>
             <Text

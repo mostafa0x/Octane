@@ -1,5 +1,5 @@
 import { View, Text, useWindowDimensions, ScrollView } from 'react-native'
-import React from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import * as Animatable from 'react-native-animatable'
 import AppBar from 'components/App Bar'
 import { Href, Route, RouteInputParams } from 'expo-router'
@@ -7,16 +7,25 @@ import { NavigationOptions } from 'expo-router/build/global-state/routing'
 import InputField from 'components/form/InputField'
 import { useFormik } from 'formik'
 import { UploadvalidationSchema } from 'lib/Vaildtions/UploadSchema'
-import { HelperText, SegmentedButtons, Tooltip } from 'react-native-paper'
+import { HelperText, Searchbar, SegmentedButtons, Tooltip } from 'react-native-paper'
 import SegmentedBtn from 'components/SegmentedBtn'
+import SerachCompanys from 'components/SerachCompanys'
+import { useDispatch, useSelector } from 'react-redux'
+import { StateFace } from 'Types/Store/StateFace'
+import { GetSerachCompany } from 'lib/Store/Slices/CompanySlice'
 
 export default function Upload() {
   const { width, height } = useWindowDimensions()
-  const [value, setValue] = React.useState('')
+  const { currentcompanys } = useSelector((state: StateFace) => state.CompanyReducer)
 
+  const [searchQuery, setSearchQuery] = useState('')
+  const searchBoxRef = useRef<React.ComponentRef<typeof Searchbar>>(null)
   async function handleUpload(formValues: any) {}
+  const dispatch = useDispatch()
   const formik = useFormik({
     initialValues: {
+      company_id: 0,
+      cards_submitted: 0,
       submission_type: '',
       delivery_method: '',
       image: '',
@@ -25,6 +34,22 @@ export default function Upload() {
     validationSchema: UploadvalidationSchema,
     onSubmit: handleUpload,
   })
+
+  const handleSerach = useCallback((text: string) => {
+    setSearchQuery(text)
+    dispatch(GetSerachCompany(text))
+  }, [])
+
+  const handleClear = useCallback(() => {
+    if (searchBoxRef.current) {
+      searchBoxRef.current?.blur()
+      setSearchQuery('')
+    }
+  }, [])
+
+  useEffect(() => {
+    handleSerach('')
+  }, [])
 
   return (
     <Animatable.View
@@ -43,6 +68,16 @@ export default function Upload() {
           paddingTop: height * 0.1,
           paddingHorizontal: height * 0.036,
         }}>
+        <View style={{ marginTop: 20, width: width * 0.9 }}>
+          <Searchbar
+            ref={searchBoxRef}
+            placeholder="Search"
+            value={searchQuery}
+            onChangeText={handleSerach}
+            onClearIconPress={() => handleClear()}
+          />
+        </View>
+        <SerachCompanys height={height} width={width} currentcompanys={currentcompanys} />
         <SegmentedBtn
           name={'submission_type'}
           lable={'submission type'}

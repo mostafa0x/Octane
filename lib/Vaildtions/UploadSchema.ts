@@ -1,7 +1,7 @@
 import * as yup from 'yup'
 
 export const UploadvalidationSchema = yup.object().shape({
-  company_id: yup.number().required('Required!'),
+  company_id: yup.number().min(1, 'Error!').required('Required!'),
   cards_submitted: yup
     .number()
     .typeError('Must be a number')

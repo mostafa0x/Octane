@@ -70,6 +70,14 @@ function AppBar({ type, sectionPadding, router, userData, width }: props) {
       ) : (
         <ProfileContent router={router} width={width} />
       )}
+      {type == 'Home' && (
+        <View style={{ marginTop: 40, gap: 8, padding: sectionPadding }}>
+          <Text style={{ color: '#EEEEEE', fontSize: 26, fontWeight: 'bold' }}>Made for You</Text>
+          <Text style={{ color: '#EEEEEE', fontSize: 18 }}>
+            Get Things Done Efficiently and Accurately
+          </Text>
+        </View>
+      )}
     </View>
   )
 }

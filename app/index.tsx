@@ -22,9 +22,9 @@ export default function Home() {
     (state: StateFace) => state.MainReducer
   )
   const { userData } = useSelector((state: StateFace) => state.UserReducer)
-  const [searchQuery, setSearchQuery] = useState('')
   const dispatch = useDispatch()
   const [activeList, setActiveList] = useState('daily')
+  const [searchQuery, setSearchQuery] = useState('')
   const searchBoxRef = useRef<React.ComponentRef<typeof Searchbar>>(null)
   const router = useRouter()
 
