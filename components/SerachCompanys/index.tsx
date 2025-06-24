@@ -40,7 +40,7 @@ function SerachCompanys({
         extraData={selectCompany}
         estimatedItemSize={70}
         keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={{ paddingBottom: 20 }}
+        contentContainerStyle={{ paddingBottom: 0 }}
         renderItem={({ item }) => (
           <ItemCard_CS
             item={item}

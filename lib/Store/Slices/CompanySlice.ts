@@ -7,7 +7,7 @@ type ActionFace = {
 }
 const initialState: CompanySliceFace = {
   companys: [
-    { id: 1, name: 'xxx', code: 1 },
+    { id: 2610, name: 'xxx', code: 2610 },
     { id: 2, name: 'zzz', code: 2 },
     { id: 4, name: 'vvv', code: 16 },
     { id: 3, name: 'kkj', code: 264 },

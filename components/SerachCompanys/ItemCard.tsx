@@ -19,12 +19,6 @@ export default function ItemCard_CS({
   SelectCompanyID,
   selectCompany,
 }: props) {
-  useEffect(() => {
-    console.log(formik.values.company_id)
-
-    return () => {}
-  }, [formik.values.company_id])
-
   return (
     <View
       style={{ width: width * 0.95, padding: width * 0.02 }}
@@ -45,7 +39,7 @@ export default function ItemCard_CS({
           }}
           style={{ width: '40%' }}
           contentStyle={{ width: '100%' }}
-          buttonColor={formik.values?.['company_id'] == item.id ? 'red' : 'green'}
+          buttonColor={formik.values?.['company_id'] == item.id ? '#8d1c47' : 'green'}
           textColor="white">
           {formik.values.company_id == item.id ? 'Seleted' : 'Select'}
         </Button>
