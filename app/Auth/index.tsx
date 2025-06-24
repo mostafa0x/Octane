@@ -1,5 +1,5 @@
 import { View, ScrollView, useWindowDimensions } from 'react-native'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Image } from 'expo-image'
 import { Button } from 'react-native-paper'
 import { useFocusEffect, useRouter } from 'expo-router'
@@ -16,6 +16,9 @@ export default function Auth() {
   const { width, height } = useWindowDimensions()
   const [authMode, setAuthMode] = useState(1)
 
+  useEffect(() => {
+    router.prefetch('/')
+  }, [])
   useFocusEffect(
     useCallback(() => {
       return () => {}

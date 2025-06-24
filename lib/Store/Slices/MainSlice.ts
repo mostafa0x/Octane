@@ -75,7 +75,6 @@ const MainSlice = createSlice({
       } else if (action.payload.period == 'monthly') {
         state.acknowledgments_Monthly = action.payload.data
       }
-      console.log(`loaded ${action.payload.period}`)
     },
     ClearMainData: (state, action) => {
       state.allocated = 0

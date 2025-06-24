@@ -23,7 +23,6 @@ export default function Profile() {
 
   return (
     <Animatable.View animation="fadeIn" duration={200} easing="ease-in-out" style={{ flex: 1 }}>
-      {/* الهيدر */}
       <View style={{ position: 'absolute', top: 0, left: 0, zIndex: 50, width: width }}>
         <TouchableOpacity
           onPress={() => router.back()}
@@ -47,7 +46,6 @@ export default function Profile() {
         />
       </View>
 
-      {/* خلفية */}
       <View style={{ position: 'absolute', top: height * 0.2, width: '100%' }}>
         <Image
           style={{ width: '100%', height: height * 0.25 }}
@@ -56,12 +54,10 @@ export default function Profile() {
         />
       </View>
 
-      {/* الصورة العلوية */}
       <View style={{ width: '100%', height: height * 0.3 }}>
         <Image source={backImg} contentFit="fill" style={{ width: '100%', height: '100%' }} />
       </View>
 
-      {/* الصورة الشخصية */}
       <View
         style={{
           position: 'absolute',
@@ -83,7 +79,6 @@ export default function Profile() {
         </TouchableOpacity>
       </View>
 
-      {/* محتوى الصفحة */}
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
@@ -97,12 +92,12 @@ export default function Profile() {
           backgroundColor: 'white',
           paddingTop: height * 0.12,
         }}>
-        {/* الاسم */}
-        <View style={{ alignItems: 'center', marginBottom: 30 }}>
-          <Text style={{ fontSize: 28, fontWeight: 'bold', width: width }}>{userData?.name}</Text>
+        <View style={{ alignItems: 'center', marginBottom: 50 }}>
+          <Text style={{ fontSize: 28, fontWeight: 'bold', width: width, textAlign: 'center' }}>
+            {userData?.name}
+          </Text>
         </View>
 
-        {/* المعلومات */}
         <View style={{ gap: 30 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
             <View

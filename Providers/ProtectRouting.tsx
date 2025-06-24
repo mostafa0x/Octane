@@ -11,11 +11,13 @@ import { ChangeLoadedData } from 'lib/Store/Slices/UserSlice'
 import { useInitApp } from 'Hooks/useInitApp'
 import SpinnerLoading from 'components/SpinnerLoading'
 import ErrorScreen from 'components/Error Screen'
+import { ChangeIsMountApp } from 'lib/Store/Slices/AppSlice'
 
 export default function ProtectRoutingProvider({ children }: { children: React.ReactNode }) {
   const { userToken, isLoadedData, isLoadedUserData } = useSelector(
     (state: StateFace) => state.UserReducer
   )
+  const { isMountApp } = useSelector((state: StateFace) => state.AppReducer)
   const [isLoading, setIsLoading] = useState(true)
   const [isError, setIsError] = useState<string | null>(null)
   const dispatch = useDispatch()
@@ -24,11 +26,12 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
   const { init } = useInitApp()
 
   useEffect(() => {
-    if (isLoadedUserData) return
+    if (isLoadedUserData || isMountApp) return
 
     const initApp = async () => {
       console.log('✅ run app ✅')
       await getUserInfo(dispatch)
+      dispatch(ChangeIsMountApp(true))
     }
 
     initApp()
@@ -39,17 +42,17 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
     setIsError(null)
 
     try {
-      console.log('loading data...')
-      // await init()
+      await init()
+
       setIsLoading(false)
     } catch (err: any) {
       setIsError(err?.response?.data?.message ?? err.message ?? 'Something went wrong !')
       console.log(err.message ?? 'Something went wrong')
     }
-  }, [init])
+  }, [])
 
   useEffect(() => {
-    if (!isLoadedUserData) return
+    if (!isMountApp) return
     if (userToken) {
       if (pathName == '/Auth') {
         if (isLoadedData) {
@@ -66,7 +69,7 @@ export default function ProtectRoutingProvider({ children }: { children: React.R
       }
       setIsLoading(false)
     }
-  }, [isLoadedUserData, isLoadedData, userToken, pathName])
+  }, [isMountApp, isLoadedUserData, isLoadedData, userToken, pathName])
 
   if (isError) {
     return <ErrorScreen isError={isError} GetData={GetData} />

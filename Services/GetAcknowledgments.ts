@@ -8,7 +8,6 @@ export const GetAcknowledgments = async (period: string, dispatch: any) => {
     const data = res.data.acknowledgments
     dispatch(SetAcknowledgments({ period, data: data }))
   } catch (err: any) {
-    //   console.log(err)
     throw err
   }
 }

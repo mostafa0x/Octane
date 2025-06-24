@@ -13,6 +13,7 @@ export const useInitApp = () => {
       GetAcknowledgments('weekly', dispatch),
       GetAcknowledgments('daily', dispatch),
     ])
+    console.log('loaded data ✅')
     dispatch(ChangeLoadedData(true))
   }
 

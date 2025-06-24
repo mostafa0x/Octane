@@ -1,22 +1,17 @@
-import { useMenuContext } from 'Providers/MenuProvider'
-import { Animated, TouchableOpacity, View, useWindowDimensions, ScrollView } from 'react-native'
-import { Text, IconButton, Icon, Button, Searchbar } from 'react-native-paper'
-import * as Animatable from 'react-native-animatable'
-import * as Progress from 'react-native-progress'
+import { TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Text, Searchbar } from 'react-native-paper'
 import { Image } from 'expo-image'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { FlashList } from '@shopify/flash-list'
-import ItemCard from 'components/List/ItemCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
 import { SearchAcknowledgments, SetAcknowledgments_Current } from 'lib/Store/Slices/MainSlice'
 import { useRouter } from 'expo-router'
 import NfcCard from 'components/NFC Card'
 import ListButtonHistory from 'components/List Button History'
-type AnimatableView = Animatable.View
+import * as Animatable from 'react-native-animatable'
+import ListCard from 'components/List/ListCard'
 
 const backImg = require('../assets/backn.png')
-const nfcIcon = require('../assets/nfc.png')
 
 export default function Home() {
   const { width, height } = useWindowDimensions()
@@ -26,10 +21,8 @@ export default function Home() {
   const { userData } = useSelector((state: StateFace) => state.UserReducer)
   const [searchQuery, setSearchQuery] = useState('')
   const dispatch = useDispatch()
-  const { openDrawer } = useMenuContext()
   const [activeList, setActiveList] = useState('daily')
   const searchBoxRef = useRef<React.ComponentRef<typeof Searchbar>>(null)
-  const animRef = useRef<AnimatableView>(null)
   const router = useRouter()
 
   const handleSerach = useCallback((text: string) => {
@@ -42,7 +35,6 @@ export default function Home() {
     setSearchQuery('')
     searchBoxRef.current?.blur()
     setActiveList(nameLower)
-    if (animRef.current && animRef.current.fadeIn) animRef.current?.fadeIn(100)
     dispatch(SetAcknowledgments_Current(nameLower))
   }, [])
 
@@ -116,7 +108,7 @@ export default function Home() {
             opacity: 0.4,
           }}
         />
-        <View style={{ marginTop: 10, gap: 8, padding: sectionPadding }}>
+        <View style={{ marginTop: 40, gap: 8, padding: sectionPadding }}>
           <Text style={{ color: '#EEEEEE', fontSize: 26, fontWeight: 'bold' }}>Made for You</Text>
           <Text style={{ color: '#EEEEEE', fontSize: 18 }}>
             Get Things Done Efficiently and Accurately
@@ -152,98 +144,6 @@ export default function Home() {
           cardWidth={cardWidth}
           handleActive={handleActive}
         />
-        {/* <View
-          style={{
-            height: cardHeight,
-            width: cardWidth,
-            flexDirection: 'row',
-            borderRadius: 31,
-            backgroundColor: '#8d1c47',
-            padding: 20,
-          }}>
-          <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-            <Progress.Circle
-              size={progressSize}
-              progress={allocated > 0 ? submitted / allocated : 0}
-              showsText={false}
-              color="#0068FF"
-              unfilledColor="#F1FFF3"
-              borderWidth={0}
-              thickness={4.25}
-            />
-
-            <View style={{ position: 'absolute', top: 12 }}>
-              <Icon source={nfcIcon} color="white" size={progressSize} />
-            </View>
-            <Text style={{ color: '#bdcdce', marginTop: 8, fontSize: 18 }}>NFC tracker</Text>
-          </View>
-          <View
-            style={{
-              backgroundColor: '#ffffff',
-              width: width * 0.004,
-              height: height * 0.15,
-              borderRadius: 50,
-            }}></View>
-          <View style={{ flex: 1, justifyContent: 'space-between', paddingLeft: 40 }}>
-            <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-              <Icon size={50} color="#bdcdce" source={nfcIcon} />
-              <View style={{ alignItems: 'center' }}>
-                <Text style={{ color: '#bdcdce', fontSize: 15 }}>Allocated</Text>
-                <Text style={{ fontSize: 18, color: '#f7f7f7', fontWeight: 'bold' }}>
-                  {allocated}
-                </Text>
-              </View>
-            </View>
-            <View
-              style={{
-                backgroundColor: '#ffffff',
-                width: width * 0.3,
-                height: height * 0.002,
-                borderRadius: 50,
-              }}></View>
-            <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-              <Icon size={50} color="#5c9dff" source={nfcIcon} />
-              <View style={{ alignItems: 'center' }}>
-                <Text style={{ color: '#bdcdce', fontSize: 15 }}>Submitted</Text>
-                <Text style={{ fontSize: 18, color: '#5c9dff', fontWeight: 'bold' }}>
-                  +{submitted}
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View> */}
-        {/* 
-        <View
-          style={{
-            marginTop: 20,
-            height: searchHeight,
-            width: cardWidth,
-            borderRadius: 22,
-            backgroundColor: '#c47b9f',
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            alignItems: 'center',
-          }}>
-          {['daily', 'weekly', 'monthly'].map((item) => (
-            <Button
-              key={item}
-              onPress={() => handleActive(item)}
-              mode={activeList === item ? 'contained' : 'text'}
-              style={{ width: cardWidth / 3 - 10, height: searchHeight * 0.8, borderRadius: 25 }}
-              labelStyle={{
-                fontSize: 15,
-
-                color: activeList === item ? '#eff1f1' : '#052224',
-              }}
-              buttonColor={activeList === item ? '#8d1c47' : '#c47b9f'}
-              contentStyle={{
-                justifyContent: 'center',
-                height: searchHeight * 0.8,
-              }}>
-              {item.charAt(0).toUpperCase() + item.slice(1)}
-            </Button>
-          ))}
-        </View> */}
 
         <View style={{ marginTop: 20, width: cardWidth }}>
           <Searchbar
@@ -253,25 +153,7 @@ export default function Home() {
             onChangeText={handleSerach}
           />
         </View>
-
-        <Animatable.View
-          ref={animRef}
-          animation="fadeIn"
-          easing="ease-in-out"
-          style={{ height: height * 0.3, width: '100%', marginTop: 20 }}>
-          <FlashList
-            data={acknowledgments_Current}
-            estimatedItemSize={70}
-            keyExtractor={(item, index) => index.toString()}
-            contentContainerStyle={{ paddingBottom: 20 }}
-            renderItem={({ item }) => <ItemCard item={item} />}
-            ListEmptyComponent={() => (
-              <View style={{ marginTop: 50, alignItems: 'center' }}>
-                <Text style={{ fontSize: 20, opacity: 0.7 }}>Empty</Text>
-              </View>
-            )}
-          />
-        </Animatable.View>
+        <ListCard acknowledgments_Current={acknowledgments_Current} height={height} width={width} />
       </View>
     </Animatable.View>
   )

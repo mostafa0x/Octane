@@ -7,10 +7,10 @@ export default async function handleLoutOut(dispatch: any, router: Router) {
   try {
     await clearUserInfo()
     dispatch(ClearMainData(null))
-    dispatch(fillUserInfo({ userData: null, userToken: null }))
     dispatch(ChangeLoadedData(false))
     dispatch(changeIsLoadedUserData(false))
-    router.dismissAll()
+    dispatch(fillUserInfo({ userData: null, userToken: null }))
+    // router.replace('/Auth')
   } catch (err: any) {
     console.log(err)
   }
