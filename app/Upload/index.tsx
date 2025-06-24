@@ -10,7 +10,7 @@ import {
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import * as Animatable from 'react-native-animatable'
 import AppBar from 'components/App Bar'
-import { Href, Route, RouteInputParams } from 'expo-router'
+import { Href, Route, RouteInputParams, router } from 'expo-router'
 import { NavigationOptions } from 'expo-router/build/global-state/routing'
 import InputField from 'components/form/InputField'
 import { useFormik } from 'formik'
@@ -32,6 +32,7 @@ import { GetSerachCompany } from 'lib/Store/Slices/CompanySlice'
 import * as ImagePicker from 'expo-image-picker'
 import axiosClient from 'lib/api/axiosClient'
 import { Image } from 'expo-image'
+import { PushNewAcknowledgment } from 'lib/Store/Slices/MainSlice'
 
 export default function Upload() {
   const { width, height } = useWindowDimensions()
@@ -43,6 +44,7 @@ export default function Upload() {
   const handleUpload = async (formValues: any) => {
     if (isLoadingRes) return
     setIsLoadingRes(true)
+    setErrorApi(null)
     try {
       const formData = new FormData()
 
@@ -69,10 +71,13 @@ export default function Upload() {
         },
       })
 
-      const data = response.data
+      const data = response.data.acknowledgments[0]
+      dispatch(PushNewAcknowledgment(data))
+      router.push('/')
       console.log('Response:', data)
     } catch (err: any) {
-      console.error('❌ Upload failed:', err?.response?.data || err.message)
+      setErrorApi(err?.response?.data.message || err.message)
+      //  console.error('❌ Upload failed:', err?.response?.data || err.message)
       setIsLoadingRes(false)
     }
   }
@@ -280,12 +285,15 @@ export default function Upload() {
                       mode="contained"
                       onPress={() => {
                         //  setShowConfirmModal(false)
-                        // formik.handleSubmit()
+                        formik.handleSubmit()
                       }}
                       buttonColor="#4CAF50">
                       Confirm
                     </Button>
                   )}
+                  <HelperText visible={!!errorApi} type="error">
+                    {errorApi}
+                  </HelperText>
                   {isLoadingRes ? null : (
                     <Button
                       mode="outlined"
@@ -294,7 +302,6 @@ export default function Upload() {
                       Cancel
                     </Button>
                   )}
-                  <HelperText visible={errorApi} type="error"></HelperText>
                 </View>
               </View>
             </View>

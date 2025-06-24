@@ -28,6 +28,12 @@ const MainSlice = createSlice({
   name: 'MainSlice',
   initialState,
   reducers: {
+    PushNewAcknowledgment: (state, action) => {
+      state.acknowledgments_Current = [action.payload, ...state.acknowledgments_Current]
+      state.acknowledgments_Daily = [action.payload, ...state.acknowledgments_Daily]
+      state.acknowledgments_Weekly = [action.payload, ...state.acknowledgments_Weekly]
+      state.acknowledgments_Monthly = [action.payload, ...state.acknowledgments_Monthly]
+    },
     SearchAcknowledgments: (state, action: SerachpayloadFace) => {
       const keyword = action.payload.keyword.toLowerCase()
       const GetsourceList = () => {
@@ -95,4 +101,5 @@ export const {
   SetSubmitted,
   SearchAcknowledgments,
   ClearMainData,
+  PushNewAcknowledgment,
 } = MainSlice.actions
