@@ -1,3 +1,4 @@
+import { Router } from 'expo-router'
 import React, { useCallback } from 'react'
 import { View } from 'react-native'
 import { SwipeButton } from 'react-native-expo-swipe-button'
@@ -6,11 +7,12 @@ import { Icon } from 'react-native-paper'
 interface props {
   height: number
   width: number
+  router: Router
 }
 
-export default function SwipeBtn({ height, width }: props) {
+export default function SwipeBtn({ height, width, router }: props) {
   const handleComplete = useCallback(() => {
-    console.log('hi')
+    router.push('/Upload')
   }, [])
 
   return (
@@ -21,12 +23,12 @@ export default function SwipeBtn({ height, width }: props) {
         goBackToStart={true}
         circleBackgroundColor={'#8d1c47'}
         underlayStyle={{ backgroundColor: '#c47b9f' }}
-        underlayTitle="page will open "
-        titleStyle={{ width: width * 0.8 }}
-        title="Swipe to Add cards"
+        underlayTitle="Swipe up to open the page "
+        titleStyle={{ width: width * 0.8, fontSize: width * 0.022 }}
+        title="Swipe to upload acknowledgment"
         onComplete={handleComplete}
         iconContainerStyle={{}}
-        Icon={<Icon color="#bdcdce" size={60} source="plus" />}
+        Icon={<Icon color="#bdcdce" size={60} source="equal-than" />}
       />
     </View>
   )

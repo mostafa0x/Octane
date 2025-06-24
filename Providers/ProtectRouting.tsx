@@ -26,7 +26,7 @@ function ProtectRoutingProvider({ children }: { children: React.ReactNode }) {
   const { init } = useInitApp()
 
   const shouldRedirectToAuth = useMemo(
-    () => !userToken && (pathName === '/' || pathName === '/Profile'),
+    () => !userToken && (pathName === '/' || pathName === '/Profile' || pathName === '/Upload'),
     [userToken, pathName]
   )
 

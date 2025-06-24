@@ -128,7 +128,7 @@ export default function Home() {
           />
         </View>
         <ListCard acknowledgments_Current={acknowledgments_Current} height={height} width={width} />
-        <SwipeBtn width={width} height={height} />
+        <SwipeBtn width={width} height={height} router={router} />
       </View>
     </Animatable.View>
   )
