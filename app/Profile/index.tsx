@@ -6,6 +6,7 @@ import { useRouter } from 'expo-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
 import handleLoutOut from 'Services/handleLogOut'
+import AppBar from 'components/App Bar'
 const avatarIcon = require('../../assets/avatar.png')
 const backImg = require('../../assets/backn.png')
 
@@ -23,29 +24,7 @@ export default function Profile() {
 
   return (
     <Animatable.View animation="fadeIn" duration={200} easing="ease-in-out" style={{ flex: 1 }}>
-      <View style={{ position: 'absolute', top: 0, left: 0, zIndex: 50, width: width }}>
-        <TouchableOpacity
-          onPress={() => router.back()}
-          style={{ position: 'absolute', left: 10, top: 0, zIndex: 10 }}>
-          <View style={{ marginTop: 8 }}>
-            <Icon size={40} color="white" source="keyboard-backspace" />
-          </View>
-        </TouchableOpacity>
-        <View style={{ position: 'absolute', left: 60, top: 10, zIndex: 10 }}>
-          <Text style={{ color: '#F1FFF3', fontSize: 24, width: width }}>Profile</Text>
-        </View>
-        <View
-          style={{
-            height: 60,
-            width: '100%',
-            borderBottomLeftRadius: 30,
-            borderBottomRightRadius: 30,
-            backgroundColor: 'black',
-            opacity: 0.4,
-          }}
-        />
-      </View>
-
+      <AppBar type="Profile" router={router} userData={userData} width={width} />
       <View style={{ position: 'absolute', top: height * 0.2, width: '100%' }}>
         <Image
           style={{ width: '100%', height: height * 0.25 }}

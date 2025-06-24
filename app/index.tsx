@@ -88,7 +88,13 @@ export default function Home() {
         }}
       /> */}
 
-      <AppBar sectionPadding={sectionPadding} router={router} userData={userData} width={width} />
+      <AppBar
+        type="Home"
+        sectionPadding={sectionPadding}
+        router={router}
+        userData={userData}
+        width={width}
+      />
       <View style={{ height: height * 0.3 }}>
         <Image source={backImg} contentFit="fill" style={{ width: '100%', height: '100%' }} />
       </View>

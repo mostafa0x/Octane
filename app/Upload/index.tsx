@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function Upload() {
   return (
-    <View>
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
       <Text>Upload</Text>
     </View>
   )

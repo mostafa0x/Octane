@@ -19,16 +19,16 @@ export default function SwipeBtn({ height, width, router }: props) {
     <View style={{ alignItems: 'center' }}>
       <SwipeButton
         height={height * 0.05}
-        width={width * 0.8}
+        width={width * 0.87}
         goBackToStart={true}
         circleBackgroundColor={'#8d1c47'}
         underlayStyle={{ backgroundColor: '#c47b9f' }}
         underlayTitle="Swipe up to open the page "
-        titleStyle={{ width: width * 0.8, fontSize: width * 0.022 }}
+        titleStyle={{ width: width * 0.8, fontSize: width * 0.024 }}
         title="Swipe to upload acknowledgment"
         onComplete={handleComplete}
         iconContainerStyle={{}}
-        Icon={<Icon color="#bdcdce" size={60} source="equal-than" />}
+        Icon={<Icon color="#bdcdce" size={60} source="plus" />}
       />
     </View>
   )
