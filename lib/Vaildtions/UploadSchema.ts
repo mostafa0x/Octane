@@ -9,12 +9,18 @@ export const UploadvalidationSchema = yup.object().shape({
     .required('Required!'),
   submission_type: yup
     .string()
-    .oneOf(['replacement', 'test'], 'It must be an option : replacement, test')
+    .oneOf(
+      ['replacement', 'existing_customer', 'new_customer'],
+      'It must be an option : replacement, test'
+    )
     .required('Required!'),
-  delivery_method: yup.string().oneOf(['octane_employee', 'test']).required('Required!'),
+  delivery_method: yup
+    .string()
+    .oneOf(['office_receival', 'octane_employee', 'aramex'])
+    .required('Required!'),
   image: yup.string().required('Required!'),
   state_time: yup
     .string()
-    .oneOf(['onTime', 'late'], 'It must be an option : onTime OR late')
+    .oneOf(['on_Time', 'Late'], 'It must be an option : onTime OR late')
     .required('Required!'),
 })

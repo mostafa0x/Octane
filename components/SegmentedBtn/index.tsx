@@ -16,9 +16,17 @@ interface props {
 
 function SegmentedBtn({ name, lable, width, height, formik }: props) {
   const [currentBtns, setCurrentBtns] = useState<btnArray[]>([])
-  const cards_SubmittedBtns = useRef<btnArray[]>([{ name: 'hi' }, { name: 'see' }])
-  const state_TimeBtns = useRef<btnArray[]>([{ name: 'onTime' }, { name: 'late' }])
-  const delivery_MethodBtns = useRef<btnArray[]>([{ name: 'octane_employee' }, { name: 'test' }])
+  const cards_SubmittedBtns = useRef<btnArray[]>([
+    { name: 'replacement' },
+    { name: 'existing_customer' },
+    { name: 'new_customer' },
+  ])
+  const delivery_MethodBtns = useRef<btnArray[]>([
+    { name: 'office_receival' },
+    { name: 'octane_employee' },
+    { name: 'aramex' },
+  ])
+  const state_TimeBtns = useRef<btnArray[]>([{ name: 'on_Time' }, { name: 'Late' }])
 
   useEffect(() => {
     formik.setFieldTouched(name, false)
@@ -29,7 +37,7 @@ function SegmentedBtn({ name, lable, width, height, formik }: props) {
 
   return (
     <View>
-      <Text style={{ fontSize: width * 0.042, marginBottom: height * 0.008 }}>{lable}</Text>
+      <Text style={{ fontSize: width * 0.028, marginBottom: height * 0.008 }}>{lable}</Text>
       <SegmentedButtons
         value={formik.values?.[name]}
         onValueChange={(val) => {
@@ -38,7 +46,7 @@ function SegmentedBtn({ name, lable, width, height, formik }: props) {
           }
           formik.setFieldValue(name, val)
         }}
-        style={{ height: height * 0.05 }}
+        style={{ height: height * 0.035 }}
         buttons={currentBtns.map((btn) => ({
           value: btn.name,
           label: btn.name.split('_').join(' '),
@@ -48,8 +56,8 @@ function SegmentedBtn({ name, lable, width, height, formik }: props) {
 
           labelStyle: {
             textAlignVertical: 'center',
-            height: height * 0.03,
-            fontSize: btn.name.length <= 10 ? width * 0.046 : width * 0.036,
+            height: height * 0.02,
+            fontSize: width * 0.025,
 
             color: 'black',
           },

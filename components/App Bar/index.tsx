@@ -66,7 +66,7 @@ function AppBar({ type, sectionPadding, router, userData, width }: props) {
         }}
       />
       {type === 'Home' ? (
-        <HomeContent router={router} width={width} />
+        <HomeContent router={router} width={width} userData={userData} />
       ) : (
         <ProfileContent router={router} width={width} />
       )}

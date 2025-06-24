@@ -7,16 +7,18 @@ import { NavigationOptions } from 'expo-router/build/global-state/routing'
 import InputField from 'components/form/InputField'
 import { useFormik } from 'formik'
 import { UploadvalidationSchema } from 'lib/Vaildtions/UploadSchema'
-import { HelperText, Searchbar, SegmentedButtons, Tooltip } from 'react-native-paper'
+import { Button, HelperText, Searchbar, SegmentedButtons, Tooltip } from 'react-native-paper'
 import SegmentedBtn from 'components/SegmentedBtn'
 import SerachCompanys from 'components/SerachCompanys'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
 import { GetSerachCompany } from 'lib/Store/Slices/CompanySlice'
+import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer'
 
 export default function Upload() {
   const { width, height } = useWindowDimensions()
   const { currentcompanys } = useSelector((state: StateFace) => state.CompanyReducer)
+  const [selectCompany, setSelectCompany] = useState(0)
 
   const [searchQuery, setSearchQuery] = useState('')
   const searchBoxRef = useRef<React.ComponentRef<typeof Searchbar>>(null)
@@ -34,6 +36,12 @@ export default function Upload() {
     validationSchema: UploadvalidationSchema,
     onSubmit: handleUpload,
   })
+
+  const SelectCompanyID = useCallback((id: number, name: string) => {
+    setSelectCompany(id)
+    formik.setFieldValue('company_id', id)
+    handleSerach(name)
+  }, [])
 
   const handleSerach = useCallback((text: string) => {
     setSearchQuery(text)
@@ -65,7 +73,7 @@ export default function Upload() {
           borderTopLeftRadius: 50,
           borderTopRightRadius: 50,
           backgroundColor: 'white',
-          paddingTop: height * 0.1,
+          paddingTop: height * 0.02,
           paddingHorizontal: height * 0.036,
         }}>
         <View style={{ marginTop: 20, width: width * 0.9 }}>
@@ -77,7 +85,14 @@ export default function Upload() {
             onClearIconPress={() => handleClear()}
           />
         </View>
-        <SerachCompanys height={height} width={width} currentcompanys={currentcompanys} />
+        <SerachCompanys
+          height={height}
+          width={width}
+          currentcompanys={currentcompanys}
+          formik={formik}
+          SelectCompanyID={SelectCompanyID}
+          selectCompany={selectCompany}
+        />
         <SegmentedBtn
           name={'submission_type'}
           lable={'submission type'}
@@ -106,6 +121,9 @@ export default function Upload() {
           formik={formik}
           errorMes={null}
         />
+        <View style={{ marginTop: height * 0.05 }}>
+          <Button>Upload Image</Button>
+        </View>
       </View>
     </Animatable.View>
   )

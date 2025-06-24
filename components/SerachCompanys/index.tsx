@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import React, { memo, useEffect, useRef } from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import * as Animatable from 'react-native-animatable'
 import { FlashList } from '@shopify/flash-list'
 import { CompanyFace } from 'Types/ItemList'
@@ -10,9 +10,19 @@ interface props {
   height: number
   width: number
   currentcompanys: CompanyFace[]
+  formik: any
+  selectCompany: any
+  SelectCompanyID: any
 }
 
-function SerachCompanys({ height, width, currentcompanys }: props) {
+function SerachCompanys({
+  height,
+  width,
+  currentcompanys,
+  formik,
+  selectCompany,
+  SelectCompanyID,
+}: props) {
   const animRef = useRef<AnimatableView>(null)
 
   return (
@@ -20,18 +30,32 @@ function SerachCompanys({ height, width, currentcompanys }: props) {
       ref={animRef}
       animation="fadeIn"
       easing="ease-in-out"
-      style={{ height: height * 0.24, width: '100%', marginTop: 20 }}>
+      style={{
+        height: selectCompany == 0 ? height * 0.17 : height * 0.05,
+        width: '100%',
+        marginTop: 20,
+      }}>
       <FlashList
         data={currentcompanys}
+        extraData={selectCompany}
         estimatedItemSize={70}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={{ paddingBottom: 20 }}
-        renderItem={({ item }) => <ItemCard_CS item={item} height={height} width={width} />}
+        renderItem={({ item }) => (
+          <ItemCard_CS
+            item={item}
+            height={height}
+            width={width}
+            formik={formik}
+            SelectCompanyID={SelectCompanyID}
+            selectCompany={selectCompany}
+          />
+        )}
         ListEmptyComponent={() => (
           <View style={{ marginTop: 50, alignItems: 'center' }}>
             <Text
-              style={{ fontSize: width * 0.072, opacity: 0.7, width: width, textAlign: 'center' }}>
-              Empty
+              style={{ fontSize: width * 0.032, opacity: 0.7, width: width, textAlign: 'center' }}>
+              no company with this name or code.
             </Text>
           </View>
         )}
