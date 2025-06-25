@@ -41,6 +41,7 @@ function SegmentedBtn({ name, width, height, formik }: props) {
       </Text>
       <SegmentedButtons
         value={formik.values?.[name]}
+        theme={{ colors: { primary: 'green' } }}
         onValueChange={(val) => {
           Keyboard.dismiss()
           if (!formik.touched[name]) {
@@ -55,7 +56,6 @@ function SegmentedBtn({ name, width, height, formik }: props) {
           icon: formik.values?.[name] == btn.name ? 'check-bold' : '',
           checkedColor: 'green',
           uncheckedColor: 'red',
-
           labelStyle: {
             textAlignVertical: 'center',
             height: height * 0.017,

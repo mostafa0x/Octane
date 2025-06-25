@@ -4,7 +4,7 @@ import * as Animatable from 'react-native-animatable'
 import { FlashList } from '@shopify/flash-list'
 import { CompanyFace } from 'Types/ItemList'
 import ItemCard_CS from './ItemCard'
-import { HelperText } from 'react-native-paper'
+import { HelperText, Searchbar } from 'react-native-paper'
 type AnimatableView = Animatable.View
 
 interface props {
@@ -32,14 +32,14 @@ function SerachCompanys({
       animation="fadeIn"
       easing="ease-in-out"
       style={{
-        height: selectCompany == 0 ? height * 0.188 : height * 0.08,
+        height: selectCompany == 0 ? height * 0.2 : height * 0.08,
         width: '100%',
         marginTop: 20,
       }}>
       <FlashList
         data={currentcompanys}
         extraData={selectCompany}
-        estimatedItemSize={55}
+        estimatedItemSize={80}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={{ paddingBottom: 0 }}
         renderItem={({ item }) => (

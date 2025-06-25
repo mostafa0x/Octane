@@ -1,43 +1,89 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { TouchableOpacity, View } from 'react-native'
-import { Text, Icon, Avatar } from 'react-native-paper'
+import React, { useMemo, useState } from 'react'
+import { TouchableOpacity, View, StyleSheet } from 'react-native'
+import { Text, Avatar } from 'react-native-paper'
 import { acknowledgmentsFace } from 'Types/Store/MainSliceFace'
 
 interface Props {
   item: acknowledgmentsFace
+  width: number
 }
 
-const ItemCard = ({ item }: Props) => {
+const ItemCard = ({ item, width }: Props) => {
   const [visible, setIsVisible] = useState(false)
-  const imgs: any = [{ uri: item.image }]
+
   const fontSize = useMemo(() => {
-    if (item.delivery_method.length <= 15) return 15
-    if (item.delivery_method.length <= 20) return 12
-    return 10
-  }, [item.delivery_method])
+    if (item.delivery_method.length <= 15) return width * 0.036
+    if (item.delivery_method.length <= 20) return width * 0.032
+    return width * 0.028
+  }, [item.delivery_method, width])
+
+  const avatarSize = width * 0.12
+  const imgs = useMemo(() => [{ uri: item.image }], [item.image])
 
   return (
-    <View className="flex-row items-center gap-5  border-b border-gray-200 p-4">
+    <View style={[styles.container, { padding: width * 0.035 }]}>
       <TouchableOpacity onPress={() => setIsVisible(true)}>
-        <Avatar.Image size={50} source={{ uri: item.image }} />
+        <Avatar.Image size={avatarSize} source={imgs} />
       </TouchableOpacity>
-      <View className="gap-2 ">
-        <Text style={{ fontSize: 18, width: 120, fontWeight: 'bold', color: '#052224' }}>
+
+      <View style={[styles.companyInfo, { width: width * 0.25 }]}>
+        <Text style={[styles.companyName, { fontSize: width * 0.032 }]}>
           {item.company.name.split(' ').splice(0, 2).join(' ')}
         </Text>
-        <Text style={{ fontSize: 15, color: '#0068FF' }}>{item.company.code}</Text>
+        <Text style={[styles.companyCode, { fontSize: width * 0.03 }]}>{item.company.code}</Text>
       </View>
-      <View className="h-10 w-[1px] bg-[#00D09E]" />
-      <Text>{item.cards_submitted}</Text>
-      <View className="h-10 w-[1px] bg-[#00D09E]" />
-      <View className="gap-2">
-        <Text style={{ fontSize, fontWeight: 'bold', color: '#052224' }}>
-          {item.delivery_method}
-        </Text>
-        <Text style={{ fontSize: 15, color: '#0068FF' }}>{item.state_time}</Text>
+
+      <View style={styles.separator} />
+      <View style={[styles.cardsBox, { width: width * 0.09 }]}>
+        <Text style={{ fontSize: width * 0.03 }}>{item.cards_submitted}</Text>
+      </View>
+
+      <View style={styles.separator} />
+      <View style={[styles.detailsBox, { flex: 1 }]}>
+        <Text style={[styles.deliveryMethod, { fontSize }]}>{item.delivery_method}</Text>
+        <Text style={[styles.stateTime, { fontSize: width * 0.03 }]}>{item.state_time}</Text>
       </View>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: '#E5E7EB',
+  },
+  companyInfo: {
+    marginLeft: 12,
+    gap: 4,
+  },
+  companyName: {
+    fontWeight: 'bold',
+    color: '#052224',
+  },
+  companyCode: {
+    color: '#0068FF',
+  },
+  separator: {
+    height: 40,
+    width: 1,
+    backgroundColor: '#00D09E',
+    marginHorizontal: 10,
+  },
+  cardsBox: {
+    alignItems: 'center',
+  },
+  detailsBox: {
+    gap: 4,
+  },
+  deliveryMethod: {
+    fontWeight: 'bold',
+    color: '#052224',
+  },
+  stateTime: {
+    color: '#0068FF',
+  },
+})
 
 export default React.memo(ItemCard)

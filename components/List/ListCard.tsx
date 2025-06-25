@@ -31,7 +31,7 @@ function ListCard({ acknowledgments_Current, height, width }: props) {
         estimatedItemSize={70}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={{ paddingBottom: 20 }}
-        renderItem={({ item }) => <ItemCard item={item} />}
+        renderItem={({ item }) => <ItemCard item={item} width={width} />}
         ListEmptyComponent={() => (
           <View style={{ marginTop: 50, alignItems: 'center' }}>
             <Text

@@ -1,4 +1,4 @@
-import { View, useWindowDimensions, Keyboard, TouchableWithoutFeedback } from 'react-native'
+import { View, useWindowDimensions, Keyboard, KeyboardAvoidingView, Platform } from 'react-native'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import * as Animatable from 'react-native-animatable'
 import { router } from 'expo-router'
@@ -17,8 +17,11 @@ import ShowImageOptions from 'components/Models/showImageOptions'
 import ShowConfirmModal from 'components/Models/ShowConfirmModal'
 import UploadImage from 'components/form/UploadImage'
 import { acknowledgmentsFace } from 'Types/Store/MainSliceFace'
+import { Image } from 'expo-image'
+import AppBar from 'components/App Bar'
 
 export default function Upload() {
+  const backImg = useRef(require('../../assets/backn.png'))
   const { width, height } = useWindowDimensions()
   const { currentcompanys } = useSelector((state: StateFace) => state.CompanyReducer)
   const [selectCompany, setSelectCompany] = useState(0)
@@ -112,13 +115,22 @@ export default function Upload() {
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [errorApi, setErrorApi] = useState<string | null>(null)
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}>
       <Animatable.View
         animation="fadeIn"
         duration={200}
         easing="ease-in-out"
         style={{ flex: 1, backgroundColor: 'black' }}>
-        <View style={{ width: '100%', height: height * 0.1 }}></View>
+        <View style={{ width: '100%', height: height * 0.12 }}>
+          <AppBar type="Upload" router={router} width={width} />
+        </View>
+        <Image
+          style={{ position: 'absolute', width: '100%', height: '30%' }}
+          contentFit="fill"
+          source={backImg.current}
+        />
 
         <View
           style={{
@@ -205,6 +217,6 @@ export default function Upload() {
           </View>
         </View>
       </Animatable.View>
-    </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   )
 }

@@ -1,9 +1,8 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React, { memo } from 'react'
 import { Image } from 'expo-image'
-import { Href, Route, RouteInputParams, Router } from 'expo-router'
+import { Router } from 'expo-router'
 import { userDataFace } from 'Types/Store/UserSliceFace'
-import { NavigationOptions } from 'expo-router/build/global-state/routing'
 import { Icon } from 'react-native-paper'
 
 interface props {
@@ -51,6 +50,24 @@ const ProfileContent = React.memo(({ router, width }: props) => {
     </>
   )
 })
+const UploadContent = React.memo(({ router, width }: props) => {
+  return (
+    <>
+      <TouchableOpacity
+        onPress={() => router.back()}
+        style={{ position: 'absolute', left: 10, top: 0, zIndex: 10 }}>
+        <View style={{ marginTop: 8 }}>
+          <Icon size={40} color="white" source="keyboard-backspace" />
+        </View>
+      </TouchableOpacity>
+      <View style={{ position: 'absolute', left: 60, top: 10, zIndex: 10 }}>
+        <Text style={{ color: '#F1FFF3', fontSize: 24, width: width * 1 }}>
+          Upload acknowledgments
+        </Text>
+      </View>
+    </>
+  )
+})
 
 function AppBar({ type, sectionPadding, router, userData, width }: props) {
   return (
@@ -65,11 +82,9 @@ function AppBar({ type, sectionPadding, router, userData, width }: props) {
           opacity: 0.4,
         }}
       />
-      {type === 'Home' ? (
-        <HomeContent router={router} width={width} userData={userData} />
-      ) : (
-        <ProfileContent router={router} width={width} />
-      )}
+      {type === 'Home' && <HomeContent router={router} width={width} userData={userData} />}
+      {type === 'Profile' && <ProfileContent router={router} width={width} />}
+      {type === 'Upload' && <UploadContent router={router} width={width} />}
       {type == 'Home' && (
         <View style={{ marginTop: 40, gap: 8, padding: sectionPadding }}>
           <Text style={{ color: '#EEEEEE', fontSize: 26, fontWeight: 'bold' }}>Made for You</Text>

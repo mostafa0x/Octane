@@ -1,22 +1,20 @@
-import { TouchableOpacity, View, useWindowDimensions } from 'react-native'
-import { Text, Searchbar } from 'react-native-paper'
+import { KeyboardAvoidingView, Platform, View, useWindowDimensions } from 'react-native'
+import { Searchbar } from 'react-native-paper'
 import { Image } from 'expo-image'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
 import { SearchAcknowledgments, SetAcknowledgments_Current } from 'lib/Store/Slices/MainSlice'
-import { Href, Route, RouteInputParams, useRouter } from 'expo-router'
+import { useRouter } from 'expo-router'
 import NfcCard from 'components/NFC Card'
 import ListButtonHistory from 'components/List Button History'
 import * as Animatable from 'react-native-animatable'
 import ListCard from 'components/List/ListCard'
 import AppBar from 'components/App Bar'
-import { NavigationOptions } from 'expo-router/build/global-state/routing'
 import SwipeBtn from 'components/SwipeBtn'
 
-const backImg = require('../assets/backn.png')
-
 export default function Home() {
+  const backImg = useRef(require('../assets/backn.png'))
   const { width, height } = useWindowDimensions()
   const { acknowledgments_Current, allocated, submitted } = useSelector(
     (state: StateFace) => state.MainReducer
@@ -52,18 +50,21 @@ export default function Home() {
   const sectionPadding = width * 0.05
 
   return (
-    <Animatable.View
-      style={{ flex: 1, backgroundColor: 'black' }}
-      animation="fadeIn"
-      duration={200}
-      easing="ease-in-out">
-      <Image
-        style={{ position: 'absolute', width: '100%', height: '100%' }}
-        contentFit="fill"
-        source={backImg}
-      />
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}>
+      <Animatable.View
+        style={{ flex: 1, backgroundColor: 'black' }}
+        animation="fadeIn"
+        duration={200}
+        easing="ease-in-out">
+        <Image
+          style={{ position: 'absolute', width: '100%', height: '50%' }}
+          contentFit="fill"
+          source={backImg.current}
+        />
 
-      {/* <View
+        {/* <View
         style={{
           position: 'absolute',
           top: height * 0.4,
@@ -88,54 +89,63 @@ export default function Home() {
         }}
       /> */}
 
-      <AppBar
-        type="Home"
-        sectionPadding={sectionPadding}
-        router={router}
-        userData={userData}
-        width={width}
-      />
-      <View style={{ height: height * 0.3 }}>
-        <Image source={backImg} contentFit="fill" style={{ width: '100%', height: '100%' }} />
-      </View>
-
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          borderTopLeftRadius: 70,
-          borderTopRightRadius: 70,
-          backgroundColor: 'white',
-          padding: sectionPadding,
-        }}>
-        <NfcCard
-          submitted={submitted}
-          allocated={allocated}
-          cardWidth={cardWidth}
-          cardHeight={cardHeight}
-          progressSize={progressSize}
-          height={height}
+        <AppBar
+          type="Home"
+          sectionPadding={sectionPadding}
+          router={router}
+          userData={userData}
           width={width}
         />
-        <ListButtonHistory
-          activeList={activeList}
-          searchHeight={searchHeight}
-          cardWidth={cardWidth}
-          handleActive={handleActive}
-        />
-
-        <View style={{ marginTop: 20, width: cardWidth }}>
-          <Searchbar
-            ref={searchBoxRef}
-            placeholder="Search"
-            value={searchQuery}
-            onChangeText={handleSerach}
-            onClearIconPress={() => handleActive(activeList)}
+        <View style={{ height: height * 0.3 }}>
+          <Image
+            source={backImg.current}
+            contentFit="fill"
+            style={{ width: '100%', height: '100%' }}
           />
         </View>
-        <ListCard acknowledgments_Current={acknowledgments_Current} height={height} width={width} />
-        <SwipeBtn width={width} height={height} router={router} />
-      </View>
-    </Animatable.View>
+
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            borderTopLeftRadius: 70,
+            borderTopRightRadius: 70,
+            backgroundColor: 'white',
+            padding: sectionPadding,
+          }}>
+          <NfcCard
+            submitted={submitted}
+            allocated={allocated}
+            cardWidth={cardWidth}
+            cardHeight={cardHeight}
+            progressSize={progressSize}
+            height={height}
+            width={width}
+          />
+          <ListButtonHistory
+            activeList={activeList}
+            searchHeight={searchHeight}
+            cardWidth={cardWidth}
+            handleActive={handleActive}
+          />
+
+          <View style={{ marginTop: 20, width: cardWidth }}>
+            <Searchbar
+              ref={searchBoxRef}
+              placeholder="Search"
+              value={searchQuery}
+              onChangeText={handleSerach}
+              onClearIconPress={() => handleActive(activeList)}
+            />
+          </View>
+          <ListCard
+            acknowledgments_Current={acknowledgments_Current}
+            height={height}
+            width={width}
+          />
+          <SwipeBtn width={width} height={height} router={router} />
+        </View>
+      </Animatable.View>
+    </KeyboardAvoidingView>
   )
 }
