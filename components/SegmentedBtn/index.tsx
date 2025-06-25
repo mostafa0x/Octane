@@ -36,7 +36,7 @@ function SegmentedBtn({ name, width, height, formik }: props) {
 
   return (
     <View>
-      <Text style={{ fontSize: width * 0.028, marginBottom: height * 0.008 }}>
+      <Text style={{ fontSize: width * 0.028, marginBottom: height * 0.008, color: '#6C7278' }}>
         {name.split('_').join(' ')}
       </Text>
       <SegmentedButtons

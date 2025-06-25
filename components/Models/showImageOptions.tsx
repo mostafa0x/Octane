@@ -37,7 +37,7 @@ function ShowImageOptions_Model({ formik, showImageOptions, setShowImageOptions 
     <Modal
       visible={showImageOptions}
       transparent
-      animationType="slide"
+      animationType="fade"
       onRequestClose={() => setShowImageOptions(false)}>
       <TouchableOpacity
         activeOpacity={1}

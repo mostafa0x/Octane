@@ -158,7 +158,10 @@ export default function Upload() {
           SelectCompanyID={SelectCompanyID}
           selectCompany={selectCompany}
         />
-        <HelperText type="error" visible={formik.touched.company_id && !!formik.errors.company_id}>
+        <HelperText
+          style={{ fontSize: width * 0.028, color: 'red' }}
+          type="error"
+          visible={formik.touched.company_id && !!formik.errors.company_id}>
           {formik.errors.company_id}
         </HelperText>
         <InputField
@@ -175,7 +178,9 @@ export default function Upload() {
 
         <View style={{ marginTop: height * 0.02 }}>
           {formik.values.image !== '' ? (
-            <TouchableOpacity onPress={() => setShowImageOptions(true)} className="items-center">
+            <TouchableOpacity
+              onPress={() => setShowImageOptions(true)}
+              className="items-center rounded-2xl border-2 border-gray-200">
               <Image
                 contentFit="contain"
                 style={{ width: width * 0.5, height: height * 0.1 }}
@@ -183,7 +188,7 @@ export default function Upload() {
               />
             </TouchableOpacity>
           ) : (
-            <Animatable.View animation="pulse" iterationCount="infinite" duration={1600}>
+            <Animatable.View>
               <Button
                 buttonColor="#8d1c47"
                 icon="image"
