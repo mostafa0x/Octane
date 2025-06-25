@@ -34,6 +34,7 @@ import axiosClient from 'lib/api/axiosClient'
 import { Image } from 'expo-image'
 import { PushNewAcknowledgment } from 'lib/Store/Slices/MainSlice'
 import ShowImageOptions from 'components/Models/showImageOptions'
+import ShowConfirmModal from 'components/Models/ShowConfirmModal'
 
 export default function Upload() {
   const { width, height } = useWindowDimensions()
@@ -215,66 +216,13 @@ export default function Upload() {
               Submit
             </Button>
           </View>
-          <Modal
-            visible={showConfirmModal}
-            transparent
-            animationType="fade"
-            onRequestClose={() => setShowConfirmModal(false)}>
-            <View style={styles.centeredOverlay}>
-              <View style={styles.confirmBox}>
-                <Text style={styles.confirmTitle}>Confirm Submission</Text>
-                {/* 
-                {formik.values.image ? (
-                  <View style={{ alignItems: 'center', marginVertical: 10 }}>
-                    <Animatable.Image
-                      animation="fadeIn"
-                      duration={500}
-                      source={{ uri: formik.values.image }}
-                      style={{ width: 120, height: 120, borderRadius: 8 }}
-                      resizeMode="cover"
-                    />
-                  </View>
-                ) : null} */}
-                <View style={{ gap: 24, marginTop: 40 }}>
-                  <Text>📦 Company ID: {formik.values.company_id}</Text>
-                  <Text>📝 Submission Type: {formik.values.submission_type}</Text>
-                  <Text>🚚 Delivery Method: {formik.values.delivery_method}</Text>
-                  <Text>🕒 State Time: {formik.values.state_time}</Text>
-                  <Text>💳 Cards Submitted: {formik.values.cards_submitted}</Text>
-                </View>
-
-                <View
-                  style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 50 }}>
-                  {isLoadingRes ? (
-                    <View className=" items-center justify-center">
-                      <ActivityIndicator size={50} />
-                    </View>
-                  ) : (
-                    <Button
-                      mode="contained"
-                      onPress={() => {
-                        //  setShowConfirmModal(false)
-                        formik.handleSubmit()
-                      }}
-                      buttonColor="#4CAF50">
-                      Confirm
-                    </Button>
-                  )}
-                  <HelperText visible={!!errorApi} type="error">
-                    {errorApi}
-                  </HelperText>
-                  {isLoadingRes ? null : (
-                    <Button
-                      mode="outlined"
-                      onPress={() => setShowConfirmModal(false)}
-                      textColor="#f44336">
-                      Cancel
-                    </Button>
-                  )}
-                </View>
-              </View>
-            </View>
-          </Modal>
+          <ShowConfirmModal
+            showConfirmModal={showConfirmModal}
+            setShowConfirmModal={setShowConfirmModal}
+            formik={formik}
+            errorApi={errorApi}
+            isLoadingRes={isLoadingRes}
+          />
           <ShowImageOptions
             formik={formik}
             showImageOptions={showImageOptions}
