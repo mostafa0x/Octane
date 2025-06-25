@@ -96,7 +96,7 @@ export default function Home() {
           userData={userData}
           width={width}
         />
-        <View style={{ height: height * 0.3 }}>
+        <View style={{ height: height * 0.25 }}>
           <Image
             source={backImg.current}
             contentFit="fill"
@@ -143,7 +143,9 @@ export default function Home() {
             height={height}
             width={width}
           />
-          <SwipeBtn width={width} height={height} router={router} />
+          <View style={{ marginTop: height * 0.0 }}>
+            <SwipeBtn width={width} height={height} router={router} />
+          </View>
         </View>
       </Animatable.View>
     </KeyboardAvoidingView>

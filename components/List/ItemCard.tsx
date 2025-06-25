@@ -12,9 +12,9 @@ const ItemCard = ({ item, width }: Props) => {
   const [visible, setIsVisible] = useState(false)
 
   const fontSize = useMemo(() => {
-    if (item.delivery_method.length <= 15) return width * 0.036
-    if (item.delivery_method.length <= 20) return width * 0.032
-    return width * 0.028
+    if (item.delivery_method.length <= 15) return width * 0.028
+    if (item.delivery_method.length <= 20) return width * 0.024
+    return width * 0.024
   }, [item.delivery_method, width])
 
   const avatarSize = width * 0.12
