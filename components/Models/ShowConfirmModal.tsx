@@ -8,6 +8,8 @@ interface props {
   formik: any
   errorApi: string | null
   isLoadingRes: boolean
+  width: number
+  height: number
 }
 
 function ShowConfirmModal_Modle({
@@ -16,6 +18,8 @@ function ShowConfirmModal_Modle({
   formik,
   errorApi,
   isLoadingRes,
+  width,
+  height,
 }: props) {
   return (
     <Modal
@@ -38,12 +42,57 @@ function ShowConfirmModal_Modle({
                     />
                   </View>
                 ) : null} */}
-          <View style={{ gap: 24, marginTop: 40 }}>
-            <Text>📦 Company ID: {formik.values.company_id}</Text>
-            <Text>📝 Submission Type: {formik.values.submission_type}</Text>
-            <Text>🚚 Delivery Method: {formik.values.delivery_method}</Text>
-            <Text>🕒 State Time: {formik.values.state_time}</Text>
-            <Text>💳 Cards Submitted: {formik.values.cards_submitted}</Text>
+          <View style={{ gap: 24, marginTop: height * 0.04 }}>
+            <Text>
+              📦 Company ID:{'  '}
+              <Text
+                style={{
+                  fontSize: width * 0.044,
+                  fontWeight: 'bold',
+                }}>
+                {formik.values.company_id}
+              </Text>
+            </Text>
+            <Text>
+              📝 Submission Type:{'  '}
+              <Text
+                style={{
+                  fontSize: width * 0.044,
+                  fontWeight: 'bold',
+                }}>
+                {formik.values.submission_type.split('_').join(' ')}
+              </Text>
+            </Text>
+            <Text>
+              🚚 Delivery Method:{'  '}
+              <Text
+                style={{
+                  fontSize: width * 0.044,
+                  fontWeight: 'bold',
+                }}>
+                {formik.values.delivery_method.split('_').join(' ')}
+              </Text>
+            </Text>
+            <Text>
+              🕒 State Time:{'  '}
+              <Text
+                style={{
+                  fontSize: width * 0.044,
+                  fontWeight: 'bold',
+                }}>
+                {formik.values.state_time.split('_').join(' ')}
+              </Text>
+            </Text>
+            <Text>
+              💳 Cards Submitted:{'  '}
+              <Text
+                style={{
+                  fontSize: width * 0.044,
+                  fontWeight: 'bold',
+                }}>
+                {formik.values.cards_submitted}
+              </Text>
+            </Text>
           </View>
 
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 50 }}>

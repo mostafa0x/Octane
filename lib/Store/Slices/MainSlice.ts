@@ -35,9 +35,6 @@ const MainSlice = createSlice({
   initialState,
   reducers: {
     PushNewAcknowledgment: (state, action: PUSH_ActionPayloadFace) => {
-      const cards = action.payload.data.cards_submitted
-      console.log(cards)
-
       state.submitted = +state.submitted + +action.payload.data.cards_submitted
       state.acknowledgments_Current = [action.payload.data, ...state.acknowledgments_Current]
       state.acknowledgments_Daily = [action.payload.data, ...state.acknowledgments_Daily]

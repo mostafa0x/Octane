@@ -183,6 +183,8 @@ export default function Upload() {
               formik={formik}
               errorApi={errorApi}
               isLoadingRes={isLoadingRes}
+              width={width}
+              height={height}
             />
             <ShowImageOptions
               formik={formik}
