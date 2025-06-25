@@ -24,7 +24,9 @@ export default function ItemCard_CS({
       style={{ width: width * 0.95, padding: width * 0.02 }}
       className="flex-1 flex-row justify-between">
       <View style={{ width: '50%' }}>
-        <Text style={{ fontSize: width * 0.042 }}>{item.name}</Text>
+        <Text style={{ fontSize: width * 0.038 }}>
+          {item.name.split(' ').splice(0, 2).join(' ')}
+        </Text>
       </View>
       <View style={{ width: '10%' }}>
         <Text>{item.code}</Text>

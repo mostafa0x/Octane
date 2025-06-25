@@ -2,6 +2,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Router } from 'expo-router'
 import axiosClient from 'lib/api/axiosClient'
+import { SetCompanys } from 'lib/Store/Slices/CompanySlice'
 import { changeIsLoadedUserData, fillUserInfo } from 'lib/Store/Slices/UserSlice'
 import { userDataFace } from 'Types/Store/UserSliceFace'
 
@@ -46,21 +47,26 @@ export const clearUserInfo = async () => {
   }
 }
 
-export const GetCompanys = async () => {
+export const GetCompanys = async (dispatch: any) => {
   try {
     const companys = await AsyncStorage.getItem('@companys')
     if (!companys) {
       const res = await axiosClient.get('/admin/companies')
+      dispatch(SetCompanys(res.data.companies))
       const date = Date.now()
       const data = {
-        data: res.data,
+        data: res.data.companies,
         time: date,
       }
-      await AsyncStorage.setItem('@companys', JSON.stringify(data))
+      await AsyncStorage.setItem('@companys', await JSON.stringify(data))
       console.log('done set copmanys')
       return
     }
+    const companysJSON = await JSON.parse(companys)
+    console.log(companysJSON)
+
     console.log('found')
+    dispatch(SetCompanys(companysJSON.data))
   } catch (err: any) {
     console.log(err)
 

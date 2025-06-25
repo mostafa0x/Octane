@@ -6,16 +6,7 @@ type ActionFace = {
   payload: string
 }
 const initialState: CompanySliceFace = {
-  companys: [
-    { id: 2610, name: 'xxx', code: 2610 },
-    { id: 2, name: 'zzz', code: 2 },
-    { id: 4, name: 'vvv', code: 16 },
-    { id: 3, name: 'kkj', code: 264 },
-    { id: 5, name: 'bb', code: 154 },
-    { id: 5, name: 'yyy', code: 6652 },
-    { id: 6, name: '77', code: 155 },
-    { id: 7, name: '44e', code: 212 },
-  ],
+  companys: [],
   currentcompanys: [],
 }
 
@@ -32,7 +23,7 @@ const CompanySlice = createSlice({
       state.currentcompanys = fillterd
     },
     SetCompanys: (state, action) => {
-      state.companys = action.payload
+      state.companys.push(...action.payload)
     },
   },
 })

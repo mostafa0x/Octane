@@ -28,9 +28,9 @@ function ErrorScreen({ isError, GetData }: props) {
         </Text>
 
         <Button
-          style={{ width: width * 0.65, height: height * 0.07 }}
-          contentStyle={{ height: height * 0.07 }}
-          labelStyle={{ fontSize: width * 0.042 }}
+          style={{ width: width * 0.65, height: height * 0.08 }}
+          contentStyle={{ height: height * 0.08, justifyContent: 'center' }}
+          labelStyle={{ fontSize: width * 0.042, height: height * 0.03 }}
           buttonColor="#8d1c47"
           textColor="white"
           onPress={GetData}>

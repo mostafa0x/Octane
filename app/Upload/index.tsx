@@ -96,7 +96,9 @@ export default function Upload() {
   const handleClear = useCallback(() => {
     if (searchBoxRef.current) {
       searchBoxRef.current?.blur()
+      // formik.setFieldValue('company_id', 0)
       setSearchQuery('')
+      handleSerach('')
     }
   }, [])
 
