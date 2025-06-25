@@ -32,6 +32,13 @@ function ShowConfirmModal_Modle({
     return () => backHandler.remove()
   }, [isLoadingRes])
 
+  useEffect(() => {
+    const date = new Date()
+    console.log(date.getTime())
+
+    return () => {}
+  }, [])
+
   return (
     <Modal
       visible={showConfirmModal}

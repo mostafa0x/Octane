@@ -2,6 +2,7 @@ import { ChangeLoadedData } from 'lib/Store/Slices/UserSlice'
 import { useDispatch } from 'react-redux'
 import { GetAcknowledgments } from 'Services/GetAcknowledgments'
 import { GetNfcs } from 'Services/GetNfs'
+import { GetCompanys } from 'Services/Storage'
 
 export const useInitApp = () => {
   const dispatch = useDispatch()
@@ -13,7 +14,8 @@ export const useInitApp = () => {
       GetAcknowledgments('weekly', dispatch),
       GetAcknowledgments('daily', dispatch),
     ])
-    console.log('loaded data ✅')
+    await console.log('loaded data ✅')
+    await GetCompanys()
     dispatch(ChangeLoadedData(true))
   }
 

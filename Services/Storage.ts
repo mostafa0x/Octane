@@ -1,6 +1,7 @@
 // src/services/storage.ts
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Router } from 'expo-router'
+import axiosClient from 'lib/api/axiosClient'
 import { changeIsLoadedUserData, fillUserInfo } from 'lib/Store/Slices/UserSlice'
 import { userDataFace } from 'Types/Store/UserSliceFace'
 
@@ -42,5 +43,27 @@ export const clearUserInfo = async () => {
   } catch (error) {
     console.error('Error clearing user info:', error)
     throw `Error clearing user info:, ${error}`
+  }
+}
+
+export const GetCompanys = async () => {
+  try {
+    const companys = await AsyncStorage.getItem('@companys')
+    if (!companys) {
+      const res = await axiosClient.get('/admin/companies')
+      const date = Date.now()
+      const data = {
+        data: res.data,
+        time: date,
+      }
+      await AsyncStorage.setItem('@companys', JSON.stringify(data))
+      console.log('done set copmanys')
+      return
+    }
+    console.log('found')
+  } catch (err: any) {
+    console.log(err)
+
+    throw err
   }
 }
