@@ -23,16 +23,26 @@ const initialState: MainSliceFace = {
   acknowledgments_Weekly: [],
   acknowledgments_Monthly: [],
 }
+interface PUSH_ActionPayloadFace {
+  type: string
+  payload: {
+    data: acknowledgmentsFace
+  }
+}
 
 const MainSlice = createSlice({
   name: 'MainSlice',
   initialState,
   reducers: {
-    PushNewAcknowledgment: (state, action) => {
-      state.acknowledgments_Current = [action.payload, ...state.acknowledgments_Current]
-      state.acknowledgments_Daily = [action.payload, ...state.acknowledgments_Daily]
-      state.acknowledgments_Weekly = [action.payload, ...state.acknowledgments_Weekly]
-      state.acknowledgments_Monthly = [action.payload, ...state.acknowledgments_Monthly]
+    PushNewAcknowledgment: (state, action: PUSH_ActionPayloadFace) => {
+      const cards = action.payload.data.cards_submitted
+      console.log(cards)
+
+      state.submitted = +state.submitted + +action.payload.data.cards_submitted
+      state.acknowledgments_Current = [action.payload.data, ...state.acknowledgments_Current]
+      state.acknowledgments_Daily = [action.payload.data, ...state.acknowledgments_Daily]
+      state.acknowledgments_Weekly = [action.payload.data, ...state.acknowledgments_Weekly]
+      state.acknowledgments_Monthly = [action.payload.data, ...state.acknowledgments_Monthly]
     },
     SearchAcknowledgments: (state, action: SerachpayloadFace) => {
       const keyword = action.payload.keyword.toLowerCase()

@@ -4,6 +4,7 @@ import * as Animatable from 'react-native-animatable'
 import { FlashList } from '@shopify/flash-list'
 import { CompanyFace } from 'Types/ItemList'
 import ItemCard_CS from './ItemCard'
+import { HelperText } from 'react-native-paper'
 type AnimatableView = Animatable.View
 
 interface props {
@@ -31,7 +32,7 @@ function SerachCompanys({
       animation="fadeIn"
       easing="ease-in-out"
       style={{
-        height: selectCompany == 0 ? height * 0.17 : height * 0.05,
+        height: selectCompany == 0 ? height * 0.188 : height * 0.08,
         width: '100%',
         marginTop: 20,
       }}>
@@ -60,6 +61,12 @@ function SerachCompanys({
           </View>
         )}
       />
+      <HelperText
+        style={{ fontSize: width * 0.028, color: 'red' }}
+        type="error"
+        visible={formik.touched.company_id && !!formik.errors.company_id}>
+        {formik.errors.company_id}
+      </HelperText>
     </Animatable.View>
   )
 }

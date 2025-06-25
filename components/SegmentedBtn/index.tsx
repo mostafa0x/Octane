@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, Keyboard } from 'react-native'
 import React, { memo, useEffect, useRef, useState } from 'react'
 import { HelperText, SegmentedButtons } from 'react-native-paper'
 
@@ -42,6 +42,7 @@ function SegmentedBtn({ name, width, height, formik }: props) {
       <SegmentedButtons
         value={formik.values?.[name]}
         onValueChange={(val) => {
+          Keyboard.dismiss()
           if (!formik.touched[name]) {
             formik.setFieldTouched(name, true)
           }
@@ -57,7 +58,7 @@ function SegmentedBtn({ name, width, height, formik }: props) {
 
           labelStyle: {
             textAlignVertical: 'center',
-            height: height * 0.02,
+            height: height * 0.017,
             fontSize: width * 0.025,
 
             color: 'black',

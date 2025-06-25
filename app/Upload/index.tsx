@@ -1,40 +1,22 @@
-import {
-  View,
-  Text,
-  useWindowDimensions,
-  ScrollView,
-  TouchableOpacity,
-  StyleSheet,
-  Modal,
-} from 'react-native'
+import { View, useWindowDimensions, Keyboard, TouchableWithoutFeedback } from 'react-native'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import * as Animatable from 'react-native-animatable'
-import AppBar from 'components/App Bar'
-import { Href, Route, RouteInputParams, router } from 'expo-router'
-import { NavigationOptions } from 'expo-router/build/global-state/routing'
+import { router } from 'expo-router'
 import InputField from 'components/form/InputField'
 import { useFormik } from 'formik'
 import { UploadvalidationSchema } from 'lib/Vaildtions/UploadSchema'
-import {
-  ActivityIndicator,
-  Button,
-  HelperText,
-  Portal,
-  Searchbar,
-  SegmentedButtons,
-  Tooltip,
-} from 'react-native-paper'
+import { Button, Searchbar } from 'react-native-paper'
 import SegmentedBtn from 'components/SegmentedBtn'
 import SerachCompanys from 'components/SerachCompanys'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
 import { GetSerachCompany } from 'lib/Store/Slices/CompanySlice'
-import * as ImagePicker from 'expo-image-picker'
 import axiosClient from 'lib/api/axiosClient'
-import { Image } from 'expo-image'
 import { PushNewAcknowledgment } from 'lib/Store/Slices/MainSlice'
 import ShowImageOptions from 'components/Models/showImageOptions'
 import ShowConfirmModal from 'components/Models/ShowConfirmModal'
+import UploadImage from 'components/form/UploadImage'
+import { acknowledgmentsFace } from 'Types/Store/MainSliceFace'
 
 export default function Upload() {
   const { width, height } = useWindowDimensions()
@@ -73,8 +55,10 @@ export default function Upload() {
         },
       })
 
-      const data = response.data.acknowledgments[0]
-      dispatch(PushNewAcknowledgment(data))
+      const data: acknowledgmentsFace = response.data.acknowledgments[0]
+
+      dispatch(PushNewAcknowledgment({ data: data }))
+
       router.push('/')
       console.log('Response:', data)
     } catch (err: any) {
@@ -126,161 +110,88 @@ export default function Upload() {
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [errorApi, setErrorApi] = useState<string | null>(null)
   return (
-    <Animatable.View
-      animation="fadeIn"
-      duration={200}
-      easing="ease-in-out"
-      style={{ flex: 1, backgroundColor: 'black' }}>
-      <View style={{ width: '100%', height: height * 0.1 }}></View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <Animatable.View
+        animation="fadeIn"
+        duration={200}
+        easing="ease-in-out"
+        style={{ flex: 1, backgroundColor: 'black' }}>
+        <View style={{ width: '100%', height: height * 0.1 }}></View>
 
-      <View
-        style={{
-          flex: 1,
-          borderTopLeftRadius: 50,
-          borderTopRightRadius: 50,
-          backgroundColor: 'white',
-          paddingTop: height * 0.02,
-          paddingHorizontal: height * 0.036,
-        }}>
-        <View style={{ marginTop: 20, width: width * 0.9 }}>
-          <Searchbar
-            ref={searchBoxRef}
-            placeholder="Search"
-            value={searchQuery}
-            onChangeText={handleSerach}
-            onClearIconPress={() => handleClear()}
-          />
-        </View>
-        <SerachCompanys
-          height={height}
-          width={width}
-          currentcompanys={currentcompanys}
-          formik={formik}
-          SelectCompanyID={SelectCompanyID}
-          selectCompany={selectCompany}
-        />
-        <HelperText
-          style={{ fontSize: width * 0.028, color: 'red' }}
-          type="error"
-          visible={formik.touched.company_id && !!formik.errors.company_id}>
-          {formik.errors.company_id}
-        </HelperText>
-        <InputField
-          lable={'cards submitted'}
-          name={'cards_submitted'}
-          formik={formik}
-          errorMes={null}
-        />
-        {['submission_type', 'delivery_method', 'state_time'].map((item) => {
-          return (
-            <SegmentedBtn key={item} name={item} height={height} width={width} formik={formik} />
-          )
-        })}
-
-        <View style={{ marginTop: height * 0.02 }}>
-          {formik.values.image !== '' ? (
-            <TouchableOpacity
-              onPress={() => setShowImageOptions(true)}
-              className="items-center rounded-2xl border-2 border-gray-200">
-              <Image
-                contentFit="contain"
-                style={{ width: width * 0.5, height: height * 0.1 }}
-                source={{ uri: formik.values.image }}
-              />
-            </TouchableOpacity>
-          ) : (
-            <Animatable.View>
-              <Button
-                buttonColor="#8d1c47"
-                icon="image"
-                mode="contained"
-                onPress={() => setShowImageOptions(true)}>
-                Upload Image
-              </Button>
-            </Animatable.View>
-          )}
-
-          <HelperText type="error" visible={formik.touched.image && !!formik.errors.image}>
-            {formik.errors.image}
-          </HelperText>
-          <View style={{ marginTop: height * 0 }}>
-            <Button
-              onPress={() => {
-                if (formik.isValid && formik.dirty && formik.values.image) {
-                  return setShowConfirmModal(true)
-                }
-                formik.submitForm()
-              }}
-              textColor="white"
-              buttonColor="#8d1c47">
-              Submit
-            </Button>
+        <View
+          style={{
+            flex: 1,
+            borderTopLeftRadius: 50,
+            borderTopRightRadius: 50,
+            backgroundColor: 'white',
+            paddingTop: height * 0.02,
+            paddingHorizontal: height * 0.036,
+          }}>
+          <View style={{ marginTop: 20, width: width * 0.9 }}>
+            <Searchbar
+              ref={searchBoxRef}
+              placeholder="Search"
+              value={searchQuery}
+              onChangeText={handleSerach}
+              onClearIconPress={() => handleClear()}
+            />
           </View>
-          <ShowConfirmModal
-            showConfirmModal={showConfirmModal}
-            setShowConfirmModal={setShowConfirmModal}
+          <SerachCompanys
+            height={height}
+            width={width}
+            currentcompanys={currentcompanys}
             formik={formik}
-            errorApi={errorApi}
-            isLoadingRes={isLoadingRes}
+            SelectCompanyID={SelectCompanyID}
+            selectCompany={selectCompany}
           />
-          <ShowImageOptions
+
+          <InputField
+            lable={'cards submitted'}
+            name={'cards_submitted'}
             formik={formik}
-            showImageOptions={showImageOptions}
-            setShowImageOptions={setShowImageOptions}
+            errorMes={null}
           />
+          {['submission_type', 'delivery_method', 'state_time'].map((item) => {
+            return (
+              <SegmentedBtn key={item} name={item} height={height} width={width} formik={formik} />
+            )
+          })}
+
+          <View style={{ marginTop: height * 0.02 }}>
+            <UploadImage
+              formik={formik}
+              width={width}
+              height={height}
+              setShowImageOptions={setShowImageOptions}
+            />
+            <View style={{ marginTop: height * 0 }}>
+              <Button
+                onPress={() => {
+                  if (formik.isValid && formik.dirty && formik.values.image) {
+                    return setShowConfirmModal(true)
+                  }
+                  formik.submitForm()
+                }}
+                textColor="white"
+                buttonColor="#8d1c47">
+                Submit
+              </Button>
+            </View>
+            <ShowConfirmModal
+              showConfirmModal={showConfirmModal}
+              setShowConfirmModal={setShowConfirmModal}
+              formik={formik}
+              errorApi={errorApi}
+              isLoadingRes={isLoadingRes}
+            />
+            <ShowImageOptions
+              formik={formik}
+              showImageOptions={showImageOptions}
+              setShowImageOptions={setShowImageOptions}
+            />
+          </View>
         </View>
-      </View>
-    </Animatable.View>
+      </Animatable.View>
+    </TouchableWithoutFeedback>
   )
 }
-
-const styles = StyleSheet.create({
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'flex-end',
-  },
-  modalContainer: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    textAlign: 'center',
-    marginBottom: 15,
-  },
-  optionBtn: {
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    backgroundColor: '#f2f2f2',
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  optionText: {
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  centeredOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  confirmBox: {
-    width: '85%',
-
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 15,
-    elevation: 5,
-  },
-  confirmTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-})

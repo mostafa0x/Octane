@@ -41,7 +41,7 @@ export default function ItemCard_CS({
           contentStyle={{ width: '100%' }}
           buttonColor={formik.values?.['company_id'] == item.id ? '#8d1c47' : 'green'}
           textColor="white">
-          {formik.values.company_id == item.id ? 'Seleted' : 'Select'}
+          {formik.values.company_id == item.id ? 'cancel' : 'Select'}
         </Button>
       </View>
     </View>
