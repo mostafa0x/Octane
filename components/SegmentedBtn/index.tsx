@@ -8,13 +8,12 @@ export interface btnArray {
 
 interface props {
   name: string
-  lable: string
   width: number
   height: number
   formik: any
 }
 
-function SegmentedBtn({ name, lable, width, height, formik }: props) {
+function SegmentedBtn({ name, width, height, formik }: props) {
   const [currentBtns, setCurrentBtns] = useState<btnArray[]>([])
   const cards_SubmittedBtns = useRef<btnArray[]>([
     { name: 'replacement' },
@@ -37,7 +36,9 @@ function SegmentedBtn({ name, lable, width, height, formik }: props) {
 
   return (
     <View>
-      <Text style={{ fontSize: width * 0.028, marginBottom: height * 0.008 }}>{lable}</Text>
+      <Text style={{ fontSize: width * 0.028, marginBottom: height * 0.008 }}>
+        {name.split('_').join(' ')}
+      </Text>
       <SegmentedButtons
         value={formik.values?.[name]}
         onValueChange={(val) => {

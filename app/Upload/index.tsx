@@ -33,6 +33,7 @@ import * as ImagePicker from 'expo-image-picker'
 import axiosClient from 'lib/api/axiosClient'
 import { Image } from 'expo-image'
 import { PushNewAcknowledgment } from 'lib/Store/Slices/MainSlice'
+import ShowImageOptions from 'components/Models/showImageOptions'
 
 export default function Upload() {
   const { width, height } = useWindowDimensions()
@@ -77,8 +78,8 @@ export default function Upload() {
       console.log('Response:', data)
     } catch (err: any) {
       setErrorApi(err?.response?.data.message || err.message)
-      //  console.error('❌ Upload failed:', err?.response?.data || err.message)
       setIsLoadingRes(false)
+      console.log(err)
     }
   }
 
@@ -117,37 +118,12 @@ export default function Upload() {
   useEffect(() => {
     handleSerach('')
     formik.setFieldTouched('image', false)
+    formik.setFieldTouched('company_id', false)
   }, [])
 
   const [showImageOptions, setShowImageOptions] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [errorApi, setErrorApi] = useState<string | null>(null)
-  const handleImagePick = async (type: 'camera' | 'gallery') => {
-    let result
-
-    if (type === 'camera') {
-      result = await ImagePicker.launchCameraAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        quality: 0.9,
-      })
-    } else {
-      result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        quality: 0.7,
-      })
-    }
-
-    if (!result.canceled) {
-      const uri = result.assets[0].uri
-      formik.setFieldValue('image', uri)
-      console.log('Selected Image URI:', uri)
-    }
-
-    setShowImageOptions(false)
-  }
-
   return (
     <Animatable.View
       animation="fadeIn"
@@ -182,34 +158,21 @@ export default function Upload() {
           SelectCompanyID={SelectCompanyID}
           selectCompany={selectCompany}
         />
-        <SegmentedBtn
-          name={'submission_type'}
-          lable={'submission type'}
-          height={height}
-          width={width}
-          formik={formik}
-        />
-        <SegmentedBtn
-          name={'delivery_method'}
-          lable={'delivery method'}
-          height={height}
-          width={width}
-          formik={formik}
-        />
-        <SegmentedBtn
-          name={'state_time'}
-          lable={'state time'}
-          height={height}
-          width={width}
-          formik={formik}
-        />
-
+        <HelperText type="error" visible={formik.touched.company_id && !!formik.errors.company_id}>
+          {formik.errors.company_id}
+        </HelperText>
         <InputField
           lable={'cards submitted'}
           name={'cards_submitted'}
           formik={formik}
           errorMes={null}
         />
+        {['submission_type', 'delivery_method', 'state_time'].map((item) => {
+          return (
+            <SegmentedBtn key={item} name={item} height={height} width={width} formik={formik} />
+          )
+        })}
+
         <View style={{ marginTop: height * 0.02 }}>
           {formik.values.image !== '' ? (
             <TouchableOpacity onPress={() => setShowImageOptions(true)} className="items-center">
@@ -238,8 +201,9 @@ export default function Upload() {
             <Button
               onPress={() => {
                 if (formik.isValid && formik.dirty && formik.values.image) {
-                  setShowConfirmModal(true)
+                  return setShowConfirmModal(true)
                 }
+                formik.submitForm()
               }}
               textColor="white"
               buttonColor="#8d1c47">
@@ -306,33 +270,11 @@ export default function Upload() {
               </View>
             </View>
           </Modal>
-
-          <Modal
-            visible={showImageOptions}
-            transparent
-            animationType="slide"
-            onRequestClose={() => setShowImageOptions(false)}>
-            <TouchableOpacity
-              activeOpacity={1}
-              onPressOut={() => setShowImageOptions(false)}
-              style={styles.modalOverlay}>
-              <View style={styles.modalContainer}>
-                <Text style={styles.modalTitle}>Select Image Source</Text>
-
-                <TouchableOpacity
-                  style={styles.optionBtn}
-                  onPress={() => handleImagePick('camera')}>
-                  <Text style={styles.optionText}>📷 From Camera</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.optionBtn}
-                  onPress={() => handleImagePick('gallery')}>
-                  <Text style={styles.optionText}>🖼️ From Gallery</Text>
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-          </Modal>
+          <ShowImageOptions
+            formik={formik}
+            showImageOptions={showImageOptions}
+            setShowImageOptions={setShowImageOptions}
+          />
         </View>
       </View>
     </Animatable.View>
