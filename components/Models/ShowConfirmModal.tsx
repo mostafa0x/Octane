@@ -1,6 +1,6 @@
-import { View, Text, Modal, StyleSheet } from 'react-native'
-import React, { memo } from 'react'
-import { ActivityIndicator, Button, HelperText } from 'react-native-paper'
+import { View, Text, Modal, StyleSheet, BackHandler } from 'react-native'
+import React, { memo, useEffect } from 'react'
+import { ActivityIndicator, Button, HelperText, Icon } from 'react-native-paper'
 
 interface props {
   showConfirmModal: boolean
@@ -21,12 +21,23 @@ function ShowConfirmModal_Modle({
   width,
   height,
 }: props) {
+  useEffect(() => {
+    const backAction = () => {
+      if (isLoadingRes) {
+        return true
+      }
+      return false
+    }
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction)
+    return () => backHandler.remove()
+  }, [isLoadingRes])
+
   return (
     <Modal
       visible={showConfirmModal}
       transparent
       animationType="fade"
-      onRequestClose={() => setShowConfirmModal(false)}>
+      onRequestClose={() => !isLoadingRes && setShowConfirmModal(false)}>
       <View style={styles.centeredOverlay}>
         <View style={styles.confirmBox}>
           <Text style={styles.confirmTitle}>Confirm Submission</Text>
@@ -42,65 +53,79 @@ function ShowConfirmModal_Modle({
                     />
                   </View>
                 ) : null} */}
-          <View style={{ gap: 24, marginTop: height * 0.04 }}>
-            <Text>
-              📦 Company ID:{'  '}
-              <Text
-                style={{
-                  fontSize: width * 0.044,
-                  fontWeight: 'bold',
-                }}>
-                {formik.values.company_id}
+          {errorApi ? (
+            <View style={{ marginTop: height * 0.04 }} className=" items-center">
+              <Icon color="#e03c3c" size={100} source={'information'} />
+              <HelperText style={{ fontSize: width * 0.042 }} visible={!!errorApi} type="error">
+                {errorApi}
+              </HelperText>
+            </View>
+          ) : (
+            <View style={{ gap: 24, marginTop: height * 0.04 }}>
+              <Text>
+                📦 Company ID:{'  '}
+                <Text
+                  style={{
+                    fontSize: width * 0.044,
+                    fontWeight: 'bold',
+                  }}>
+                  {formik.values.company_id}
+                </Text>
               </Text>
-            </Text>
-            <Text>
-              📝 Submission Type:{'  '}
-              <Text
-                style={{
-                  fontSize: width * 0.044,
-                  fontWeight: 'bold',
-                }}>
-                {formik.values.submission_type.split('_').join(' ')}
+              <Text>
+                📝 Submission Type:{'  '}
+                <Text
+                  style={{
+                    fontSize: width * 0.044,
+                    fontWeight: 'bold',
+                  }}>
+                  {formik.values.submission_type.split('_').join(' ')}
+                </Text>
               </Text>
-            </Text>
-            <Text>
-              🚚 Delivery Method:{'  '}
-              <Text
-                style={{
-                  fontSize: width * 0.044,
-                  fontWeight: 'bold',
-                }}>
-                {formik.values.delivery_method.split('_').join(' ')}
+              <Text>
+                🚚 Delivery Method:{'  '}
+                <Text
+                  style={{
+                    fontSize: width * 0.044,
+                    fontWeight: 'bold',
+                  }}>
+                  {formik.values.delivery_method.split('_').join(' ')}
+                </Text>
               </Text>
-            </Text>
-            <Text>
-              🕒 State Time:{'  '}
-              <Text
-                style={{
-                  fontSize: width * 0.044,
-                  fontWeight: 'bold',
-                }}>
-                {formik.values.state_time.split('_').join(' ')}
+              <Text>
+                🕒 State Time:{'  '}
+                <Text
+                  style={{
+                    fontSize: width * 0.044,
+                    fontWeight: 'bold',
+                  }}>
+                  {formik.values.state_time.split('_').join(' ')}
+                </Text>
               </Text>
-            </Text>
-            <Text>
-              💳 Cards Submitted:{'  '}
-              <Text
-                style={{
-                  fontSize: width * 0.044,
-                  fontWeight: 'bold',
-                }}>
-                {formik.values.cards_submitted}
+              <Text>
+                💳 Cards Submitted:{'  '}
+                <Text
+                  style={{
+                    fontSize: width * 0.044,
+                    fontWeight: 'bold',
+                  }}>
+                  {formik.values.cards_submitted}
+                </Text>
               </Text>
-            </Text>
-          </View>
+            </View>
+          )}
 
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 50 }}>
-            {isLoadingRes ? (
-              <View className=" items-center justify-center">
-                <ActivityIndicator size={50} />
-              </View>
-            ) : (
+          {isLoadingRes ? (
+            <View style={{ marginTop: height * 0.05 }} className=" items-center justify-center">
+              <ActivityIndicator size={50} />
+            </View>
+          ) : (
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginTop: height * 0.05,
+              }}>
               <Button
                 mode="contained"
                 onPress={() => {
@@ -108,21 +133,16 @@ function ShowConfirmModal_Modle({
                   formik.handleSubmit()
                 }}
                 buttonColor="#4CAF50">
-                Confirm
+                {errorApi ? 'Try again' : 'Confirm'}
               </Button>
-            )}
-            <HelperText visible={!!errorApi} type="error">
-              {errorApi}
-            </HelperText>
-            {isLoadingRes ? null : (
               <Button
                 mode="outlined"
                 onPress={() => setShowConfirmModal(false)}
                 textColor="#f44336">
                 Cancel
               </Button>
-            )}
-          </View>
+            </View>
+          )}
         </View>
       </View>
     </Modal>

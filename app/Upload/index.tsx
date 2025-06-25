@@ -167,6 +167,7 @@ export default function Upload() {
             <View style={{ marginTop: height * 0 }}>
               <Button
                 onPress={() => {
+                  Keyboard.dismiss()
                   if (formik.isValid && formik.dirty && formik.values.image) {
                     return setShowConfirmModal(true)
                   }

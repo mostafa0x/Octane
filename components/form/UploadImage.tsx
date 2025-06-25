@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Keyboard } from 'react-native'
 import React, { memo } from 'react'
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
@@ -30,7 +30,10 @@ function UploadImage({ formik, width, height, setShowImageOptions }: props) {
             buttonColor="#8d1c47"
             icon="image"
             mode="contained"
-            onPress={() => setShowImageOptions(true)}>
+            onPress={() => {
+              Keyboard.dismiss()
+              setShowImageOptions(true)
+            }}>
             Upload Image
           </Button>
         </Animatable.View>
