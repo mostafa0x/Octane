@@ -1,5 +1,5 @@
-import { View, Text } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { View, Text, TouchableOpacity } from 'react-native'
+import React, { memo, useEffect, useState } from 'react'
 import { CompanyFace } from 'Types/ItemList'
 import { Button } from 'react-native-paper'
 
@@ -11,14 +11,7 @@ interface props {
   SelectCompanyID: any
   selectCompany: number
 }
-export default function ItemCard_CS({
-  item,
-  height,
-  width,
-  formik,
-  SelectCompanyID,
-  selectCompany,
-}: props) {
+function ItemCard_CS({ item, height, width, formik, SelectCompanyID, selectCompany }: props) {
   return (
     <View
       style={{ width: width * 0.95, padding: width * 0.02 }}
@@ -31,7 +24,7 @@ export default function ItemCard_CS({
       <View style={{ width: '10%' }}>
         <Text>{item.code}</Text>
       </View>
-      <View style={{ width: '50%', marginLeft: width * 0.1 }}>
+      <TouchableOpacity style={{ width: '50%', marginLeft: width * 0.1 }}>
         <Button
           onPress={() => {
             if (selectCompany == item.id) {
@@ -45,7 +38,9 @@ export default function ItemCard_CS({
           textColor="white">
           {formik.values.company_id == item.id ? 'cancel' : 'Select'}
         </Button>
-      </View>
+      </TouchableOpacity>
     </View>
   )
 }
+
+export default memo(ItemCard_CS)

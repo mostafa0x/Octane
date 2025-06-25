@@ -39,8 +39,8 @@ function SerachCompanys({
       <FlashList
         data={currentcompanys}
         extraData={selectCompany}
-        estimatedItemSize={70}
-        keyExtractor={(item, index) => index.toString()}
+        estimatedItemSize={55}
+        keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={{ paddingBottom: 0 }}
         renderItem={({ item }) => (
           <ItemCard_CS

@@ -133,6 +133,14 @@ export default function Upload() {
             <Searchbar
               ref={searchBoxRef}
               placeholder="Search"
+              inputStyle={{
+                fontSize:
+                  searchQuery.length <= 30
+                    ? width * 0.032
+                    : searchQuery.length <= 40
+                      ? width * 0.028
+                      : width * 0.026,
+              }}
               value={searchQuery}
               onChangeText={handleSerach}
               onClearIconPress={() => handleClear()}

@@ -4,6 +4,7 @@ import { Router } from 'expo-router'
 import axiosClient from 'lib/api/axiosClient'
 import { SetCompanys } from 'lib/Store/Slices/CompanySlice'
 import { changeIsLoadedUserData, fillUserInfo } from 'lib/Store/Slices/UserSlice'
+import { CompanyFace } from 'Types/ItemList'
 import { userDataFace } from 'Types/Store/UserSliceFace'
 
 export const storeUserInfo = async (
@@ -62,11 +63,18 @@ export const GetCompanys = async (dispatch: any) => {
       console.log('done set copmanys')
       return
     }
-    const companysJSON = await JSON.parse(companys)
-    console.log(companysJSON)
-
-    console.log('found')
-    dispatch(SetCompanys(companysJSON.data))
+    const companysJSON: { data: CompanyFace; time: string } = await JSON.parse(companys)
+    const storedTime = parseInt(companysJSON.time)
+    const now = Date.now()
+    const expirdTime = 7 * 24 * 60 * 60 * 1000
+    if (now - storedTime >= expirdTime) {
+      await AsyncStorage.removeItem('@companys')
+      GetCompanys(dispatch)
+      console.log('Should Upate')
+    } else {
+      dispatch(SetCompanys(companysJSON.data))
+      console.log('found')
+    }
   } catch (err: any) {
     console.log(err)
 
