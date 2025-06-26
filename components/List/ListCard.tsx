@@ -25,7 +25,11 @@ function ListCard({ acknowledgments_Current, height, width }: props) {
       ref={animRef}
       animation="fadeIn"
       easing="ease-in-out"
-      style={{ height: height * 0.34, width: '100%', marginTop: height * 0.0 }}>
+      style={{
+        height: height * 0.34,
+        width: '100%',
+        marginTop: height * 0.0,
+      }}>
       <FlashList
         data={acknowledgments_Current}
         estimatedItemSize={70}
@@ -35,8 +39,14 @@ function ListCard({ acknowledgments_Current, height, width }: props) {
         ListEmptyComponent={() => (
           <View style={{ marginTop: 50, alignItems: 'center' }}>
             <Text
-              style={{ fontSize: width * 0.072, opacity: 0.7, width: width, textAlign: 'center' }}>
-              Empty
+              style={{
+                fontSize: width * 0.062,
+                opacity: 0.7,
+                width: width * 0.7,
+                textAlign: 'center',
+                fontWeight: '300',
+              }}>
+              There are no acknowledgments yet.
             </Text>
           </View>
         )}

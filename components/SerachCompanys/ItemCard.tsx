@@ -55,8 +55,9 @@ const ItemCard_CS = memo(({ item, width, formik, SelectCompanyID, selectCompany 
 const createStyles = (width: number) =>
   StyleSheet.create({
     container: {
-      width: width * 0.95,
+      width: width * 0.9,
       padding: width * 0.02,
+      height: '100%',
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',

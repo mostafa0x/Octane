@@ -65,9 +65,17 @@ const SerachCompanys = ({
 const createStyles = (height: number, width: number) =>
   StyleSheet.create({
     container: {
-      height: height * 0.2,
-      width: '100%',
-      marginTop: 20,
+      height: height * 0.218,
+      width: '95%',
+      padding: 2,
+      borderWidth: 1,
+      borderColor: 'gray',
+      borderTopWidth: 0,
+      borderRadius: 10,
+      borderTopRightRadius: 0,
+      borderTopLeftRadius: 0,
+
+      marginLeft: 15,
     },
     listContent: {
       paddingBottom: 0,

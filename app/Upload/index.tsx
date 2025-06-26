@@ -230,7 +230,6 @@ export default function Upload() {
   )
 }
 
-// إنشاء الأنماط في دالة منفصلة
 const createStyles = (width: number, height: number) =>
   StyleSheet.create({
     keyboardAvoidingView: {
@@ -258,7 +257,7 @@ const createStyles = (width: number, height: number) =>
     },
     searchContainer: {
       marginTop: 20,
-      width: width * 0.87,
+      width: width * 0.88,
     },
     uploadSection: {
       marginTop: height * 0.02,
