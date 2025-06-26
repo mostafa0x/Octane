@@ -27,9 +27,7 @@ const ItemCard = ({ item, width }: Props) => {
       </TouchableOpacity>
 
       <View style={[styles.companyInfo, { width: width * 0.25 }]}>
-        <Text style={[styles.companyName, { fontSize: width * 0.032 }]}>
-          {item.company.name.split(' ').splice(0, 2).join(' ')}
-        </Text>
+        <Text style={[styles.companyName, { fontSize: width * 0.032 }]}>{item.company.name}</Text>
         <Text style={[styles.companyCode, { fontSize: width * 0.03 }]}>{item.company.code}</Text>
       </View>
 

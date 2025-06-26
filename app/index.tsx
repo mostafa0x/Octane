@@ -49,7 +49,6 @@ export default function Home() {
     handleActive('daily')
   }, [handleActive])
 
-  // حساب الأبعاد مرة واحدة
   const styles = Style(width, height)
 
   return (
