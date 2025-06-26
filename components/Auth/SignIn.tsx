@@ -69,8 +69,8 @@ export default function SignIn() {
       }}>
       <Animatable.View className="flex-1" animation="fadeIn" duration={400} easing="ease-in-out">
         <View style={{ marginBottom: 40 }}>
-          <InputField lable={'Email'} name={'email'} formik={formik} errorMes={errorMes} />
-          <InputField lable={'Password'} name={'password'} formik={formik} errorMes={errorMes} />
+          <InputField label={'Email'} name={'email'} formik={formik} errorMes={errorMes} />
+          <InputField label={'Password'} name={'password'} formik={formik} errorMes={errorMes} />
         </View>
 
         <View style={{ alignItems: 'center' }}>

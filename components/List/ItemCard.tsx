@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { TouchableOpacity, View, StyleSheet } from 'react-native'
-import { Text, Avatar } from 'react-native-paper'
+import { Text, Avatar, Icon, ActivityIndicator } from 'react-native-paper'
 import { acknowledgmentsFace } from 'Types/Store/MainSliceFace'
 
 interface Props {
@@ -17,13 +17,12 @@ const ItemCard = ({ item, width }: Props) => {
     return width * 0.024
   }, [item.delivery_method, width])
 
-  const avatarSize = width * 0.12
+  const avatarSize = useRef(width * 0.12)
   const imgs = useMemo(() => [{ uri: item.image }], [item.image])
-
   return (
     <View style={[styles.container, { padding: width * 0.035 }]}>
       <TouchableOpacity onPress={() => setIsVisible(true)}>
-        <Avatar.Image size={avatarSize} source={imgs} />
+        <Avatar.Image size={avatarSize.current} source={imgs} />
       </TouchableOpacity>
 
       <View style={[styles.companyInfo, { width: width * 0.25 }]}>
