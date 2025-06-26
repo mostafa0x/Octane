@@ -25,7 +25,7 @@ function ListCard({ acknowledgments_Current, height, width }: props) {
       ref={animRef}
       animation="fadeIn"
       easing="ease-in-out"
-      style={{ height: height * 0.3, width: '100%', marginTop: height * 0.0 }}>
+      style={{ height: height * 0.38, width: '100%', marginTop: height * 0.0 }}>
       <FlashList
         data={acknowledgments_Current}
         estimatedItemSize={70}

@@ -132,7 +132,7 @@ const Style = (width: number, height: number) =>
       height: '50%',
     },
     imageContainer: {
-      height: height * 0.25,
+      height: height * 0.18,
     },
     fullImage: {
       width: '100%',
