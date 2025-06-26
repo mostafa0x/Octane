@@ -1,47 +1,41 @@
-import { View, Text } from 'react-native'
-import React, { memo, useEffect, useRef, useState } from 'react'
+import { View, Text, StyleSheet } from 'react-native'
+import React, { memo, useRef } from 'react'
 import * as Animatable from 'react-native-animatable'
 import { FlashList } from '@shopify/flash-list'
 import { CompanyFace } from 'Types/ItemList'
 import ItemCard_CS from './ItemCard'
 import { HelperText, Searchbar } from 'react-native-paper'
+
 type AnimatableView = Animatable.View
 
-interface props {
+interface Props {
   height: number
   width: number
   currentcompanys: CompanyFace[]
   formik: any
-  selectCompany: any
-  SelectCompanyID: any
+  selectCompany: number
+  SelectCompanyID: (id: number, name: string) => void
 }
 
-function SerachCompanys({
+const SerachCompanys = ({
   height,
   width,
   currentcompanys,
   formik,
   selectCompany,
   SelectCompanyID,
-}: props) {
+}: Props) => {
   const animRef = useRef<AnimatableView>(null)
+  const styles = createStyles(height, width)
 
   return (
-    <Animatable.View
-      ref={animRef}
-      animation="fadeIn"
-      easing="ease-in-out"
-      style={{
-        height: selectCompany == 0 ? height * 0.2 : height * 0.08,
-        width: '100%',
-        marginTop: 20,
-      }}>
+    <Animatable.View ref={animRef} animation="fadeIn" easing="ease-in-out" style={styles.container}>
       <FlashList
         data={currentcompanys}
         extraData={selectCompany}
         estimatedItemSize={80}
         keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={{ paddingBottom: 0 }}
+        contentContainerStyle={styles.listContent}
         renderItem={({ item }) => (
           <ItemCard_CS
             item={item}
@@ -53,16 +47,13 @@ function SerachCompanys({
           />
         )}
         ListEmptyComponent={() => (
-          <View style={{ marginTop: 50, alignItems: 'center' }}>
-            <Text
-              style={{ fontSize: width * 0.032, opacity: 0.7, width: width, textAlign: 'center' }}>
-              no company with this name or code.
-            </Text>
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>no company with this name or code.</Text>
           </View>
         )}
       />
       <HelperText
-        style={{ fontSize: width * 0.028, color: 'red' }}
+        style={styles.helperText}
         type="error"
         visible={formik.touched.company_id && !!formik.errors.company_id}>
         {formik.errors.company_id}
@@ -70,5 +61,31 @@ function SerachCompanys({
     </Animatable.View>
   )
 }
+
+const createStyles = (height: number, width: number) =>
+  StyleSheet.create({
+    container: {
+      height: height * 0.2,
+      width: '100%',
+      marginTop: 20,
+    },
+    listContent: {
+      paddingBottom: 0,
+    },
+    emptyContainer: {
+      marginTop: 50,
+      alignItems: 'center',
+    },
+    emptyText: {
+      fontSize: width * 0.032,
+      opacity: 0.7,
+      width: '100%',
+      textAlign: 'center',
+    },
+    helperText: {
+      fontSize: width * 0.028,
+      color: 'red',
+    },
+  })
 
 export default memo(SerachCompanys)

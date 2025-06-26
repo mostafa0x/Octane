@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, Platform, View, useWindowDimensions } from 'react-native'
+import { KeyboardAvoidingView, Platform, View, useWindowDimensions, StyleSheet } from 'react-native'
 import { Searchbar } from 'react-native-paper'
 import { Image } from 'expo-image'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -26,110 +26,74 @@ export default function Home() {
   const searchBoxRef = useRef<React.ComponentRef<typeof Searchbar>>(null)
   const router = useRouter()
 
-  const handleSerach = useCallback((text: string) => {
-    setSearchQuery(text)
-    dispatch(SearchAcknowledgments({ keyword: text, period: activeList }))
-  }, [])
+  const handleSerach = useCallback(
+    (text: string) => {
+      setSearchQuery(text)
+      dispatch(SearchAcknowledgments({ keyword: text, period: activeList }))
+    },
+    [activeList, dispatch]
+  )
 
-  const handleActive = useCallback((period: string) => {
-    const nameLower = period.toLowerCase()
-    setSearchQuery('')
-    searchBoxRef.current?.blur()
-    setActiveList(nameLower)
-    dispatch(SetAcknowledgments_Current(nameLower))
-  }, [])
+  const handleActive = useCallback(
+    (period: string) => {
+      const nameLower = period.toLowerCase()
+      setSearchQuery('')
+      searchBoxRef.current?.blur()
+      setActiveList(nameLower)
+      dispatch(SetAcknowledgments_Current(nameLower))
+    },
+    [dispatch]
+  )
 
   useEffect(() => {
     handleActive('daily')
-  }, [])
+  }, [handleActive])
 
-  const cardWidth = width * 0.9
-  const cardHeight = height * 0.18
-  const progressSize = Math.min(width, height) * 0.18
-  const searchHeight = height * 0.07
-  const sectionPadding = width * 0.05
+  // حساب الأبعاد مرة واحدة
+  const styles = Style(width, height)
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1 }}>
+      style={styles.keyboardAvoidingView}>
       <Animatable.View
-        style={{ flex: 1, backgroundColor: 'black' }}
+        style={styles.animatableView}
         animation="fadeIn"
         duration={200}
         easing="ease-in-out">
-        <Image
-          style={{ position: 'absolute', width: '100%', height: '50%' }}
-          contentFit="fill"
-          source={backImg.current}
-        />
-
-        {/* <View
-        style={{
-          position: 'absolute',
-          top: height * 0.4,
-          left: width * 0.6,
-          zIndex: 50,
-          height: 145,
-          width: 2,
-          backgroundColor: 'white',
-          borderRadius: 16,
-        }}
-      />
-      <View
-        style={{
-          position: 'absolute',
-          top: height * 0.5,
-          left: width * 0.65,
-          zIndex: 50,
-          height: 1,
-          width: width * 0.4,
-          backgroundColor: 'white',
-          borderRadius: 16,
-        }}
-      /> */}
+        <Image style={styles.backgroundImage} contentFit="fill" source={backImg.current} />
 
         <AppBar
           type="Home"
-          sectionPadding={sectionPadding}
+          sectionPadding={width * 0.05}
           router={router}
           userData={userData}
           width={width}
         />
-        <View style={{ height: height * 0.25 }}>
-          <Image
-            source={backImg.current}
-            contentFit="fill"
-            style={{ width: '100%', height: '100%' }}
-          />
+
+        <View style={styles.imageContainer}>
+          <Image source={backImg.current} contentFit="fill" style={styles.fullImage} />
         </View>
 
-        <View
-          style={{
-            flex: 1,
-            alignItems: 'center',
-            borderTopLeftRadius: 70,
-            borderTopRightRadius: 70,
-            backgroundColor: 'white',
-            padding: sectionPadding,
-          }}>
+        <View style={styles.mainContainer}>
           <NfcCard
             submitted={submitted}
             allocated={allocated}
-            cardWidth={cardWidth}
-            cardHeight={cardHeight}
-            progressSize={progressSize}
+            cardWidth={width * 0.9}
+            cardHeight={height * 0.18}
+            progressSize={Math.min(width, height) * 0.18}
             height={height}
             width={width}
           />
+
           <ListButtonHistory
             activeList={activeList}
-            searchHeight={searchHeight}
-            cardWidth={cardWidth}
+            searchHeight={height * 0.07}
+            cardWidth={width * 0.9}
             handleActive={handleActive}
           />
 
-          <View style={{ marginTop: 20, width: cardWidth }}>
+          <View style={styles.searchContainer}>
             <Searchbar
               ref={searchBoxRef}
               placeholder="Search"
@@ -138,12 +102,14 @@ export default function Home() {
               onClearIconPress={() => handleActive(activeList)}
             />
           </View>
+
           <ListCard
             acknowledgments_Current={acknowledgments_Current}
             height={height}
             width={width}
           />
-          <View style={{ marginTop: height * 0.0 }}>
+
+          <View style={styles.swipeBtnContainer}>
             <SwipeBtn width={width} height={height} router={router} />
           </View>
         </View>
@@ -151,3 +117,41 @@ export default function Home() {
     </KeyboardAvoidingView>
   )
 }
+
+const Style = (width: number, height: number) =>
+  StyleSheet.create({
+    keyboardAvoidingView: {
+      flex: 1,
+    },
+    animatableView: {
+      flex: 1,
+      backgroundColor: 'black',
+    },
+    backgroundImage: {
+      position: 'absolute',
+      width: '100%',
+      height: '50%',
+    },
+    imageContainer: {
+      height: height * 0.25,
+    },
+    fullImage: {
+      width: '100%',
+      height: '100%',
+    },
+    mainContainer: {
+      flex: 1,
+      alignItems: 'center',
+      borderTopLeftRadius: 70,
+      borderTopRightRadius: 70,
+      backgroundColor: 'white',
+      padding: width * 0.05,
+    },
+    searchContainer: {
+      marginTop: 20,
+      width: width * 0.9,
+    },
+    swipeBtnContainer: {
+      marginTop: height * 0.0,
+    },
+  })
