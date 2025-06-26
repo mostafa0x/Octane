@@ -42,7 +42,6 @@ export default function Upload() {
   const searchBoxRef = useRef<React.ComponentRef<typeof Searchbar>>(null)
   const dispatch = useDispatch()
 
-  // إنشاء الأنماط مرة واحدة
   const styles = createStyles(width, height)
 
   const handleUpload = async (formValues: any) => {

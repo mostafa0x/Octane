@@ -11,5 +11,5 @@ export interface userDataFace {
   email: string
   role: string
   status: string
-  avatar: string
+  image: string | null
 }

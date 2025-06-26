@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, useWindowDimensions, ScrollView } from 'react-native'
-import { Avatar, Icon } from 'react-native-paper'
+import { ActivityIndicator, Avatar, Icon } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
 import { useRouter } from 'expo-router'
@@ -7,6 +7,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
 import handleLoutOut from 'Services/handleLogOut'
 import AppBar from 'components/App Bar'
+import { useEffect, useState } from 'react'
+import ShowImageOptions from 'components/Models/showImageOptions'
+import { useFormik } from 'formik'
+import UploadAvatar from 'Services/UploadAvatar'
+import { changeImageProfile } from 'lib/Store/Slices/UserSlice'
+import { storeUserInfo, UpdataUserInfo } from 'Services/Storage'
 const avatarIcon = require('../../assets/avatar.png')
 const backImg = require('../../assets/backn.png')
 
@@ -15,10 +21,54 @@ export default function Profile() {
   const { userData } = useSelector((state: StateFace) => state.UserReducer)
   const router = useRouter()
   const dispatch = useDispatch()
+  const [showImageOptions, setShowImageOptions] = useState(false)
+  const [isLoadingRes, setIsLoadingRes] = useState(false)
+  const [errorRes, setErrorRes] = useState<string | null>(null)
+  async function handleChangeAvatar(formValues: any) {
+    if (isLoadingRes) return
+    setIsLoadingRes(true)
+    setErrorRes(null)
+    try {
+      const formData = new FormData()
+      if (formValues.image) {
+        const fileName = formValues.image.split('/').pop()
+        const fileType = fileName?.split('.').pop()
+
+        formData.append('image', {
+          uri: formValues.image,
+          name: fileName || `photo.${fileType}`,
+          type: `image/${fileType}`,
+        } as any)
+      }
+
+      if (userData) {
+        const data = await UploadAvatar(formData)
+        dispatch(changeImageProfile(data.image))
+        await UpdataUserInfo(userData, data.image)
+      }
+    } catch (err: any) {
+      console.log(err)
+      setErrorRes(err.response?.data?.message ?? 'Error Upload Image !')
+      throw err
+    } finally {
+      setIsLoadingRes(false)
+    }
+  }
+  const formik = useFormik({
+    initialValues: { image: '' },
+    onSubmit: handleChangeAvatar,
+  })
 
   async function callLogOut() {
     await handleLoutOut(dispatch, router)
   }
+  useEffect(() => {
+    if (isLoadingRes) return
+    if (formik.values.image !== '' && !isLoadingRes) {
+      formik.handleSubmit()
+    }
+    return () => {}
+  }, [formik.values])
 
   const avatarSize = width * 0.4
 
@@ -47,9 +97,9 @@ export default function Profile() {
         <TouchableOpacity activeOpacity={0.8}>
           <Avatar.Image
             source={
-              userData?.avatar
+              userData?.image
                 ? {
-                    uri: userData?.avatar,
+                    uri: userData?.image,
                   }
                 : avatarIcon
             }
@@ -94,7 +144,26 @@ export default function Profile() {
               {userData?.email ?? 'loading email...'}
             </Text>
           </View>
-
+          <TouchableOpacity
+            onPress={() => setShowImageOptions(true)}
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+            <View
+              style={{
+                height: 60,
+                width: 60,
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius: 22,
+                backgroundColor: '#6DB6FE',
+              }}>
+              {isLoadingRes ? (
+                <ActivityIndicator size={30} />
+              ) : (
+                <Icon size={40} source="image-edit-outline" />
+              )}
+            </View>
+            <Text style={{ fontSize: 16, width: width }}>Change Avatar</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={callLogOut}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
@@ -113,6 +182,11 @@ export default function Profile() {
           </TouchableOpacity>
         </View>
       </ScrollView>
+      <ShowImageOptions
+        formik={formik}
+        showImageOptions={showImageOptions}
+        setShowImageOptions={setShowImageOptions}
+      />
     </Animatable.View>
   )
 }

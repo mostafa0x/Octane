@@ -3,7 +3,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Router } from 'expo-router'
 import axiosClient from 'lib/api/axiosClient'
 import { SetCompanys } from 'lib/Store/Slices/CompanySlice'
-import { changeIsLoadedUserData, fillUserInfo } from 'lib/Store/Slices/UserSlice'
+import {
+  changeImageProfile,
+  changeIsLoadedUserData,
+  fillUserInfo,
+} from 'lib/Store/Slices/UserSlice'
 import { CompanyFace } from 'Types/ItemList'
 import { userDataFace } from 'Types/Store/UserSliceFace'
 
@@ -20,6 +24,14 @@ export const storeUserInfo = async (
     ])
     dispatch(fillUserInfo({ userToken, userData }))
     dispatch(changeIsLoadedUserData(true))
+  } catch (error) {
+    console.error('Error saving user info:', error)
+  }
+}
+export const UpdataUserInfo = async (userData: userDataFace, newImage: string) => {
+  try {
+    const updatedUser = { ...userData, image: newImage }
+    await AsyncStorage.setItem('@userData', JSON.stringify(updatedUser))
   } catch (error) {
     console.error('Error saving user info:', error)
   }

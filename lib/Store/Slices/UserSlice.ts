@@ -28,8 +28,14 @@ const UserSlice = createSlice({
     changeIsLoadedUserData: (state, action) => {
       state.isLoadedUserData = action.payload
     },
+    changeImageProfile: (state, action) => {
+      if (state.userData) {
+        state.userData.image = action.payload
+      }
+    },
   },
 })
 
 export const UserReducer = UserSlice.reducer
-export const { fillUserInfo, changeIsLoadedUserData, ChangeLoadedData } = UserSlice.actions
+export const { fillUserInfo, changeIsLoadedUserData, ChangeLoadedData, changeImageProfile } =
+  UserSlice.actions
