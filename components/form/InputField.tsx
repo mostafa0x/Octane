@@ -1,63 +1,103 @@
-import { View, Text, TextInput, Pressable, TouchableOpacity } from 'react-native'
-import React, { memo, useEffect, useState } from 'react'
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
+import React, { memo, useCallback } from 'react'
 import { Feather } from '@expo/vector-icons'
 import { HelperText } from 'react-native-paper'
 
-interface props {
-  lable: string
+interface Props {
+  label: string
   name: string
   formik: any
-  errorMes: string | null
+  errorMes?: string | null
 }
 
-function InputField({ lable, name, formik, errorMes }: props) {
-  const [showPassword, setShowPassword] = useState(false)
+const InputField = memo(({ label, name, formik, errorMes }: Props) => {
+  const [showPassword, setShowPassword] = React.useState(false)
+
+  // حساب القيم المشتقة مرة واحدة
   const isPassword = ['password', 'repassword'].includes(name)
-  const isError: boolean =
-    errorMes !== 'User already exists' && errorMes
+  const isNumberField = ['cards_submitted'].includes(name)
+  const isErrorEmail = errorMes === 'User already exists' && name === 'email'
+  const hasError =
+    errorMes && errorMes !== 'User already exists'
       ? errorMes
       : formik.touched?.[name] && !!formik.errors?.[name]
-  const isErrorEmail = errorMes == 'User already exists' && name == 'email'
-  const isNumberField = ['cards_submitted'].includes(name)
+  const shouldShowError = formik.touched?.[name] && !!formik.errors?.[name]
 
-  useEffect(() => {
-    formik.setFieldTouched(name, false)
-    return () => {}
+  const togglePasswordVisibility = useCallback(() => {
+    setShowPassword((prev) => !prev)
   }, [])
 
+  // تمت إزالة useEffect الذي كان يسبب المشكلة
+
+  const styles = createStyles(hasError || isErrorEmail)
+
   return (
-    <>
-      <Text className="mb-2 text-[16px] text-[#6C7278]">{lable}</Text>
-      <View
-        className="flex-row items-center  px-4 py-2"
-        style={{
-          borderRadius: 10,
-          borderWidth: 2,
-          borderColor: isError || isErrorEmail ? '#e03c3c' : '#EDF1F3',
-        }}>
+    <View style={styles.container}>
+      <Text style={styles.label}>{label}</Text>
+
+      <View style={styles.inputContainer}>
         <TextInput
           keyboardType={isNumberField ? 'numeric' : 'default'}
           onSubmitEditing={() => isPassword && formik.handleSubmit()}
           onChangeText={formik.handleChange(name)}
-          onBlur={formik.handleBlur(name)}
-          value={formik.values?.[name]}
-          style={{ flex: 1, height: 50, fontSize: 14, color: 'black' }}
-          placeholder={isNumberField ? '0' : lable}
+          onBlur={() => formik.handleBlur(name)}
+          value={formik.values?.[name]?.toString()}
+          style={styles.input}
+          placeholder={isNumberField ? '0' : label}
           secureTextEntry={isPassword && !showPassword}
+          placeholderTextColor="#ACB5BB"
         />
+
         {isPassword && (
-          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-            <Feather name={showPassword ? 'eye' : 'eye-off'} color={'#ACB5BB'} size={25} />
+          <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
+            <Feather name={showPassword ? 'eye' : 'eye-off'} color="#ACB5BB" size={25} />
           </TouchableOpacity>
         )}
       </View>
-      <HelperText
-        style={{ fontSize: 14, color: 'red' }}
-        type="error"
-        visible={formik.touched?.[name] && !!formik.errors?.[name]}>
+
+      <HelperText style={styles.helperText} type="error" visible={shouldShowError}>
         {formik.errors?.[name]}
       </HelperText>
-    </>
+    </View>
   )
-}
-export default memo(InputField)
+})
+
+const createStyles = (hasError: boolean) =>
+  StyleSheet.create({
+    container: {
+      marginBottom: 16,
+    },
+    label: {
+      marginBottom: 8,
+      fontSize: 16,
+      color: '#6C7278',
+    },
+    inputContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingHorizontal: 16,
+      paddingVertical: 8,
+      borderRadius: 10,
+      borderWidth: 2,
+      borderColor: hasError ? '#e03c3c' : '#EDF1F3',
+      backgroundColor: '#FFFFFF',
+    },
+    input: {
+      flex: 1,
+      height: 50,
+      fontSize: 14,
+      color: 'black',
+      paddingVertical: 0,
+    },
+    eyeIcon: {
+      padding: 8,
+      marginLeft: 8,
+    },
+    helperText: {
+      fontSize: 14,
+      color: 'red',
+      marginTop: 4,
+    },
+  })
+
+export default InputField

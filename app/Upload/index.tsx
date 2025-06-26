@@ -175,7 +175,7 @@ export default function Upload() {
           />
 
           <InputField
-            lable={'cards submitted'}
+            label={'cards submitted'}
             name={'cards_submitted'}
             formik={formik}
             errorMes={null}
@@ -254,12 +254,11 @@ const createStyles = (width: number, height: number) =>
       borderTopLeftRadius: 50,
       borderTopRightRadius: 50,
       backgroundColor: 'white',
-      paddingTop: height * 0.02,
-      paddingHorizontal: height * 0.036,
+      paddingHorizontal: height * 0.03,
     },
     searchContainer: {
       marginTop: 20,
-      width: width * 0.9,
+      width: width * 0.87,
     },
     uploadSection: {
       marginTop: height * 0.02,
