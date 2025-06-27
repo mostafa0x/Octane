@@ -102,13 +102,13 @@ export default function UploadCompanys() {
         <View
           style={{
             justifyContent: 'center',
-            marginTop: height * 0.02,
+            marginTop: height * 0.01,
             marginBottom: height * 0.05,
             gap: 30,
           }}>
-          <Text style={{ textAlign: 'center', fontSize: width * 0.062 }}>Upload Companys</Text>
           <View style={{ padding: 10 }}>
-            <Text style={{ fontWeight: 'bold', marginBottom: height * 0.008 }}>
+            <Text
+              style={{ fontWeight: 'bold', marginBottom: height * 0.008, fontSize: width * 0.042 }}>
               Supported file formats:
             </Text>
             {formats.current.map((item, index) => (
