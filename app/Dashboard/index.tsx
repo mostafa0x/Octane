@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, useWindowDimensions, ScrollView } from 'r
 import { ActivityIndicator, Avatar, HelperText, Icon } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
-import { useRouter } from 'expo-router'
+import { usePathname, useRouter } from 'expo-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
 import handleLoutOut from 'Services/handleLogOut'
@@ -22,7 +22,7 @@ export default function Dashboard() {
   const { width, height } = useWindowDimensions()
   const { userData } = useSelector((state: StateFace) => state.UserReducer)
   const { users } = useSelector((state: StateFace) => state.DashboardReducer)
-
+  const pathName = usePathname()
   const router = useRouter()
   const dispatch = useDispatch()
   const [isLoadingPage, setIsLoadingPage] = useState(true)
@@ -135,13 +135,38 @@ export default function Dashboard() {
             flexDirection: 'row',
             gap: 60,
           }}>
-          <TouchableOpacity onPress={() => router.push('/Dashboard')}>
+          <TouchableOpacity
+            style={
+              pathName == '/Dashboard' && {
+                borderRadius: 25,
+                padding: 5,
+                backgroundColor: '#11962e',
+              }
+            }
+            onPress={() => pathName !== '/Dashboard' && router.push('/Dashboard')}>
             <Icon size={50} source={'home'} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            style={
+              pathName == '/Dashboard/Reports' && {
+                borderRadius: 25,
+                padding: 5,
+                backgroundColor: '#11962e',
+              }
+            }>
             <Icon size={50} source={'tab-search'} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              pathName !== '/Dashboard/UploadCompanys' && router.push('/Dashboard/UploadCompanys')
+            }
+            style={
+              pathName == '/Dashboard/UploadCompanys' && {
+                borderRadius: 25,
+                padding: 5,
+                backgroundColor: '#11962e',
+              }
+            }>
             <Icon size={50} source={'developer-board'} />
           </TouchableOpacity>
         </View>
