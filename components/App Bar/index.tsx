@@ -11,6 +11,7 @@ interface props {
   userData?: userDataFace | null
   width: number
   type?: string
+  label?: string
 }
 
 const HomeContent = React.memo(({ router, userData, width }: props) => {
@@ -50,7 +51,7 @@ const ProfileContent = React.memo(({ router, width }: props) => {
     </>
   )
 })
-const DashboardContent = React.memo(({ router, width }: props) => {
+const DashboardContent = React.memo(({ router, width, label }: props) => {
   return (
     <>
       <TouchableOpacity
@@ -61,7 +62,9 @@ const DashboardContent = React.memo(({ router, width }: props) => {
         </View>
       </TouchableOpacity>
       <View style={{ position: 'absolute', left: 60, top: 10, zIndex: 10 }}>
-        <Text style={{ color: '#F1FFF3', fontSize: 24, width: width }}>Dashboard</Text>
+        <Text style={{ color: '#F1FFF3', fontSize: 24, width: width }}>
+          {label ? label : 'Dashboard'}
+        </Text>
       </View>
     </>
   )
@@ -85,7 +88,7 @@ const UploadContent = React.memo(({ router, width }: props) => {
   )
 })
 
-function AppBar({ type, sectionPadding, router, userData, width }: props) {
+function AppBar({ type, sectionPadding, router, userData, width, label }: props) {
   return (
     <View style={{ position: 'absolute', top: 0, left: 0, zIndex: 50, width: '100%' }}>
       <View
@@ -100,7 +103,7 @@ function AppBar({ type, sectionPadding, router, userData, width }: props) {
       />
       {type === 'Home' && <HomeContent router={router} width={width} userData={userData} />}
       {type === 'Profile' && <ProfileContent router={router} width={width} />}
-      {type === 'Dashboard' && <DashboardContent router={router} width={width} />}
+      {type === 'Dashboard' && <DashboardContent router={router} width={width} label={label} />}
       {type === 'Upload' && <UploadContent router={router} width={width} />}
       {type == 'Home' && (
         <View style={{ marginTop: 10, gap: 8, padding: sectionPadding }}>

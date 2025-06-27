@@ -47,7 +47,6 @@ export default function Dashboard() {
 
   return (
     <Animatable.View animation="fadeIn" duration={100} style={{ flex: 1 }}>
-      <AppBar type="Dashboard" router={router} userData={userData} width={width} />
       <View style={{ position: 'absolute', top: height * 0.2, width: '100%' }}>
         <Image
           style={{ width: '100%', height: height * 0.25 }}
