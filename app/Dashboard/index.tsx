@@ -13,29 +13,40 @@ import { useFormik } from 'formik'
 import UploadAvatar from 'Services/UploadAvatar'
 import { changeImageProfile } from 'lib/Store/Slices/UserSlice'
 import { storeUserInfo, UpdataUserInfo } from 'Services/Storage'
+import axiosClient from 'lib/api/axiosClient'
+import { GetUsers } from 'lib/Store/Slices/DashboardSlice'
 const avatarIcon = require('../../assets/avatar.png')
 const backImg = require('../../assets/backn.png')
-
-interface BoxArrayFace {
-  lable: string
-  icon: string
-}
 
 export default function Dashboard() {
   const { width, height } = useWindowDimensions()
   const { userData } = useSelector((state: StateFace) => state.UserReducer)
+  const { users } = useSelector((state: StateFace) => state.DashboardReducer)
+
   const router = useRouter()
   const dispatch = useDispatch()
   const [isLoadingPage, setIsLoadingPage] = useState(true)
-  const boxsArr = useRef<BoxArrayFace[]>([
-    { lable: 'User', icon: 'account' },
-    { lable: 'User', icon: 'play' },
-  ])
 
-  const avatarSize = width * 0.4
+  useEffect(() => {
+    async function handleGetUsers() {
+      try {
+        const res = await axiosClient.get('/admin/users/')
+        const data = res.data.users
+        dispatch(GetUsers(data))
+        setIsLoadingPage(false)
+      } catch (err: any) {
+        console.log(err)
+
+        throw err
+      }
+    }
+    handleGetUsers()
+
+    return () => {}
+  }, [])
 
   return (
-    <Animatable.View animation="fadeIn" duration={200} easing="ease-in-out" style={{ flex: 1 }}>
+    <Animatable.View animation="fadeIn" duration={100} style={{ flex: 1 }}>
       <AppBar type="Dashboard" router={router} userData={userData} width={width} />
       <View style={{ position: 'absolute', top: height * 0.2, width: '100%' }}>
         <Image
@@ -45,78 +56,96 @@ export default function Dashboard() {
         />
       </View>
 
-      <View style={{ width: '100%', height: height * 0.2 }}>
+      <View style={{ width: '100%', height: height * 0.2, zIndex: -1 }}>
         <Image source={backImg} contentFit="fill" style={{ width: '100%', height: '100%' }} />
       </View>
-
       <View
-        style={{
-          position: 'absolute',
-          top: height * 0.2,
-          left: (width - avatarSize) / 2,
-          zIndex: 10,
-        }}></View>
-
-      <ScrollView
-        contentContainerStyle={{
-          flexGrow: 1,
-          paddingHorizontal: 24,
-          paddingBottom: 100,
-        }}
         style={{
           flex: 1,
           borderTopLeftRadius: 100,
           borderTopRightRadius: 100,
           backgroundColor: 'white',
-          paddingTop: height * 0.12,
+          paddingTop: height * 0.05,
         }}>
-        {isLoadingPage ? (
-          <ActivityIndicator size={80} />
-        ) : (
-          <View
-            style={{
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              justifyContent: boxsArr.current.length > 1 ? 'space-around' : 'flex-start',
-              gap: 20,
-              paddingHorizontal: 10,
-            }}>
-            {boxsArr.current.map((item, index) => (
-              <TouchableOpacity
-                key={index}
-                style={{
-                  width: width * 0.25,
-                  marginBottom: 20,
-                  alignItems: 'center',
-                }}>
-                <View
-                  style={{
-                    borderWidth: 0.5,
-                    backgroundColor: '#6DB6FE',
-                    borderRadius: 20,
-                    width: '100%',
-                    height: height * 0.11,
-                    aspectRatio: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  <Icon size={70} color="white" source={item.icon} />
-                </View>
-                <Text
-                  style={{
-                    fontSize: width * 0.038,
-                    color: 'black',
-                    textAlign: 'center',
-                    marginTop: height * 0.008,
-                    width: '100%',
-                  }}>
-                  {item.lable}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        )}
-      </ScrollView>
+        <ScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+            paddingHorizontal: 24,
+            paddingBottom: 100,
+          }}>
+          {isLoadingPage ? (
+            <ActivityIndicator size={80} />
+          ) : (
+            <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                justifyContent: users.length > 1 ? 'space-between' : 'flex-start',
+                gap: 23,
+                paddingHorizontal: 10,
+              }}>
+              {users.map((user, index) =>
+                user.id == userData?.id ? null : (
+                  <TouchableOpacity
+                    key={index}
+                    style={{
+                      width: width * 0.25,
+                      marginBottom: 20,
+                      alignItems: 'center',
+                    }}>
+                    <Image
+                      style={{
+                        borderWidth: 0.5,
+                        backgroundColor: '#6DB6FE',
+                        borderRadius: 20,
+                        width: '100%',
+                        height: height * 0.11,
+                        aspectRatio: 1,
+                        alignItems: 'center',
+                        justifyContent: 'space-around',
+                      }}
+                      contentFit="cover"
+                      source={user?.image ? { uri: user.image } : avatarIcon}
+                    />
+                    <Text
+                      style={{
+                        fontSize: width * 0.038,
+                        color: 'black',
+                        textAlign: 'center',
+                        marginTop: height * 0.008,
+                        width: '100%',
+                      }}>
+                      {user.name}
+                    </Text>
+                  </TouchableOpacity>
+                )
+              )}
+            </View>
+          )}
+        </ScrollView>
+        <View
+          style={{
+            marginTop: height * 0.002,
+            height: height * 0.08,
+            backgroundColor: '#c47b9f',
+            borderTopRightRadius: 50,
+            borderTopLeftRadius: 50,
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row',
+            gap: 60,
+          }}>
+          <TouchableOpacity onPress={() => router.push('/Dashboard')}>
+            <Icon size={50} source={'home'} />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Icon size={50} source={'tab-search'} />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Icon size={50} source={'developer-board'} />
+          </TouchableOpacity>
+        </View>
+      </View>
     </Animatable.View>
   )
 }
