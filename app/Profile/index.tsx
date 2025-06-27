@@ -84,14 +84,14 @@ export default function Profile() {
         />
       </View>
 
-      <View style={{ width: '100%', height: height * 0.3 }}>
+      <View style={{ width: '100%', height: height * 0.2 }}>
         <Image source={backImg} contentFit="fill" style={{ width: '100%', height: '100%' }} />
       </View>
 
       <View
         style={{
           position: 'absolute',
-          top: height * 0.2,
+          top: height * 0.09,
           left: (width - avatarSize) / 2,
           zIndex: 10,
         }}>

@@ -26,6 +26,7 @@ export default function Dashboard() {
   const { userData } = useSelector((state: StateFace) => state.UserReducer)
   const router = useRouter()
   const dispatch = useDispatch()
+  const [isLoadingPage, setIsLoadingPage] = useState(true)
   const boxsArr = useRef<BoxArrayFace[]>([
     { lable: 'User', icon: 'account' },
     { lable: 'User', icon: 'play' },
@@ -69,47 +70,52 @@ export default function Dashboard() {
           backgroundColor: 'white',
           paddingTop: height * 0.12,
         }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            justifyContent: boxsArr.current.length > 1 ? 'space-around' : 'flex-start',
-            gap: 20,
-            paddingHorizontal: 10,
-          }}>
-          {boxsArr.current.map((item, index) => (
-            <TouchableOpacity
-              key={index}
-              style={{
-                width: width * 0.25,
-                marginBottom: 20,
-                alignItems: 'center',
-              }}>
-              <View
+        {isLoadingPage ? (
+          <ActivityIndicator size={80} />
+        ) : (
+          <View
+            style={{
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              justifyContent: boxsArr.current.length > 1 ? 'space-around' : 'flex-start',
+              gap: 20,
+              paddingHorizontal: 10,
+            }}>
+            {boxsArr.current.map((item, index) => (
+              <TouchableOpacity
+                key={index}
                 style={{
-                  borderWidth: 0.5,
-                  backgroundColor: '#6DB6FE',
-                  borderRadius: 20,
-                  width: '100%',
-                  height: height * 0.11,
-                  aspectRatio: 1,
+                  width: width * 0.25,
+                  marginBottom: 20,
                   alignItems: 'center',
-                  justifyContent: 'center',
                 }}>
-                <Icon size={70} color="white" source={item.icon} />
-              </View>
-              <Text
-                style={{
-                  fontSize: width * 0.038,
-                  color: 'black',
-                  textAlign: 'center',
-                  marginTop: 8,
-                }}>
-                {item.lable}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+                <View
+                  style={{
+                    borderWidth: 0.5,
+                    backgroundColor: '#6DB6FE',
+                    borderRadius: 20,
+                    width: '100%',
+                    height: height * 0.11,
+                    aspectRatio: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Icon size={70} color="white" source={item.icon} />
+                </View>
+                <Text
+                  style={{
+                    fontSize: width * 0.038,
+                    color: 'black',
+                    textAlign: 'center',
+                    marginTop: height * 0.008,
+                    width: '100%',
+                  }}>
+                  {item.lable}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
       </ScrollView>
     </Animatable.View>
   )
