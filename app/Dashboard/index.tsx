@@ -88,7 +88,12 @@ export default function Dashboard() {
               {users.map((user, index) =>
                 user.id == userData?.id ? null : (
                   <TouchableOpacity
-                    onPress={() => router.push(`/Dashboard/UserInfo/${user.id}`)}
+                    onPress={() =>
+                      router.push({
+                        pathname: `/Dashboard/UserInfo/${user.id}`,
+                        params: { userName: user.name, userImage: user.image },
+                      })
+                    }
                     key={index}
                     style={{
                       width: width * 0.25,
