@@ -93,3 +93,23 @@ export const GetCompanys = async (dispatch: any) => {
     throw err
   }
 }
+
+export const UpdateCompanys = async (dispatch: any) => {
+  try {
+    const res = await axiosClient.get('/admin/companies')
+    await AsyncStorage.removeItem('@companys')
+    dispatch(SetCompanys(res.data.companies))
+    const date = Date.now()
+    const data = {
+      data: res.data.companies,
+      time: date,
+    }
+    await AsyncStorage.setItem('@companys', await JSON.stringify(data))
+    console.log('done set copmanys')
+    return
+  } catch (err: any) {
+    console.log(err)
+
+    throw err
+  }
+}

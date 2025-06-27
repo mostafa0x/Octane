@@ -6,8 +6,8 @@ import { HelperText, Icon } from 'react-native-paper'
 const backImg = require('../../../assets/backn.png')
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
-import AppBar from 'components/App Bar'
-import { useRouter } from 'expo-router'
+import { UpdateCompanys } from 'Services/Storage'
+import { useDispatch } from 'react-redux'
 
 export default function UploadCompanys() {
   const [uploading, setUploading] = useState(false)
@@ -15,6 +15,7 @@ export default function UploadCompanys() {
   const { width, height } = useWindowDimensions()
   const [errorRes, setErrorRes] = useState<string | null>(null)
   const [succusRes, setSuccusRes] = useState<string | null>(null)
+  const dispatch = useDispatch()
 
   const formats = useRef([
     { ext: '.csv', desc: 'Comma-Separated Values' },
@@ -45,6 +46,7 @@ export default function UploadCompanys() {
         },
       })
       setSuccusRes(response.data.message)
+      await UpdateCompanys(dispatch)
       console.log('Upload success:', response.data)
     } catch (err: any) {
       setErrorRes(err.response?.data?.message ?? 'Error Upload File!')
