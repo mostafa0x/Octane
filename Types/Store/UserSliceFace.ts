@@ -4,12 +4,12 @@ export interface UserSliceFace {
   isLoadedUserData: boolean
   isLoadedData: boolean
 }
-
+type Role = 'admin' | 'user'
 export interface userDataFace {
   id: number
   name: string
   email: string
-  role: string
+  role: Role
   status: string
   image: string | null
 }

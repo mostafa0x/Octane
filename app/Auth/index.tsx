@@ -40,9 +40,11 @@ export default function Auth() {
           <Image source={logo} contentFit="contain" style={{ width: '100%', height: '100%' }} />
         </View>
 
-        <View style={{ minHeight: height }} className="rounded-t-[50px] bg-white px-6 pb-[85px]">
+        <View
+          style={{ minHeight: height, borderTopLeftRadius: 100, borderTopRightRadius: 100 }}
+          className=" bg-white px-6 pb-[85px]">
           <View
-            style={{ borderRadius: 30, padding: 8 }}
+            style={{ borderRadius: 100, padding: 8 }}
             className="border-3 mt-10 h-[70px] flex-row items-center justify-center border-[#F5F6F9] bg-[#e2e4e9]">
             <Button
               onPress={() => setAuthMode(1)}

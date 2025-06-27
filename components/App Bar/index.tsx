@@ -50,6 +50,22 @@ const ProfileContent = React.memo(({ router, width }: props) => {
     </>
   )
 })
+const DashboardContent = React.memo(({ router, width }: props) => {
+  return (
+    <>
+      <TouchableOpacity
+        onPress={() => router.back()}
+        style={{ position: 'absolute', left: 10, top: 0, zIndex: 10 }}>
+        <View style={{ marginTop: 8 }}>
+          <Icon size={40} color="white" source="keyboard-backspace" />
+        </View>
+      </TouchableOpacity>
+      <View style={{ position: 'absolute', left: 60, top: 10, zIndex: 10 }}>
+        <Text style={{ color: '#F1FFF3', fontSize: 24, width: width }}>Dashboard</Text>
+      </View>
+    </>
+  )
+})
 const UploadContent = React.memo(({ router, width }: props) => {
   return (
     <>
@@ -84,6 +100,7 @@ function AppBar({ type, sectionPadding, router, userData, width }: props) {
       />
       {type === 'Home' && <HomeContent router={router} width={width} userData={userData} />}
       {type === 'Profile' && <ProfileContent router={router} width={width} />}
+      {type === 'Dashboard' && <DashboardContent router={router} width={width} />}
       {type === 'Upload' && <UploadContent router={router} width={width} />}
       {type == 'Home' && (
         <View style={{ marginTop: 10, gap: 8, padding: sectionPadding }}>

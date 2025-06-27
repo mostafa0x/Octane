@@ -141,10 +141,11 @@ const Style = (width: number, height: number) =>
     mainContainer: {
       flex: 1,
       alignItems: 'center',
-      borderTopLeftRadius: 70,
-      borderTopRightRadius: 70,
+      borderTopLeftRadius: 100,
+      borderTopRightRadius: 100,
       backgroundColor: 'white',
       padding: width * 0.05,
+      paddingTop: height * 0.04,
     },
     searchContainer: {
       marginTop: 20,

@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, useWindowDimensions, ScrollView } from 'react-native'
-import { ActivityIndicator, Avatar, Icon } from 'react-native-paper'
+import { ActivityIndicator, Avatar, HelperText, Icon } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
 import { useRouter } from 'expo-router'
@@ -43,6 +43,7 @@ export default function Profile() {
 
       if (userData) {
         const data = await UploadAvatar(formData)
+        formik.values.image = ''
         dispatch(changeImageProfile(data.image))
         await UpdataUserInfo(userData, data.image)
       }
@@ -116,8 +117,8 @@ export default function Profile() {
         }}
         style={{
           flex: 1,
-          borderTopLeftRadius: 50,
-          borderTopRightRadius: 50,
+          borderTopLeftRadius: 100,
+          borderTopRightRadius: 100,
           backgroundColor: 'white',
           paddingTop: height * 0.12,
         }}>
@@ -162,8 +163,34 @@ export default function Profile() {
                 <Icon size={40} source="image-edit-outline" />
               )}
             </View>
-            <Text style={{ fontSize: 16, width: width }}>Change Avatar</Text>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={{ fontSize: 16, width: width * 0.4 }}>Change Avatar</Text>
+              <HelperText
+                type="error"
+                visible={!!errorRes}
+                style={{ textAlign: 'right', writingDirection: 'rtl', width: width * 0.4 }}>
+                {errorRes}
+              </HelperText>
+            </View>
           </TouchableOpacity>
+          {userData?.role == 'admin' && (
+            <TouchableOpacity
+              onPress={() => router.push('/Dashboard')}
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+              <View
+                style={{
+                  height: 60,
+                  width: 60,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: 22,
+                  backgroundColor: '#6DB6FE',
+                }}>
+                <Icon size={40} source="monitor-dashboard" />
+              </View>
+              <Text style={{ fontSize: 16, width: width }}>Dashboard</Text>
+            </TouchableOpacity>
+          )}
           <TouchableOpacity
             onPress={callLogOut}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>

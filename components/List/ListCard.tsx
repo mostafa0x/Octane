@@ -26,7 +26,7 @@ function ListCard({ acknowledgments_Current, height, width }: props) {
       animation="fadeIn"
       easing="ease-in-out"
       style={{
-        height: height * 0.34,
+        height: height * 0.3,
         width: '100%',
         marginTop: height * 0.0,
       }}>
