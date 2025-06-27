@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, useWindowDimensions, ScrollView } from 'r
 import { ActivityIndicator, Avatar, HelperText, Icon } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
-import { usePathname, useRouter } from 'expo-router'
+import { Href, Route, RouteInputParams, usePathname, useRouter } from 'expo-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
 import handleLoutOut from 'Services/handleLogOut'
@@ -15,6 +15,8 @@ import { changeImageProfile } from 'lib/Store/Slices/UserSlice'
 import { storeUserInfo, UpdataUserInfo } from 'Services/Storage'
 import axiosClient from 'lib/api/axiosClient'
 import { GetUsers } from 'lib/Store/Slices/DashboardSlice'
+import FooterDashboard from 'components/FooterDashboard'
+import { NavigationOptions } from 'expo-router/build/global-state/routing'
 const avatarIcon = require('../../assets/avatar.png')
 const backImg = require('../../assets/backn.png')
 
@@ -95,7 +97,7 @@ export default function Dashboard() {
                     <Image
                       style={{
                         borderWidth: 0.5,
-                        backgroundColor: '#6DB6FE',
+                        backgroundColor: '#8d1c47',
                         borderRadius: 20,
                         width: '100%',
                         height: height * 0.11,
@@ -122,53 +124,6 @@ export default function Dashboard() {
             </View>
           )}
         </ScrollView>
-        <View
-          style={{
-            marginTop: height * 0.002,
-            height: height * 0.08,
-            backgroundColor: '#c47b9f',
-            borderTopRightRadius: 50,
-            borderTopLeftRadius: 50,
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'row',
-            gap: 60,
-          }}>
-          <TouchableOpacity
-            style={
-              pathName == '/Dashboard' && {
-                borderRadius: 25,
-                padding: 5,
-                backgroundColor: '#11962e',
-              }
-            }
-            onPress={() => pathName !== '/Dashboard' && router.push('/Dashboard')}>
-            <Icon size={50} source={'home'} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={
-              pathName == '/Dashboard/Reports' && {
-                borderRadius: 25,
-                padding: 5,
-                backgroundColor: '#11962e',
-              }
-            }>
-            <Icon size={50} source={'tab-search'} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() =>
-              pathName !== '/Dashboard/UploadCompanys' && router.push('/Dashboard/UploadCompanys')
-            }
-            style={
-              pathName == '/Dashboard/UploadCompanys' && {
-                borderRadius: 25,
-                padding: 5,
-                backgroundColor: '#11962e',
-              }
-            }>
-            <Icon size={50} source={'developer-board'} />
-          </TouchableOpacity>
-        </View>
       </View>
     </Animatable.View>
   )
