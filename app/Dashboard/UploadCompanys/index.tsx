@@ -14,6 +14,8 @@ export default function UploadCompanys() {
   const [fileName, setFileName] = useState<string | null>(null)
   const { width, height } = useWindowDimensions()
   const [errorRes, setErrorRes] = useState<string | null>(null)
+  const [succusRes, setSuccusRes] = useState<string | null>(null)
+
   const formats = useRef([
     { ext: '.csv', desc: 'Comma-Separated Values' },
     { ext: '.xls', desc: 'Microsoft Excel 97-2003' },
@@ -21,6 +23,9 @@ export default function UploadCompanys() {
     { ext: '.ods', desc: 'OpenDocument Spreadsheet' },
   ])
   const uploadExcelFile = async (file: DocumentPicker.DocumentPickerResult) => {
+    if (uploading) return
+    setErrorRes(null)
+    setSuccusRes(null)
     setUploading(true)
     const formData = new FormData()
 
@@ -39,10 +44,10 @@ export default function UploadCompanys() {
           'Content-Type': 'multipart/form-data',
         },
       })
+      setSuccusRes(response.data.message)
       console.log('Upload success:', response.data)
     } catch (err: any) {
       setErrorRes(err.response?.data?.message ?? 'Error Upload File!')
-      console.error('Upload error:', err)
       throw err
     } finally {
       setUploading(false)
@@ -150,9 +155,18 @@ export default function UploadCompanys() {
           {uploading && (
             <ActivityIndicator style={{ marginTop: 20 }} size="large" color="#0068FF" />
           )}
-          <View style={{ alignItems: 'center', marginTop: height * 0.07 }}>
-            <HelperText style={{ fontSize: width * 0.042 }} type="error" visible={!!errorRes}>
+          <View style={{ alignItems: 'center', marginTop: height * 0.02 }}>
+            <HelperText
+              style={{ fontSize: width * 0.042, textAlign: 'center' }}
+              type="error"
+              visible={!!errorRes}>
               {errorRes}
+            </HelperText>
+            <HelperText
+              style={{ fontSize: width * 0.042, color: 'green', width: width, textAlign: 'center' }}
+              type="info"
+              visible={!!succusRes}>
+              {succusRes}
             </HelperText>
           </View>
         </View>
