@@ -32,7 +32,7 @@ function NfcCard({ submitted, allocated, height, width }: props) {
           showsText={false}
           color="#0068FF"
           unfilledColor="#F1FFF3"
-          borderWidth={0}
+          borderWidth={0.5}
           thickness={4.25}
         />
 

@@ -1,7 +1,8 @@
 import { View, Text, TouchableOpacity, Modal, TextInput } from 'react-native'
 import React, { memo, useRef, useState } from 'react'
 import * as Progress from 'react-native-progress'
-import { Button, Icon } from 'react-native-paper'
+import { ActivityIndicator, Button, HelperText, Icon } from 'react-native-paper'
+import axiosClient from 'lib/api/axiosClient'
 const nfcIcon = require('../../assets/nfc.png')
 
 interface props {
@@ -9,13 +10,48 @@ interface props {
   allocated: number
   height: number
   width: number
+  userID: number
+  refetch: any
 }
 
-function NfcCardDashboard({ submitted, allocated, height, width }: props) {
+function NfcCardDashboard({ submitted, allocated, height, width, userID, refetch }: props) {
   const cardWidth = useRef(width * 0.9)
   const cardHeight = useRef(height * 0.18)
   const progressSize = useRef(Math.min(width, height) * 0.18)
+  const [valueNum, setValueNum] = useState<any>(0)
   const [isShowModel, setIsShowModel] = useState(false)
+  const [isLoadingRes, setIsLoadingRes] = useState(false)
+  const [errorRes, setErrorRes] = useState<string | null>(null)
+
+  async function handleAddAllocate() {
+    console.log(valueNum)
+
+    if (isLoadingRes) return
+    if (!valueNum || valueNum <= 0) {
+      return setErrorRes('Should be more Than 0')
+    }
+    setIsLoadingRes(true)
+    setErrorRes(null)
+    try {
+      console.log(userID)
+
+      const res = await axiosClient.post(`/admin/users/allocate/${userID}`, {
+        allocated: parseInt(valueNum),
+      })
+      const data = res.data
+      refetch()
+      setIsShowModel(false)
+      setValueNum(0)
+      console.log(data.message)
+    } catch (err: any) {
+      setErrorRes(err.response?.data?.message ?? err.message ?? 'Error upload!')
+      console.log(err)
+
+      throw err
+    } finally {
+      setIsLoadingRes(false)
+    }
+  }
 
   return (
     <View
@@ -36,7 +72,7 @@ function NfcCardDashboard({ submitted, allocated, height, width }: props) {
           showsText={false}
           color="#0068FF"
           unfilledColor="#F1FFF3"
-          borderWidth={0}
+          borderWidth={0.5}
           thickness={4.25}
         />
 
@@ -96,7 +132,11 @@ function NfcCardDashboard({ submitted, allocated, height, width }: props) {
           </View>
         </View>
       </View>
-      <Modal transparent visible={isShowModel} onRequestClose={() => setIsShowModel(false)}>
+      <Modal
+        animationType="fade"
+        transparent
+        visible={isShowModel}
+        onRequestClose={() => setIsShowModel(false)}>
         <View
           style={{
             flex: 1,
@@ -107,48 +147,64 @@ function NfcCardDashboard({ submitted, allocated, height, width }: props) {
           <View
             style={{
               width: width * 0.8,
-              height: height * 0.4,
+              height: height * 0.35,
               backgroundColor: '#fff',
               padding: 20,
-              borderRadius: 100,
+              borderRadius: 70,
               elevation: 5,
             }}>
-            <View style={{ alignItems: 'center', marginTop: height * 0.06, gap: 20 }}>
+            <View style={{ alignItems: 'center', marginTop: height * 0.01, gap: 15 }}>
               <Text
                 style={{
                   width: width * 0.5,
                   textAlign: 'center',
                   fontWeight: 'bold',
-                  fontSize: width * 0.042,
+                  fontSize: width * 0.052,
                 }}>
                 Add Allocate
               </Text>
               <TextInput
-                placeholder="number "
+                onChangeText={(text: any) => setValueNum(text)}
+                value={valueNum}
                 style={{
                   borderWidth: 2,
                   borderRadius: 30,
                   width: width * 0.5,
                   height: height * 0.07,
-                  padding: 30,
+                  padding: 20,
                   textAlign: 'center',
+                  fontSize: width * 0.052,
                 }}
                 keyboardType="numeric"
+                autoFocus={true}
               />
-              <Button
-                buttonColor="#00D09E"
-                textColor="black"
-                contentStyle={{ height: height * 0.05 }}
-                style={{ width: width * 0.4, height: height * 0.05 }}>
-                Submit
-              </Button>
-              <Button
-                buttonColor="#e6f8e8"
-                textColor="black"
-                contentStyle={{ height: height * 0.05 }}
-                style={{ width: width * 0.4, height: height * 0.05 }}>
-                cancel
-              </Button>
+              {isLoadingRes ? (
+                <View style={{ marginTop: height * 0.05 }}>
+                  <ActivityIndicator size={50} />
+                </View>
+              ) : (
+                <>
+                  <Button
+                    onPress={() => handleAddAllocate()}
+                    buttonColor="#00D09E"
+                    textColor="black"
+                    contentStyle={{ height: height * 0.05 }}
+                    style={{ width: width * 0.4, height: height * 0.05 }}>
+                    Submit
+                  </Button>
+                  <Button
+                    onPress={() => setIsShowModel(false)}
+                    buttonColor="#e6f8e8"
+                    textColor="black"
+                    contentStyle={{ height: height * 0.05 }}
+                    style={{ width: width * 0.4, height: height * 0.05 }}>
+                    cancel
+                  </Button>
+                  <HelperText style={{ fontSize: width * 0.032 }} type="error" visible={!!errorRes}>
+                    {errorRes}
+                  </HelperText>
+                </>
+              )}
             </View>
           </View>
         </View>

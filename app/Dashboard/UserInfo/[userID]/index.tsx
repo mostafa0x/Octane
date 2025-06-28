@@ -35,8 +35,9 @@ export default function UserInfo() {
   const [succusRes, setSuccusRes] = useState<string | null>(null)
   const dispatch = useDispatch()
   const [value, setValue] = React.useState('')
+  const currUserID = isArray(userID) ? parseInt(userID[0]) : parseInt(userID)
 
-  const { data, isLoading, isError, error }: UseQueryResult<UserInfoFace> = useGetUserInfo(
+  const { data, isLoading, isError, error, refetch }: UseQueryResult<UserInfoFace> = useGetUserInfo(
     isArray(userID) ? parseInt(userID[0]) : parseInt(userID)
   )
 
@@ -92,7 +93,9 @@ export default function UserInfo() {
         {isError ? (
           <ErrorFC error={error} />
         ) : isLoading ? (
-          <ActivityIndicator size={70} />
+          <View style={{ marginTop: height * 0.2 }}>
+            <ActivityIndicator size={70} />
+          </View>
         ) : (
           <View style={{ marginVertical: height * 0.1, gap: 20 }}>
             <View style={{ gap: 10 }}>
@@ -120,6 +123,8 @@ export default function UserInfo() {
               allocated={data?.allocated ?? 0}
               height={height}
               width={width}
+              userID={currUserID}
+              refetch={refetch}
             />
             {/* عندي مشكله ان التايب بتاع الداتا مش هوا هوا  فلازم خالد يرجع نفس الداتا بنفس الشكل او اغير التايب واريح دماغي */}
             {/* <ListCard
