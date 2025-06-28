@@ -11,7 +11,7 @@ import { API_BASE_URL } from 'config'
 import { useDispatch } from 'react-redux'
 import * as Animatable from 'react-native-animatable'
 
-export default function SignIn() {
+export default function SignIn({ setIsLoadingRes }: any) {
   const { width, height } = useWindowDimensions()
   const [errorMes, setErrorMes] = useState<string | null>(null)
   const [isLoadingBtn, setIsLoadingBtn] = useState(false)
@@ -21,6 +21,7 @@ export default function SignIn() {
   async function handleLogin(formValues: any) {
     if (!isLoadingBtn) {
       setErrorMes(null)
+      setIsLoadingRes(true)
       setIsLoadingBtn(true)
       try {
         const res = await axios.post(`${API_BASE_URL}/auth/login`, formValues)
@@ -29,7 +30,10 @@ export default function SignIn() {
         // router.replace('/');
       } catch (err: any) {
         setIsLoadingBtn(false)
+
         setErrorMes(err.response?.data?.message ?? err.message ?? 'Error Login')
+      } finally {
+        setIsLoadingRes(false)
       }
     }
   }

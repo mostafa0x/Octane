@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux'
 import { SignUpvalidationSchema } from 'lib/Vaildtions/SignupSchema'
 import * as Animatable from 'react-native-animatable'
 
-export default function SignUp() {
+export default function SignUp({ setIsLoadingRes }: any) {
   const { width, height } = useWindowDimensions()
   const [errorMes, setErrorMes] = useState<string | null>(null)
   const [isLoadingBtn, setIsLoadingBtn] = useState(false)
@@ -21,6 +21,7 @@ export default function SignUp() {
   async function handleSignUp(formValues: any) {
     if (!isLoadingBtn) {
       setErrorMes(null)
+      setIsLoadingRes(true)
       setIsLoadingBtn(true)
       try {
         const res = await axios.post(`${API_BASE_URL}/auth/signup`, formValues)
@@ -29,6 +30,8 @@ export default function SignUp() {
       } catch (err: any) {
         setIsLoadingBtn(false)
         setErrorMes(err.response?.data?.message ?? 'Error Sign up')
+      } finally {
+        setIsLoadingRes(false)
       }
     }
   }

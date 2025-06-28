@@ -15,6 +15,7 @@ export default function Auth() {
   const dispatch = useDispatch()
   const { width, height } = useWindowDimensions()
   const [authMode, setAuthMode] = useState(1)
+  const [isLoadingRes, setIsLoadingRes] = useState(false)
 
   useEffect(() => {
     router.prefetch('/')
@@ -47,7 +48,7 @@ export default function Auth() {
             style={{ borderRadius: 100, padding: 8 }}
             className="border-3 mt-10 h-[70px] flex-row items-center justify-center border-[#F5F6F9] bg-[#e2e4e9]">
             <Button
-              onPress={() => setAuthMode(1)}
+              onPress={() => !isLoadingRes && setAuthMode(1)}
               mode={authMode == 1 ? 'contained' : 'text'}
               buttonColor={authMode == 1 ? 'white' : ''}
               style={{ flex: 1, borderRadius: 20 }}
@@ -65,7 +66,7 @@ export default function Auth() {
             </Button>
 
             <Button
-              onPress={() => setAuthMode(2)}
+              onPress={() => !isLoadingRes && setAuthMode(2)}
               mode={authMode == 2 ? 'contained' : 'text'}
               buttonColor={authMode == 2 ? 'white' : ''}
               style={{ flex: 1, borderRadius: 20 }}
@@ -83,7 +84,11 @@ export default function Auth() {
             </Button>
           </View>
 
-          {authMode === 1 ? <SignIn /> : <SignUp />}
+          {authMode === 1 ? (
+            <SignIn setIsLoadingRes={setIsLoadingRes} />
+          ) : (
+            <SignUp setIsLoadingRes={setIsLoadingRes} />
+          )}
         </View>
       </View>
     </View>

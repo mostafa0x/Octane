@@ -34,6 +34,7 @@ function FooterDashboard({ pathName, height, router }: props) {
         <Icon size={50} source={'home'} />
       </TouchableOpacity>
       <TouchableOpacity
+        onPress={() => pathName !== '/Dashboard/Reports' && router.push('/Dashboard/Reports')}
         style={
           pathName == '/Dashboard/Reports' && {
             borderRadius: 25,
