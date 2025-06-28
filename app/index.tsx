@@ -75,15 +75,7 @@ export default function Home() {
         </View>
 
         <View style={styles.mainContainer}>
-          <NfcCard
-            submitted={submitted}
-            allocated={allocated}
-            cardWidth={width * 0.9}
-            cardHeight={height * 0.18}
-            progressSize={Math.min(width, height) * 0.18}
-            height={height}
-            width={width}
-          />
+          <NfcCard submitted={submitted} allocated={allocated} height={height} width={width} />
 
           <ListButtonHistory
             activeList={activeList}

@@ -1,8 +1,6 @@
 import { View, Text, TouchableOpacity, ActivityIndicator, useWindowDimensions } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
-import * as DocumentPicker from 'expo-document-picker'
-import axiosClient from 'lib/api/axiosClient'
-import { Avatar, HelperText, Icon } from 'react-native-paper'
+import { Avatar, HelperText, Icon, SegmentedButtons } from 'react-native-paper'
 const backImg = require('../../../../assets/backn.png')
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
@@ -10,9 +8,18 @@ import { useDispatch } from 'react-redux'
 import { useLocalSearchParams } from 'expo-router'
 import useGetUserInfo from 'Hooks/useGetUserInfo'
 import { isArray } from 'lodash'
+import { acknowledgmentsFace } from 'Types/Store/MainSliceFace'
+import { UseQueryResult } from '@tanstack/react-query'
+import NFCCardDashboard from 'components/NFC Card Dashboard'
 const avatarIcon = require('../../../../assets/avatar.png')
 
-const ErrorFC = ({ error }: any) => {
+interface UserInfoFace {
+  acknowledgments: acknowledgmentsFace[]
+  allocated: number
+  submitted: number
+}
+
+const ErrorFC = ({ error }: { error: Error }) => {
   return (
     <View>
       <Text style={{ color: 'red' }}>{error.message}</Text>
@@ -26,7 +33,9 @@ export default function UserInfo() {
   const [errorRes, setErrorRes] = useState<string | null>(null)
   const [succusRes, setSuccusRes] = useState<string | null>(null)
   const dispatch = useDispatch()
-  const { data, isLoading, isError, error } = useGetUserInfo(
+  const [value, setValue] = React.useState('')
+
+  const { data, isLoading, isError, error }: UseQueryResult<UserInfoFace> = useGetUserInfo(
     isArray(userID) ? parseInt(userID[0]) : parseInt(userID)
   )
 
@@ -52,9 +61,10 @@ export default function UserInfo() {
       <View
         style={{
           position: 'absolute',
-          top: height * 0.09,
-          left: (width - width * 0.4) / 2,
+          top: height * 0.1,
+          left: (width - width * 0.3) / 2,
           zIndex: 10,
+          gap: 10,
         }}>
         <TouchableOpacity activeOpacity={0.8}>
           <Avatar.Image
@@ -65,9 +75,10 @@ export default function UserInfo() {
                   }
                 : avatarIcon
             }
-            size={width * 0.4}
+            size={width * 0.3}
           />
         </TouchableOpacity>
+        <Text style={{ textAlign: 'center', fontSize: width * 0.046 }}>{userName} </Text>
       </View>
       <View
         style={{
@@ -75,15 +86,40 @@ export default function UserInfo() {
           borderTopLeftRadius: 100,
           borderTopRightRadius: 100,
           backgroundColor: 'white',
-          padding: 50,
+          paddingHorizontal: width * 0.05,
         }}>
         {isError ? (
           <ErrorFC error={error} />
         ) : isLoading ? (
           <ActivityIndicator size={70} />
         ) : (
-          <View>
-            <Text>USerINFO {userID} </Text>
+          <View style={{ marginVertical: height * 0.1, gap: 20 }}>
+            <View style={{ gap: 10 }}>
+              <Text>status player {userID} </Text>
+              <SegmentedButtons
+                value={value}
+                onValueChange={setValue}
+                buttons={[
+                  {
+                    value: 'walk',
+                    label: 'Activy',
+                    checkedColor: 'green',
+                  },
+                  {
+                    value: 'train',
+                    label: 'supsend',
+                    checkedColor: 'green',
+                  },
+                ]}
+              />
+            </View>
+
+            <NFCCardDashboard
+              submitted={data?.submitted ?? 0}
+              allocated={data?.allocated ?? 0}
+              height={height}
+              width={width}
+            />
           </View>
         )}
       </View>

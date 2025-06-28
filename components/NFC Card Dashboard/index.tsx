@@ -11,7 +11,7 @@ interface props {
   width: number
 }
 
-function NfcCard({ submitted, allocated, height, width }: props) {
+function NfcCardDashboard({ submitted, allocated, height, width }: props) {
   const cardWidth = useRef(width * 0.9)
   const cardHeight = useRef(height * 0.18)
   const progressSize = useRef(Math.min(width, height) * 0.18)
@@ -44,10 +44,10 @@ function NfcCard({ submitted, allocated, height, width }: props) {
             color: '#bdcdce',
             marginTop: 8,
             fontSize: 18,
-            width: width * 0.3,
+            width: width * 0.4,
             textAlign: 'center',
           }}>
-          NFC tracker
+          Add Allocated
         </Text>
       </View>
       <View
@@ -96,4 +96,4 @@ function NfcCard({ submitted, allocated, height, width }: props) {
   )
 }
 
-export default memo(NfcCard)
+export default memo(NfcCardDashboard)
