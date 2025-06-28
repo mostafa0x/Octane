@@ -147,7 +147,7 @@ export default function Upload() {
         easing="ease-in-out"
         style={styles.animatableView}>
         <View style={styles.appBarContainer}>
-          <AppBar type="Upload" router={router} width={width} />
+          <AppBar height={height} type="Upload" router={router} width={width} />
         </View>
 
         <Image style={styles.backgroundImage} contentFit="fill" source={backImg.current} />

@@ -68,6 +68,7 @@ export default function Home() {
           router={router}
           userData={userData}
           width={width}
+          height={height}
         />
 
         <View style={styles.imageContainer}>

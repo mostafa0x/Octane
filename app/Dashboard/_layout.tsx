@@ -21,7 +21,7 @@ export default function LayoutDashboard() {
 
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
-      <AppBar type="Dashboard" label={label} router={router} width={width} />
+      <AppBar type="Dashboard" label={label} router={router} width={width} height={height} />
 
       <Stack screenOptions={{ headerShown: false, animation: 'fade' }} />
       <FooterDashboard pathName={pathName} height={height} router={router} />

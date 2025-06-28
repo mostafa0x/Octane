@@ -1,7 +1,7 @@
-import { View, Text } from 'react-native'
-import React, { memo, useRef } from 'react'
+import { View, Text, TouchableOpacity, Modal, TextInput } from 'react-native'
+import React, { memo, useRef, useState } from 'react'
 import * as Progress from 'react-native-progress'
-import { Icon } from 'react-native-paper'
+import { Button, Icon } from 'react-native-paper'
 const nfcIcon = require('../../assets/nfc.png')
 
 interface props {
@@ -15,6 +15,8 @@ function NfcCardDashboard({ submitted, allocated, height, width }: props) {
   const cardWidth = useRef(width * 0.9)
   const cardHeight = useRef(height * 0.18)
   const progressSize = useRef(Math.min(width, height) * 0.18)
+  const [isShowModel, setIsShowModel] = useState(false)
+
   return (
     <View
       style={{
@@ -25,7 +27,9 @@ function NfcCardDashboard({ submitted, allocated, height, width }: props) {
         backgroundColor: '#8d1c47',
         padding: 20,
       }}>
-      <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+      <TouchableOpacity
+        onPress={() => setIsShowModel(true)}
+        style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
         <Progress.Circle
           size={progressSize.current}
           progress={allocated > 0 ? submitted / allocated : 0}
@@ -49,7 +53,7 @@ function NfcCardDashboard({ submitted, allocated, height, width }: props) {
           }}>
           Add Allocated
         </Text>
-      </View>
+      </TouchableOpacity>
       <View
         style={{
           backgroundColor: '#ffffff',
@@ -92,6 +96,63 @@ function NfcCardDashboard({ submitted, allocated, height, width }: props) {
           </View>
         </View>
       </View>
+      <Modal transparent visible={isShowModel} onRequestClose={() => setIsShowModel(false)}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              width: width * 0.8,
+              height: height * 0.4,
+              backgroundColor: '#fff',
+              padding: 20,
+              borderRadius: 100,
+              elevation: 5,
+            }}>
+            <View style={{ alignItems: 'center', marginTop: height * 0.06, gap: 20 }}>
+              <Text
+                style={{
+                  width: width * 0.5,
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                  fontSize: width * 0.042,
+                }}>
+                Add Allocate
+              </Text>
+              <TextInput
+                placeholder="number "
+                style={{
+                  borderWidth: 2,
+                  borderRadius: 30,
+                  width: width * 0.5,
+                  height: height * 0.07,
+                  padding: 30,
+                  textAlign: 'center',
+                }}
+                keyboardType="numeric"
+              />
+              <Button
+                buttonColor="#00D09E"
+                textColor="black"
+                contentStyle={{ height: height * 0.05 }}
+                style={{ width: width * 0.4, height: height * 0.05 }}>
+                Submit
+              </Button>
+              <Button
+                buttonColor="#e6f8e8"
+                textColor="black"
+                contentStyle={{ height: height * 0.05 }}
+                style={{ width: width * 0.4, height: height * 0.05 }}>
+                cancel
+              </Button>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   )
 }

@@ -75,7 +75,7 @@ export default function Profile() {
 
   return (
     <Animatable.View animation="fadeIn" duration={200} easing="ease-in-out" style={{ flex: 1 }}>
-      <AppBar type="Profile" router={router} userData={userData} width={width} />
+      <AppBar type="Profile" router={router} userData={userData} width={width} height={height} />
       <View style={{ position: 'absolute', top: height * 0.2, width: '100%' }}>
         <Image
           style={{ width: '100%', height: height * 0.25 }}
