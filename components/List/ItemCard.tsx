@@ -2,6 +2,9 @@ import React, { useMemo, useRef, useState } from 'react'
 import { TouchableOpacity, View, StyleSheet } from 'react-native'
 import { Text, Avatar, Icon, ActivityIndicator } from 'react-native-paper'
 import { acknowledgmentsFace } from 'Types/Store/MainSliceFace'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+dayjs.extend(relativeTime)
 
 interface Props {
   item: acknowledgmentsFace
@@ -10,7 +13,7 @@ interface Props {
 
 const ItemCard = ({ item, width }: Props) => {
   const [visible, setIsVisible] = useState(false)
-
+  const timeAgo = dayjs(item.submission_date).fromNow()
   const fontSize = useMemo(() => {
     if (item.delivery_method.length <= 15) return width * 0.028
     if (item.delivery_method.length <= 20) return width * 0.024
@@ -38,7 +41,7 @@ const ItemCard = ({ item, width }: Props) => {
       <View style={styles.separator} />
       <View style={[styles.detailsBox, { flex: 1 }]}>
         <Text style={[styles.deliveryMethod, { fontSize }]}>{item.delivery_method}</Text>
-        <Text style={[styles.stateTime, { fontSize: width * 0.03 }]}>{item.state_time}</Text>
+        <Text style={[styles.stateTime, { fontSize: width * 0.03 }]}>{timeAgo}</Text>
       </View>
     </View>
   )

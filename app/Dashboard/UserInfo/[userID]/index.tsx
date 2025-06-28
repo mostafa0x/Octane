@@ -11,6 +11,7 @@ import { isArray } from 'lodash'
 import { acknowledgmentsFace } from 'Types/Store/MainSliceFace'
 import { UseQueryResult } from '@tanstack/react-query'
 import NFCCardDashboard from 'components/NFC Card Dashboard'
+import ListCard from 'components/List/ListCard'
 const avatarIcon = require('../../../../assets/avatar.png')
 
 interface UserInfoFace {
@@ -119,6 +120,11 @@ export default function UserInfo() {
               allocated={data?.allocated ?? 0}
               height={height}
               width={width}
+            />
+            <ListCard
+              acknowledgments_Current={data?.acknowledgments ?? []}
+              height={width}
+              width={height}
             />
           </View>
         )}
