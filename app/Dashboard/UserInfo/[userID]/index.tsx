@@ -15,6 +15,9 @@ import ListCard from 'components/List/ListCard'
 import axiosClient from 'lib/api/axiosClient'
 import ListButtonHistory from 'components/List Button History'
 const avatarIcon = require('../../../../assets/avatar.png')
+import dayjs from 'dayjs'
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
+dayjs.extend(isSameOrAfter)
 
 interface UserInfoFace {
   acknowledgments: acknowledgmentsFace[]
@@ -60,9 +63,38 @@ export default function UserInfo() {
     (period: string) => {
       const nameLower = period.toLowerCase()
       setActiveList(nameLower)
-      //   dispatch(SetAcknowledgments_Current(nameLower))
+
+      if (!data?.acknowledgments) return
+
+      const now = dayjs()
+      let filteredData: acknowledgmentsFace[] = []
+
+      switch (nameLower) {
+        case 'daily':
+          filteredData = data.acknowledgments.filter((item) =>
+            dayjs(item.submission_date).isSame(now, 'day')
+          )
+          break
+
+        case 'weekly':
+          filteredData = data.acknowledgments.filter((item) =>
+            dayjs(item.submission_date).isSame(now, 'week')
+          )
+          break
+
+        case 'monthly':
+          filteredData = data.acknowledgments.filter((item) =>
+            dayjs(item.submission_date).isSame(now, 'month')
+          )
+          break
+
+        default:
+          filteredData = data.acknowledgments
+      }
+
+      setCurrData(filteredData)
     },
-    [dispatch]
+    [data?.acknowledgments]
   )
 
   const handleSuspendUser = useCallback(async () => {
