@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, ActivityIndicator, useWindowDimensions } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
-import { Avatar, HelperText, Icon, SegmentedButtons } from 'react-native-paper'
+import { Avatar, Button, HelperText, Icon, SegmentedButtons } from 'react-native-paper'
 const backImg = require('../../../../assets/backn.png')
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
@@ -18,6 +18,7 @@ interface UserInfoFace {
   acknowledgments: acknowledgmentsFace[]
   allocated: number
   submitted: number
+  status: 'active' | 'suspend'
 }
 
 const ErrorFC = ({ error }: { error: Error }) => {
@@ -49,7 +50,7 @@ export default function UserInfo() {
 
   return (
     <Animatable.View animation="fadeIn" duration={100} style={{ flex: 1 }}>
-      <View style={{ position: 'absolute', top: height * 0.2, width: '100%' }}>
+      <View style={{ position: 'absolute', top: height * 0.1, width: '100%' }}>
         <Image
           style={{ width: '100%', height: height * 0.25 }}
           contentFit="fill"
@@ -57,13 +58,13 @@ export default function UserInfo() {
         />
       </View>
 
-      <View style={{ width: '100%', height: height * 0.2, zIndex: -1 }}>
+      <View style={{ width: '100%', height: height * 0.15, zIndex: -1 }}>
         <Image source={backImg} contentFit="fill" style={{ width: '100%', height: '100%' }} />
       </View>
       <View
         style={{
           position: 'absolute',
-          top: height * 0.1,
+          top: height * 0.06,
           left: (width - width * 0.3) / 2,
           zIndex: 10,
           gap: 10,
@@ -98,26 +99,6 @@ export default function UserInfo() {
           </View>
         ) : (
           <View style={{ marginVertical: height * 0.1, gap: 20 }}>
-            <View style={{ gap: 10 }}>
-              <Text>status player {userID} </Text>
-              <SegmentedButtons
-                value={value}
-                onValueChange={setValue}
-                buttons={[
-                  {
-                    value: 'walk',
-                    label: 'Activy',
-                    checkedColor: 'green',
-                  },
-                  {
-                    value: 'train',
-                    label: 'supsend',
-                    checkedColor: 'green',
-                  },
-                ]}
-              />
-            </View>
-
             <NFCCardDashboard
               submitted={data?.submitted ?? 0}
               allocated={data?.allocated ?? 0}
@@ -127,11 +108,21 @@ export default function UserInfo() {
               refetch={refetch}
             />
             {/* عندي مشكله ان التايب بتاع الداتا مش هوا هوا  فلازم خالد يرجع نفس الداتا بنفس الشكل او اغير التايب واريح دماغي */}
-            {/* <ListCard
+            <ListCard
               acknowledgments_Current={data?.acknowledgments ?? []}
               height={width}
               width={height}
-            /> */}
+            />
+            <View style={{ gap: 10, alignItems: 'center' }}>
+              <Button
+                textColor="black"
+                buttonColor={data?.status == 'active' ? 'red' : 'green'}
+                style={{ width: width * 0.3, height: height * 0.05 }}
+                contentStyle={{ height: height * 0.05 }}
+                labelStyle={{ fontSize: width * 0.042 }}>
+                Suspend
+              </Button>
+            </View>
           </View>
         )}
       </View>

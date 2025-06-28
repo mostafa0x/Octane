@@ -38,8 +38,8 @@ function NfcCardDashboard({ submitted, allocated, height, width, userID, refetch
       const res = await axiosClient.post(`/admin/users/allocate/${userID}`, {
         allocated: parseInt(valueNum),
       })
+      await refetch()
       const data = res.data
-      refetch()
       setIsShowModel(false)
       setValueNum(0)
       console.log(data.message)
