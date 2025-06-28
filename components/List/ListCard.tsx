@@ -10,9 +10,10 @@ interface props {
   acknowledgments_Current: acknowledgmentsFace[]
   height: number
   width: number
+  type: string
 }
 
-function ListCard({ acknowledgments_Current, height, width }: props) {
+function ListCard({ acknowledgments_Current, height, width, type }: props) {
   const animRef = useRef<AnimatableView>(null)
 
   useEffect(() => {
@@ -26,7 +27,7 @@ function ListCard({ acknowledgments_Current, height, width }: props) {
       animation="fadeIn"
       easing="ease-in-out"
       style={{
-        height: height * 0.3,
+        height: type == 'Home' ? height * 0.3 : height,
         width: '100%',
         marginTop: height * 0.0,
       }}>
@@ -35,14 +36,14 @@ function ListCard({ acknowledgments_Current, height, width }: props) {
         estimatedItemSize={70}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={{ paddingBottom: height * 0.02 }}
-        renderItem={({ item }) => <ItemCard item={item} width={width} />}
+        renderItem={({ item }) => <ItemCard item={item} />}
         ListEmptyComponent={() => (
           <View style={{ marginTop: height * 0.05, alignItems: 'center' }}>
             <Text
               style={{
-                fontSize: width * 0.062,
+                fontSize: width * 0.048,
                 opacity: 0.7,
-                width: width * 0.7,
+                width: width * 0.4,
                 textAlign: 'center',
                 fontWeight: '300',
               }}>

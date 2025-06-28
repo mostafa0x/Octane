@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react'
-import { TouchableOpacity, View, StyleSheet } from 'react-native'
-import { Text, Avatar, Icon, ActivityIndicator } from 'react-native-paper'
+import { TouchableOpacity, View, StyleSheet, useWindowDimensions } from 'react-native'
+import { Text, Avatar } from 'react-native-paper'
 import { acknowledgmentsFace } from 'Types/Store/MainSliceFace'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -8,12 +8,13 @@ dayjs.extend(relativeTime)
 
 interface Props {
   item: acknowledgmentsFace
-  width: number
 }
 
-const ItemCard = ({ item, width }: Props) => {
+const ItemCard = ({ item }: Props) => {
+  const { width } = useWindowDimensions()
   const [visible, setIsVisible] = useState(false)
   const timeAgo = dayjs(item.submission_date).fromNow()
+
   const fontSize = useMemo(() => {
     if (item.delivery_method.length <= 15) return width * 0.028
     if (item.delivery_method.length <= 20) return width * 0.024
@@ -22,6 +23,7 @@ const ItemCard = ({ item, width }: Props) => {
 
   const avatarSize = useRef(width * 0.12)
   const imgs = useMemo(() => [{ uri: item.image }], [item.image])
+
   return (
     <View style={[styles.container, { padding: width * 0.035 }]}>
       <TouchableOpacity onPress={() => setIsVisible(true)}>
@@ -34,14 +36,14 @@ const ItemCard = ({ item, width }: Props) => {
       </View>
 
       <View style={styles.separator} />
-      <View style={[styles.cardsBox, { width: width * 0.09 }]}>
+      <View style={styles.cardsBox}>
         <Text style={{ fontSize: width * 0.03 }}>{item.cards_submitted}</Text>
       </View>
 
       <View style={styles.separator} />
-      <View style={[styles.detailsBox, { flex: 1 }]}>
+      <View style={styles.detailsBox}>
         <Text style={[styles.deliveryMethod, { fontSize }]}>{item.delivery_method}</Text>
-        <Text style={[styles.stateTime, { fontSize: width * 0.03 }]}>{timeAgo}</Text>
+        <Text style={[styles.stateTime, { fontSize: width * 0.03 }]}>{item.state_time}</Text>
       </View>
     </View>
   )
@@ -53,10 +55,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomWidth: 1,
     borderColor: '#E5E7EB',
+    flexWrap: 'wrap',
   },
   companyInfo: {
     marginLeft: 12,
     gap: 4,
+    flexShrink: 1,
   },
   companyName: {
     fontWeight: 'bold',
@@ -73,9 +77,13 @@ const styles = StyleSheet.create({
   },
   cardsBox: {
     alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 30,
   },
   detailsBox: {
     gap: 4,
+    flexShrink: 1,
+    flex: 1,
   },
   deliveryMethod: {
     fontWeight: 'bold',

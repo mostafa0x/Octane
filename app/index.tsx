@@ -96,6 +96,7 @@ export default function Home() {
           </View>
 
           <ListCard
+            type="Home"
             acknowledgments_Current={acknowledgments_Current}
             height={height}
             width={width}

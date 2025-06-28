@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, ActivityIndicator, useWindowDimensions } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Avatar, Button, HelperText, Icon, SegmentedButtons } from 'react-native-paper'
 const backImg = require('../../../../assets/backn.png')
 import * as Animatable from 'react-native-animatable'
@@ -7,11 +7,13 @@ import { Image } from 'expo-image'
 import { useDispatch } from 'react-redux'
 import { useLocalSearchParams } from 'expo-router'
 import useGetUserInfo from 'Hooks/useGetUserInfo'
-import { isArray } from 'lodash'
+import { isArray, set } from 'lodash'
 import { acknowledgmentsFace } from 'Types/Store/MainSliceFace'
 import { UseQueryResult } from '@tanstack/react-query'
 import NFCCardDashboard from 'components/NFC Card Dashboard'
 import ListCard from 'components/List/ListCard'
+import axiosClient from 'lib/api/axiosClient'
+import ListButtonHistory from 'components/List Button History'
 const avatarIcon = require('../../../../assets/avatar.png')
 
 interface UserInfoFace {
@@ -23,7 +25,7 @@ interface UserInfoFace {
 
 const ErrorFC = ({ error }: { error: Error }) => {
   return (
-    <View>
+    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
       <Text style={{ color: 'red' }}>{error.message}</Text>
     </View>
   )
@@ -33,20 +35,51 @@ export default function UserInfo() {
   const { width, height } = useWindowDimensions()
   const { userID, userName, userImage } = useLocalSearchParams()
   const [errorRes, setErrorRes] = useState<string | null>(null)
+  const [isLoadingRes, setIsLoadingRes] = useState(false)
   const [succusRes, setSuccusRes] = useState<string | null>(null)
   const dispatch = useDispatch()
   const [value, setValue] = React.useState('')
   const currUserID = isArray(userID) ? parseInt(userID[0]) : parseInt(userID)
-
+  const [activeList, setActiveList] = useState('daily')
+  const [currData, setCurrData] = useState<acknowledgmentsFace[]>([])
   const { data, isLoading, isError, error, refetch }: UseQueryResult<UserInfoFace> = useGetUserInfo(
     isArray(userID) ? parseInt(userID[0]) : parseInt(userID)
   )
 
   useEffect(() => {
     if (data) {
-      console.log(data)
+      setCurrData(data.acknowledgments)
+    }
+
+    return () => {
+      setCurrData([])
     }
   }, [data])
+
+  const handleActive = useCallback(
+    (period: string) => {
+      const nameLower = period.toLowerCase()
+      setActiveList(nameLower)
+      //   dispatch(SetAcknowledgments_Current(nameLower))
+    },
+    [dispatch]
+  )
+
+  const handleSuspendUser = useCallback(async () => {
+    if (isLoadingRes) return
+    setIsLoadingRes(true)
+    setErrorRes(null)
+    try {
+      const res = await axiosClient.post(`/admin/users/suspend/${currUserID}`)
+      await refetch()
+      console.log(res.data)
+    } catch (err: any) {
+      setErrorRes(err.response?.data?.message ?? err.message ?? 'Error Suspend User!')
+      throw err
+    } finally {
+      setIsLoadingRes(false)
+    }
+  }, [currUserID])
 
   return (
     <Animatable.View animation="fadeIn" duration={100} style={{ flex: 1 }}>
@@ -57,7 +90,35 @@ export default function UserInfo() {
           source={backImg}
         />
       </View>
-
+      <View
+        style={{
+          gap: 10,
+          alignItems: 'center',
+          position: 'absolute',
+          top: height * 0.18,
+          left: width * 0.55,
+          zIndex: 10,
+        }}>
+        <Button
+          loading={isLoadingRes}
+          onPress={() => {
+            if (data?.status == 'active') {
+              handleSuspendUser()
+            }
+          }}
+          textColor="black"
+          buttonColor={data?.status == 'active' ? 'red' : 'green'}
+          style={{
+            width: width * 0.2,
+            height: height * 0.05,
+            borderRadius: 100,
+            marginLeft: width * 0.1,
+          }}
+          contentStyle={{ height: height * 0.05 }}
+          labelStyle={{ fontSize: width * 0.028 }}>
+          {data?.status == 'active' ? 'Suspend ' : 'Active User'}
+        </Button>
+      </View>
       <View style={{ width: '100%', height: height * 0.15, zIndex: -1 }}>
         <Image source={backImg} contentFit="fill" style={{ width: '100%', height: '100%' }} />
       </View>
@@ -81,7 +142,7 @@ export default function UserInfo() {
             size={width * 0.3}
           />
         </TouchableOpacity>
-        <Text style={{ textAlign: 'center', fontSize: width * 0.046 }}>{userName} </Text>
+        <Text style={{ textAlign: 'center', fontSize: width * 0.046 }}>{userName}</Text>
       </View>
       <View
         style={{
@@ -107,22 +168,19 @@ export default function UserInfo() {
               userID={currUserID}
               refetch={refetch}
             />
-            {/* عندي مشكله ان التايب بتاع الداتا مش هوا هوا  فلازم خالد يرجع نفس الداتا بنفس الشكل او اغير التايب واريح دماغي */}
+            <ListButtonHistory
+              activeList={activeList}
+              searchHeight={height * 0.07}
+              cardWidth={width * 0.9}
+              handleActive={handleActive}
+            />
+
             <ListCard
-              acknowledgments_Current={data?.acknowledgments ?? []}
+              type="Dashboard"
+              acknowledgments_Current={currData ?? []}
               height={width}
               width={height}
             />
-            <View style={{ gap: 10, alignItems: 'center' }}>
-              <Button
-                textColor="black"
-                buttonColor={data?.status == 'active' ? 'red' : 'green'}
-                style={{ width: width * 0.3, height: height * 0.05 }}
-                contentStyle={{ height: height * 0.05 }}
-                labelStyle={{ fontSize: width * 0.042 }}>
-                Suspend
-              </Button>
-            </View>
           </View>
         )}
       </View>
