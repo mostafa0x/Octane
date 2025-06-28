@@ -27,7 +27,7 @@ function FooterDashboard({ pathName, height, router }: props) {
           pathName == '/Dashboard' && {
             borderRadius: 25,
             padding: 5,
-            backgroundColor: '#11962e',
+            backgroundColor: '#ffffff',
           }
         }
         onPress={() => pathName !== '/Dashboard' && router.push('/Dashboard')}>
@@ -39,7 +39,7 @@ function FooterDashboard({ pathName, height, router }: props) {
           pathName == '/Dashboard/Reports' && {
             borderRadius: 25,
             padding: 5,
-            backgroundColor: '#11962e',
+            backgroundColor: '#ffffff',
           }
         }>
         <Icon size={50} source={'tab-search'} />
@@ -52,7 +52,7 @@ function FooterDashboard({ pathName, height, router }: props) {
           pathName == '/Dashboard/UploadCompanys' && {
             borderRadius: 25,
             padding: 5,
-            backgroundColor: '#11962e',
+            backgroundColor: '#ffffff',
           }
         }>
         <Icon size={50} source={'developer-board'} />

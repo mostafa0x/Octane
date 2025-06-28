@@ -186,15 +186,15 @@ function NfcCardDashboard({ submitted, allocated, height, width, userID, refetch
                 <>
                   <Button
                     onPress={() => handleAddAllocate()}
-                    buttonColor="#00D09E"
-                    textColor="black"
+                    buttonColor="#8d1c47"
+                    textColor="white"
                     contentStyle={{ height: height * 0.05 }}
                     style={{ width: width * 0.4, height: height * 0.05 }}>
                     Submit
                   </Button>
                   <Button
                     onPress={() => setIsShowModel(false)}
-                    buttonColor="#e6f8e8"
+                    buttonColor="#d2e6d4"
                     textColor="black"
                     contentStyle={{ height: height * 0.05 }}
                     style={{ width: width * 0.4, height: height * 0.05 }}>

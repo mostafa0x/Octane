@@ -122,35 +122,37 @@ export default function UserInfo() {
           source={backImg}
         />
       </View>
-      <View
-        style={{
-          gap: 10,
-          alignItems: 'center',
-          position: 'absolute',
-          top: height * 0.18,
-          left: width * 0.55,
-          zIndex: 10,
-        }}>
-        <Button
-          loading={isLoadingRes}
-          onPress={() => {
-            if (data?.status == 'active') {
-              handleSuspendUser()
-            }
-          }}
-          textColor="black"
-          buttonColor={data?.status == 'active' ? 'red' : 'green'}
+      {data && (
+        <View
           style={{
-            width: width * 0.2,
-            height: height * 0.05,
-            borderRadius: 100,
-            marginLeft: width * 0.1,
-          }}
-          contentStyle={{ height: height * 0.05 }}
-          labelStyle={{ fontSize: width * 0.028 }}>
-          {data?.status == 'active' ? 'Suspend ' : 'Active User'}
-        </Button>
-      </View>
+            gap: 10,
+            alignItems: 'center',
+            position: 'absolute',
+            top: height * 0.18,
+            left: width * 0.55,
+            zIndex: 10,
+          }}>
+          <Button
+            loading={isLoadingRes}
+            onPress={() => {
+              if (data?.status == 'active') {
+                handleSuspendUser()
+              }
+            }}
+            textColor="black"
+            buttonColor={data?.status == 'active' ? 'red' : '#12c51b'}
+            style={{
+              width: width * 0.2,
+              height: height * 0.05,
+              borderRadius: 100,
+              marginLeft: width * 0.1,
+            }}
+            contentStyle={{ height: height * 0.05 }}
+            labelStyle={{ fontSize: width * 0.028 }}>
+            {data?.status == 'active' ? 'Suspend ' : 'Active User'}
+          </Button>
+        </View>
+      )}
       <View style={{ width: '100%', height: height * 0.15, zIndex: -1 }}>
         <Image source={backImg} contentFit="fill" style={{ width: '100%', height: '100%' }} />
       </View>
