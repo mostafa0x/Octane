@@ -121,6 +121,7 @@ export default function UserInfo() {
               height={height}
               width={width}
             />
+            {/* عندي مشكله ان التايب بتاع الداتا مش هوا هوا  فلازم خالد يرجع نفس الداتا بنفس الشكل او اغير التايب واريح دماغي */}
             <ListCard
               acknowledgments_Current={data?.acknowledgments ?? []}
               height={width}
