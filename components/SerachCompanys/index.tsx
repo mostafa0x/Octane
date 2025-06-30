@@ -57,12 +57,6 @@ const SerachCompanys = ({
           </View>
         )}
       />
-      <HelperText
-        style={styles.helperText}
-        type="error"
-        visible={formik.touched.company_id && !!formik.errors.company_id}>
-        {formik.errors.company_id}
-      </HelperText>
     </Animatable.View>
   )
 }
@@ -70,16 +64,10 @@ const SerachCompanys = ({
 const createStyles = (height: number, width: number) =>
   StyleSheet.create({
     container: {
-      height: height * 0.218,
-      width: '95%',
+      height: height * 0.5,
+      width: '100%',
       padding: 2,
-      borderWidth: 1,
-      borderColor: 'gray',
-      borderTopWidth: 0,
       borderRadius: 10,
-      borderTopRightRadius: 0,
-      borderTopLeftRadius: 0,
-      marginLeft: width * 0.025,
     },
     listContent: {
       paddingBottom: 0,
@@ -93,10 +81,6 @@ const createStyles = (height: number, width: number) =>
       opacity: 0.7,
       width: '100%',
       textAlign: 'center',
-    },
-    helperText: {
-      fontSize: width * 0.028,
-      color: 'red',
     },
   })
 

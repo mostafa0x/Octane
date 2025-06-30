@@ -41,7 +41,7 @@ const ItemCard_CS = memo(({ item, width, formik, SelectCompanyID, selectCompany 
           onPress={handlePress}
           style={styles.button}
           contentStyle={styles.buttonContent}
-          buttonColor={isSelected ? '#8d1c47' : 'green'}
+          buttonColor={isSelected ? '#b86482' : '#8d1c47'}
           textColor="white"
           compact
           mode="contained">

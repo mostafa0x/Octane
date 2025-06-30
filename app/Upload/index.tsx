@@ -5,6 +5,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
+  Modal,
+  Text,
 } from 'react-native'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as Animatable from 'react-native-animatable'
@@ -12,7 +14,7 @@ import { router } from 'expo-router'
 import InputField from 'components/form/InputField'
 import { useFormik } from 'formik'
 import { UploadvalidationSchema } from 'lib/Vaildtions/UploadSchema'
-import { Button, Searchbar } from 'react-native-paper'
+import { Button, HelperText, Searchbar } from 'react-native-paper'
 import SegmentedBtn from 'components/SegmentedBtn'
 import SerachCompanys from 'components/SerachCompanys'
 import { useDispatch, useSelector } from 'react-redux'
@@ -27,6 +29,7 @@ import { acknowledgmentsFace } from 'Types/Store/MainSliceFace'
 import { Image } from 'expo-image'
 import AppBar from 'components/App Bar'
 import { debounce } from 'lodash'
+import { CompanyFace } from 'Types/ItemList'
 
 export default function Upload() {
   const backImg = useRef(require('../../assets/backn.png'))
@@ -38,7 +41,8 @@ export default function Upload() {
   const [showImageOptions, setShowImageOptions] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [errorApi, setErrorApi] = useState<string | null>(null)
-
+  const [isShowSerachCompany, setIsShowSerachCompany] = useState(false)
+  const [currCompany, setCurrCompnay] = useState<CompanyFace | null>(null)
   const searchBoxRef = useRef<React.ComponentRef<typeof Searchbar>>(null)
   const dispatch = useDispatch()
 
@@ -137,6 +141,12 @@ export default function Upload() {
     return width * 0.026
   }, [])
 
+  useEffect(() => {
+    const findCompany = currentcompanys.find((item) => item.id == formik.values.company_id)
+    findCompany && setCurrCompnay(findCompany)
+    return () => {}
+  }, [formik.values])
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -153,26 +163,42 @@ export default function Upload() {
         <Image style={styles.backgroundImage} contentFit="fill" source={backImg.current} />
 
         <View style={styles.mainContainer}>
-          <View style={styles.searchContainer}>
-            <Searchbar
-              ref={searchBoxRef}
-              placeholder="Search"
-              inputStyle={{ fontSize: getFontSize }}
-              value={searchQuery}
-              onChangeText={handleSerach}
-              onClearIconPress={handleClear}
-            />
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <Button
+              style={{ width: width * 0.5 }}
+              buttonColor="#8d1c47"
+              textColor="white"
+              onPress={() => setIsShowSerachCompany(true)}>
+              Select Company
+            </Button>
+            {currCompany && (
+              <Text
+                style={{
+                  width: width * 0.8,
+                  textAlign: 'center',
+                  marginTop: height * 0.03,
+                  fontWeight: '400',
+                }}>
+                Selected :
+                <Text
+                  style={{
+                    width: '100%',
+                    textAlign: 'center',
+                    fontWeight: 'bold',
+                    fontSize: width * 0.032,
+                  }}>
+                  {' '}
+                  {currCompany?.name} ({currCompany?.code})
+                </Text>
+              </Text>
+            )}
           </View>
-
-          <SerachCompanys
-            height={height}
-            width={width}
-            currentcompanys={currentcompanys}
-            formik={formik}
-            SelectCompanyID={SelectCompanyID}
-            selectCompany={selectCompany}
-          />
-
+          <HelperText
+            style={{ fontSize: width * 0.028, color: 'red' }}
+            type="error"
+            visible={formik.touched.company_id && !!formik.errors.company_id}>
+            {formik.errors.company_id}
+          </HelperText>
           <InputField
             label={'cards submitted'}
             name={'cards_submitted'}
@@ -225,6 +251,63 @@ export default function Upload() {
           </View>
         </View>
       </Animatable.View>
+      <Modal
+        visible={isShowSerachCompany}
+        onDismiss={() => setIsShowSerachCompany(false)}
+        transparent
+        animationType="fade">
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'rgba(0,0,0,0.7)',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              backgroundColor: 'white',
+              width: '90%',
+              height: height * 0.7,
+              padding: 20,
+              borderRadius: 20,
+            }}>
+            <View style={styles.searchContainer}>
+              <Searchbar
+                ref={searchBoxRef}
+                placeholder="Search"
+                inputStyle={{ fontSize: getFontSize }}
+                value={searchQuery}
+                onChangeText={handleSerach}
+                onClearIconPress={handleClear}
+              />
+            </View>
+
+            <SerachCompanys
+              height={height}
+              width={width}
+              currentcompanys={currentcompanys}
+              formik={formik}
+              SelectCompanyID={SelectCompanyID}
+              selectCompany={selectCompany}
+            />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+                marginTop: height * 0.02,
+              }}>
+              <Button
+                onPress={() => setIsShowSerachCompany(false)}
+                contentStyle={{ width: width * 0.3, height: height * 0.05 }}
+                labelStyle={{ fontSize: width * 0.042 }}
+                textColor="white"
+                buttonColor="#b86482">
+                cancel
+              </Button>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </KeyboardAvoidingView>
   )
 }
@@ -252,11 +335,12 @@ const createStyles = (width: number, height: number) =>
       borderTopLeftRadius: 50,
       borderTopRightRadius: 50,
       backgroundColor: 'white',
-      paddingHorizontal: height * 0.03,
+      paddingHorizontal: width * 0.05,
+      paddingVertical: height * 0.05,
     },
     searchContainer: {
       marginTop: 20,
-      width: width * 0.88,
+      width: '100%',
     },
     uploadSection: {
       marginTop: height * 0.02,
