@@ -3,7 +3,7 @@ import React, { memo, useRef } from 'react'
 import { Image } from 'expo-image'
 import { Router } from 'expo-router'
 import { userDataFace } from 'Types/Store/UserSliceFace'
-import { Icon } from 'react-native-paper'
+import { Button, Divider, Icon, Menu } from 'react-native-paper'
 
 interface props {
   sectionPadding?: number
@@ -67,21 +67,44 @@ const ProfileContent = React.memo(({ router, width }: props) => {
     </>
   )
 })
-const DashboardContent = React.memo(({ router, width, label }: props) => {
+const DashboardContent = React.memo(({ router, width, height, label }: props) => {
+  const [visible, setVisible] = React.useState(false)
+
   return (
     <>
       <TouchableOpacity
         onPress={() => router.back()}
-        style={{ position: 'absolute', left: 10, top: 0, zIndex: 10 }}>
+        style={{ position: 'absolute', left: width * 0.02, top: 0, zIndex: 10 }}>
         <View style={{ marginTop: 8 }}>
           <Icon size={40} color="white" source="keyboard-backspace" />
         </View>
       </TouchableOpacity>
-      <View style={{ position: 'absolute', left: 60, top: 10, zIndex: 10 }}>
+      <View style={{ position: 'absolute', left: width * 0.12, top: height * 0.01, zIndex: 10 }}>
         <Text style={{ color: '#F1FFF3', fontSize: 24, width: width }}>
           {label ? label : 'Dashboard'}
         </Text>
       </View>
+      {label === 'User information' && (
+        <TouchableOpacity
+          style={{ position: 'absolute', left: width * 0.88, top: height * 0.007, zIndex: 10 }}>
+          <Menu
+            visible={visible}
+            onDismiss={() => setVisible((curr) => curr == true && false)}
+            style={{ marginTop: height * 0.043 }}
+            anchor={
+              <TouchableOpacity onPress={() => setVisible((curr) => curr == false && true)}>
+                <Icon color="white" size={40} source={'menu'} />
+              </TouchableOpacity>
+            }>
+            <Menu.Item
+              style={{ width: width * 0.2, height: height * 0.03 }}
+              leadingIcon={'block-helper'}
+              onPress={() => {}}
+              title="block"
+            />
+          </Menu>
+        </TouchableOpacity>
+      )}
     </>
   )
 })

@@ -1,13 +1,13 @@
 import { View, Text, TouchableOpacity, ActivityIndicator, useWindowDimensions } from 'react-native'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { Avatar, Button, HelperText, Icon, SegmentedButtons } from 'react-native-paper'
+import React, { useCallback, useEffect, useState } from 'react'
+import { Avatar, Button } from 'react-native-paper'
 const backImg = require('../../../../assets/backn.png')
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
 import { useDispatch } from 'react-redux'
 import { useLocalSearchParams } from 'expo-router'
 import useGetUserInfo from 'Hooks/useGetUserInfo'
-import { isArray, set } from 'lodash'
+import { isArray } from 'lodash'
 import { acknowledgmentsFace } from 'Types/Store/MainSliceFace'
 import { UseQueryResult } from '@tanstack/react-query'
 import NFCCardDashboard from 'components/NFC Card Dashboard'
@@ -130,7 +130,7 @@ export default function UserInfo() {
             alignItems: 'center',
             position: 'absolute',
             top: height * 0.18,
-            left: width * 0.55,
+            left: width * 0.6,
             zIndex: 10,
           }}>
           <Button
@@ -140,17 +140,18 @@ export default function UserInfo() {
                 handleSuspendUser()
               }
             }}
-            textColor="black"
-            buttonColor={data?.status == 'active' ? 'red' : '#12c51b'}
+            textColor="white"
+            icon={'block-helper'}
+            buttonColor={data?.status == 'active' ? 'red' : '#000000'}
             style={{
               width: width * 0.2,
-              height: height * 0.05,
+              height: height * 0.04,
               borderRadius: 100,
               marginLeft: width * 0.1,
             }}
-            contentStyle={{ height: height * 0.05 }}
+            contentStyle={{ height: height * 0.04 }}
             labelStyle={{ fontSize: width * 0.028 }}>
-            {data?.status == 'active' ? 'Suspend ' : 'Active User'}
+            {data?.status == 'active' ? 'block ' : 'unblock'}
           </Button>
         </View>
       )}

@@ -28,14 +28,12 @@ export default function Dashboard() {
   const pathName = usePathname()
   const router = useRouter()
   const dispatch = useDispatch()
-  const [isLoadingPage, setIsLoadingPage] = useState(true)
 
   async function handleGetUsers() {
     try {
       const res = await axiosClient.get('/admin/users/')
       const data = res.data.users
       dispatch(GetUsers(data))
-      setIsLoadingPage(false)
       return data
     } catch (err: any) {
       console.log(err)
@@ -43,9 +41,10 @@ export default function Dashboard() {
       throw err
     }
   }
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError, error, isFetching } = useQuery({
     queryKey: ['users'],
     queryFn: handleGetUsers,
+    staleTime: 0,
   })
 
   useEffect(() => {
@@ -81,8 +80,10 @@ export default function Dashboard() {
             paddingHorizontal: 24,
             paddingBottom: 100,
           }}>
-          {isLoading ? (
-            <ActivityIndicator size={80} />
+          {isLoading || isFetching ? (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <ActivityIndicator color="blue" size={80} />
+            </View>
           ) : (
             <View
               style={{

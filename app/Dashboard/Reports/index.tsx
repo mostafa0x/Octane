@@ -85,7 +85,7 @@ export default function Reposts() {
       return setEmptyTXT('Specify the time period')
     } else if (!data) {
       return setEmptyTXT('A problem occurred')
-    } else if (data && data.acknowledgments.length <= 0) {
+    } else if (data && data?.acknowledgments?.length <= 0) {
       return setEmptyTXT('There are no results from this period.')
     }
   }, [toDate, fromDate, data])
@@ -164,9 +164,9 @@ export default function Reposts() {
               <View
                 style={{
                   marginTop: height * 0.02,
-                  borderWidth: 1,
+                  borderWidth: data ? 1 : 0,
                   borderRadius: 20,
-                  padding: 20,
+                  padding: 10,
                   paddingVertical: 0,
                   borderColor: 'grey',
                 }}>
