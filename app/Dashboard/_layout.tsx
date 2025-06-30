@@ -15,6 +15,8 @@ export default function LayoutDashboard() {
       setLabel('Dashboard')
     } else if (pathName === '/Dashboard/UploadCompanys') {
       setLabel('Upload Companys')
+    } else if (pathName === '/Dashboard/Reports') {
+      setLabel('Reports')
     }
     return () => {}
   }, [pathName])

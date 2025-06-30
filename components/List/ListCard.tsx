@@ -11,9 +11,10 @@ interface props {
   height: number
   width: number
   type: string
+  emptyTXT?: string
 }
 
-function ListCard({ acknowledgments_Current, height, width, type }: props) {
+function ListCard({ acknowledgments_Current, height, width, type, emptyTXT }: props) {
   const animRef = useRef<AnimatableView>(null)
 
   useEffect(() => {
@@ -47,7 +48,7 @@ function ListCard({ acknowledgments_Current, height, width, type }: props) {
                 textAlign: 'center',
                 fontWeight: '300',
               }}>
-              There are no acknowledgments yet.
+              {type === 'Reports' ? emptyTXT : 'There are no acknowledgments yet.'}
             </Text>
           </View>
         )}
