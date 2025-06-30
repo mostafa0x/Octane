@@ -17,6 +17,9 @@ import ListCard from 'components/List/ListCard'
 import { acknowledgmentsFace } from 'Types/Store/MainSliceFace'
 import useReports from 'Hooks/useReports'
 import axiosClient from 'lib/api/axiosClient'
+import * as FileSystem from 'expo-file-system'
+import * as Sharing from 'expo-sharing'
+import { Buffer } from 'buffer'
 
 export default function Reposts() {
   const { width, height } = useWindowDimensions()
@@ -34,23 +37,38 @@ export default function Reposts() {
   const formatDate = (date: Date) => date.toISOString().split('T')[0]
 
   async function handleExportReports() {
-    if (isLoadingRes && !fromDate && !toDate) return
-    if (fromDate && toDate) {
-      setIsErrorRes(null)
-      setIsLoadingRes(true)
-      try {
-        const res = await axiosClient.get(
-          `/admin/report/export?start=${formatDate(fromDate)}&end=${formatDate(toDate)}`
-        )
-        const data = res.data
-        console.log(data)
-      } catch (err: any) {
-        setIsErrorRes(err.response?.data?.message ?? err.message ?? 'Error Export')
+    if (isLoadingRes || !fromDate || !toDate) return
 
-        throw err
-      } finally {
-        setIsLoadingRes(false)
+    setIsErrorRes(null)
+    setIsLoadingRes(true)
+
+    try {
+      const res = await axiosClient.get(
+        `/admin/report/export?start=${formatDate(fromDate)}&end=${formatDate(toDate)}`,
+        {
+          responseType: 'arraybuffer',
+        }
+      )
+
+      const fileUri =
+        FileSystem.documentDirectory +
+        `Report From ${formatDate(fromDate)} To ${formatDate(toDate)}.xlsx`
+      const base64Data = Buffer.from(res.data).toString('base64')
+
+      await FileSystem.writeAsStringAsync(fileUri, base64Data, {
+        encoding: FileSystem.EncodingType.Base64,
+      })
+
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(fileUri)
+      } else {
+        alert('Sharing is not available on this device.')
       }
+    } catch (err: any) {
+      setIsErrorRes(err.response?.data?.message ?? err.message ?? 'Error Export')
+      console.error('Export error:', err)
+    } finally {
+      setIsLoadingRes(false)
     }
   }
   useEffect(() => {
@@ -99,17 +117,19 @@ export default function Reposts() {
             gap: 30,
           }}>
           <View style={{ padding: 10 }}>
-            <Text
-              style={{ fontWeight: 'bold', marginBottom: height * 0.008, fontSize: width * 0.042 }}>
-              Fillter Report :
-            </Text>
             <View
               style={{ flexDirection: 'row', justifyContent: 'space-around', width: width * 0.9 }}>
-              <Button mode="outlined" onPress={() => setFromVisible(true)}>
+              <Button
+                labelStyle={{ fontSize: width * 0.038, fontWeight: 'bold' }}
+                mode="outlined"
+                onPress={() => setFromVisible(true)}>
                 {fromDate ? `From: ${formatDate(fromDate)}` : 'Select From Date'}
               </Button>
 
-              <Button mode="outlined" onPress={() => setToVisible(true)}>
+              <Button
+                labelStyle={{ fontSize: width * 0.038, fontWeight: 'bold' }}
+                mode="outlined"
+                onPress={() => setToVisible(true)}>
                 {toDate ? `To: ${formatDate(toDate)}` : 'Select To Date'}
               </Button>
             </View>
@@ -168,7 +188,7 @@ export default function Reposts() {
                   disabled={isLoading}
                   textColor="white"
                   buttonColor="#a33307">
-                  Export
+                  {isLoadingRes ? 'Exporting...' : 'Export'}
                 </Button>
               </View>
             )}

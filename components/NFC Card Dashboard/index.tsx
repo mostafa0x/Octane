@@ -140,7 +140,7 @@ function NfcCardDashboard({ submitted, allocated, height, width, userID, refetch
         <View
           style={{
             flex: 1,
-            backgroundColor: 'rgba(0,0,0,0.5)',
+            backgroundColor: 'rgba(0,0,0,0.7)',
             justifyContent: 'center',
             alignItems: 'center',
           }}>
