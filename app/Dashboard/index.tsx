@@ -17,6 +17,7 @@ import axiosClient from 'lib/api/axiosClient'
 import { GetUsers } from 'lib/Store/Slices/DashboardSlice'
 import FooterDashboard from 'components/FooterDashboard'
 import { NavigationOptions } from 'expo-router/build/global-state/routing'
+import { useQuery } from '@tanstack/react-query'
 const avatarIcon = require('../../assets/avatar.png')
 const backImg = require('../../assets/backn.png')
 
@@ -29,22 +30,28 @@ export default function Dashboard() {
   const dispatch = useDispatch()
   const [isLoadingPage, setIsLoadingPage] = useState(true)
 
-  useEffect(() => {
-    async function handleGetUsers() {
-      try {
-        const res = await axiosClient.get('/admin/users/')
-        const data = res.data.users
-        dispatch(GetUsers(data))
-        setIsLoadingPage(false)
-      } catch (err: any) {
-        console.log(err)
+  async function handleGetUsers() {
+    try {
+      const res = await axiosClient.get('/admin/users/')
+      const data = res.data.users
+      dispatch(GetUsers(data))
+      setIsLoadingPage(false)
+      return data
+    } catch (err: any) {
+      console.log(err)
 
-        throw err
-      }
+      throw err
     }
-    handleGetUsers()
+  }
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['users'],
+    queryFn: handleGetUsers,
+  })
 
-    return () => {}
+  useEffect(() => {
+    return () => {
+      dispatch(GetUsers([]))
+    }
   }, [])
 
   return (
@@ -74,7 +81,7 @@ export default function Dashboard() {
             paddingHorizontal: 24,
             paddingBottom: 100,
           }}>
-          {isLoadingPage ? (
+          {isLoading ? (
             <ActivityIndicator size={80} />
           ) : (
             <View

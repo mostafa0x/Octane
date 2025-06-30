@@ -95,7 +95,7 @@ export default function Profile() {
           left: (width - avatarSize) / 2,
           zIndex: 10,
         }}>
-        <TouchableOpacity activeOpacity={0.8}>
+        <TouchableOpacity onPress={() => setShowImageOptions(true)} activeOpacity={0.8}>
           <Avatar.Image
             source={
               userData?.image

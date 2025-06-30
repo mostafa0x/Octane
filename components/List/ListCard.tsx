@@ -41,7 +41,7 @@ function ListCard({ acknowledgments_Current, height, width, type }: props) {
           <View style={{ marginTop: height * 0.05, alignItems: 'center' }}>
             <Text
               style={{
-                fontSize: width * 0.048,
+                fontSize: type == 'Home' ? width * 0.048 : width * 0.034,
                 opacity: 0.7,
                 width: width * 0.4,
                 textAlign: 'center',

@@ -1,8 +1,15 @@
-import { View, Text, TouchableOpacity, ActivityIndicator, useWindowDimensions } from 'react-native'
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  useWindowDimensions,
+  Modal,
+} from 'react-native'
 import React, { useRef, useState } from 'react'
 import * as DocumentPicker from 'expo-document-picker'
 import axiosClient from 'lib/api/axiosClient'
-import { HelperText, Icon } from 'react-native-paper'
+import { Button, HelperText, Icon } from 'react-native-paper'
 const backImg = require('../../../assets/backn.png')
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
@@ -15,6 +22,8 @@ export default function UploadCompanys() {
   const { width, height } = useWindowDimensions()
   const [errorRes, setErrorRes] = useState<string | null>(null)
   const [succusRes, setSuccusRes] = useState<string | null>(null)
+  const [fileRes, setFileRes] = useState<DocumentPicker.DocumentPickerResult>()
+  const [confirmUpload, setConfirmUpload] = useState(false)
   const dispatch = useDispatch()
 
   const formats = useRef([
@@ -71,7 +80,8 @@ export default function UploadCompanys() {
       if (!res.canceled && res.assets?.length) {
         const name = res.assets[0].name
         setFileName(name)
-        uploadExcelFile(res)
+        setFileRes(res)
+        setConfirmUpload(true)
       }
     } catch (error) {
       console.error('Error picking file:', error)
@@ -173,6 +183,93 @@ export default function UploadCompanys() {
           </View>
         </View>
       </View>
+      <Modal
+        animationType="fade"
+        transparent
+        visible={confirmUpload}
+        onRequestClose={() => setConfirmUpload(false)}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'rgba(0,0,0,0.8)',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              width: width * 0.8,
+              height: height * 0.35,
+              backgroundColor: '#fff',
+              padding: 20,
+              borderRadius: 70,
+              elevation: 5,
+            }}>
+            <View style={{ alignItems: 'center', marginTop: height * 0.01, gap: 15 }}>
+              <Text
+                style={{
+                  padding: 25,
+                  width: '100%',
+                  textAlign: 'center',
+                  fontWeight: '300',
+                  fontSize: width * 0.032,
+                }}>
+                The uploaded file will update the existing companies' data. Please make sure all
+                information is correct before proceeding,{' '}
+                <Text
+                  style={{
+                    width: '100%',
+                    textAlign: 'center',
+                    fontWeight: 'bold',
+                    color: 'orange',
+                    fontSize: width * 0.032,
+                  }}>
+                  as the current data will be overwritten.
+                </Text>
+              </Text>
+              <Text
+                style={{
+                  marginTop: height * 0.02,
+                  color: '#333',
+                  fontSize: width * 0.028,
+                  textAlign: 'center',
+                  width: width * 0.8,
+                }}>
+                Selected: {'  '}
+                <Text style={{ color: 'red', fontWeight: 'bold', fontSize: width * 0.032 }}>
+                  {fileName}
+                </Text>
+              </Text>
+              <View
+                style={{
+                  gap: 20,
+                  flexDirection: 'row',
+                  marginTop: height * 0.03,
+                }}>
+                <Button
+                  onPress={() => setConfirmUpload(false)}
+                  buttonColor="#d2e6d4"
+                  textColor="black"
+                  contentStyle={{ height: height * 0.05 }}
+                  style={{ width: width * 0.3, height: height * 0.05 }}>
+                  cancel
+                </Button>
+                <Button
+                  onPress={() => {
+                    if (!fileRes) return
+                    uploadExcelFile(fileRes)
+                    setConfirmUpload(false)
+                  }}
+                  buttonColor="#8d1c47"
+                  textColor="white"
+                  contentStyle={{ height: height * 0.05 }}
+                  style={{ width: width * 0.3, height: height * 0.05 }}>
+                  confirm
+                </Button>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </Animatable.View>
   )
 }
