@@ -78,6 +78,8 @@ const createStyles = (width: number) =>
     },
     codeText: {
       fontSize: width * 0.035,
+      width: '100%',
+      textAlign: 'center',
     },
     buttonContainer: {
       width: '30%',

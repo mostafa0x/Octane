@@ -38,10 +38,10 @@ function SearchCompany_Modal({
 
   return (
     <Modal
+      animationType="slide"
       visible={isShowSerachCompany}
       onDismiss={() => setIsShowSerachCompany(false)}
-      transparent
-      animationType="fade">
+      transparent>
       <View
         style={{
           flex: 1,

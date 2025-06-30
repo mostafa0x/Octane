@@ -5,7 +5,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
-  Modal,
   Text,
 } from 'react-native'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -16,7 +15,6 @@ import { useFormik } from 'formik'
 import { UploadvalidationSchema } from 'lib/Vaildtions/UploadSchema'
 import { Button, HelperText, Searchbar } from 'react-native-paper'
 import SegmentedBtn from 'components/SegmentedBtn'
-import SerachCompanys from 'components/SerachCompanys'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
 import { GetSerachCompany } from 'lib/Store/Slices/CompanySlice'
@@ -140,13 +138,19 @@ export default function Upload() {
     if (searchQuery.length <= 30) return width * 0.032
     if (searchQuery.length <= 40) return width * 0.028
     return width * 0.026
-  }, [])
+  }, [searchQuery, width])
 
   useEffect(() => {
     const findCompany = currentcompanys.find((item) => item.id == formik.values.company_id)
     findCompany && setCurrCompnay(findCompany)
     return () => {}
   }, [formik.values])
+
+  const segmentedButtons = useMemo(() => {
+    return ['submission_type', 'delivery_method', 'state_time'].map((item) => (
+      <SegmentedBtn key={item} name={item} height={height} width={width} formik={formik} />
+    ))
+  }, [formik, height, width])
 
   return (
     <KeyboardAvoidingView
@@ -206,10 +210,7 @@ export default function Upload() {
             formik={formik}
             errorMes={null}
           />
-
-          {['submission_type', 'delivery_method', 'state_time'].map((item) => (
-            <SegmentedBtn key={item} name={item} height={height} width={width} formik={formik} />
-          ))}
+          {segmentedButtons}
 
           <View style={styles.uploadSection}>
             <UploadImage
@@ -221,6 +222,7 @@ export default function Upload() {
 
             <View style={styles.buttonContainer}>
               <Button
+                loading={isLoadingRes}
                 onPress={() => {
                   Keyboard.dismiss()
                   if (formik.isValid && formik.dirty && formik.values.image) {
@@ -252,79 +254,22 @@ export default function Upload() {
             />
           </View>
         </View>
+        <SearchCompanyModal
+          isShowSerachCompany={isShowSerachCompany}
+          setIsShowSerachCompany={setIsShowSerachCompany}
+          searchBoxRef={searchBoxRef}
+          searchQuery={searchQuery}
+          handleSerach={handleSerach}
+          handleClear={handleClear}
+          height={height}
+          width={width}
+          currentcompanys={currentcompanys}
+          formik={formik}
+          SelectCompanyID={SelectCompanyID}
+          selectCompany={selectCompany}
+          getFontSize={getFontSize}
+        />
       </Animatable.View>
-      {/* <Modal
-        visible={isShowSerachCompany}
-        onDismiss={() => setIsShowSerachCompany(false)}
-        transparent
-        animationType="fade">
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: 'rgba(0,0,0,0.7)',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <View
-            style={{
-              backgroundColor: 'white',
-              width: '90%',
-              height: height * 0.7,
-              padding: 20,
-              borderRadius: 20,
-            }}>
-            <View style={styles.searchContainer}>
-              <Searchbar
-                ref={searchBoxRef}
-                placeholder="Search"
-                inputStyle={{ fontSize: getFontSize }}
-                value={searchQuery}
-                onChangeText={handleSerach}
-                onClearIconPress={handleClear}
-              />
-            </View>
-
-            <SerachCompanys
-              height={height}
-              width={width}
-              currentcompanys={currentcompanys}
-              formik={formik}
-              SelectCompanyID={SelectCompanyID}
-              selectCompany={selectCompany}
-            />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-around',
-                marginTop: height * 0.02,
-              }}>
-              <Button
-                onPress={() => setIsShowSerachCompany(false)}
-                contentStyle={{ width: width * 0.3, height: height * 0.05 }}
-                labelStyle={{ fontSize: width * 0.042 }}
-                textColor="white"
-                buttonColor="#b86482">
-                cancel
-              </Button>
-            </View>
-          </View>
-        </View>
-      </Modal> */}
-      <SearchCompanyModal
-        isShowSerachCompany={isShowSerachCompany}
-        setIsShowSerachCompany={setIsShowSerachCompany}
-        searchBoxRef={searchBoxRef}
-        searchQuery={searchQuery}
-        handleSerach={handleSerach}
-        handleClear={handleClear}
-        height={height}
-        width={width}
-        currentcompanys={currentcompanys}
-        formik={formik}
-        SelectCompanyID={SelectCompanyID}
-        selectCompany={selectCompany}
-        getFontSize={getFontSize}
-      />
     </KeyboardAvoidingView>
   )
 }
