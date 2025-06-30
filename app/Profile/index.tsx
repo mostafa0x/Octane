@@ -50,6 +50,9 @@ export default function Profile() {
     } catch (err: any) {
       console.log(err)
       setErrorRes(err.response?.data?.message ?? 'Error Upload Image !')
+      if (err.status == 403) {
+        handleLoutOut(dispatch, router)
+      }
       throw err
     } finally {
       setIsLoadingRes(false)

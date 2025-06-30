@@ -56,7 +56,8 @@ function ProtectRoutingProvider({ children }: { children: React.ReactNode }) {
 
       setIsLoading(false)
     } catch (err: any) {
-      setIsError(err?.response?.data?.message ?? err.message ?? 'Something went wrong !')
+      err.status !== 403 &&
+        setIsError(err?.response?.data?.message ?? err.message ?? 'Something went wrong !')
       console.log(err.message ?? 'Something went wrong')
     }
   }, [init])

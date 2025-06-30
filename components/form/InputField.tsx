@@ -13,7 +13,6 @@ interface Props {
 const InputField = memo(({ label, name, formik, errorMes }: Props) => {
   const [showPassword, setShowPassword] = React.useState(false)
 
-  // حساب القيم المشتقة مرة واحدة
   const isPassword = ['password', 'repassword'].includes(name)
   const isNumberField = ['cards_submitted'].includes(name)
   const isErrorEmail = errorMes === 'User already exists' && name === 'email'
@@ -22,14 +21,13 @@ const InputField = memo(({ label, name, formik, errorMes }: Props) => {
       ? errorMes
       : formik.touched?.[name] && !!formik.errors?.[name]
   const shouldShowError = formik.touched?.[name] && !!formik.errors?.[name]
+  const hasSupspend = errorMes == 'Account suspended'
 
   const togglePasswordVisibility = useCallback(() => {
     setShowPassword((prev) => !prev)
   }, [])
 
-  // تمت إزالة useEffect الذي كان يسبب المشكلة
-
-  const styles = createStyles(hasError || isErrorEmail)
+  const styles = createStyles(hasError || isErrorEmail, hasSupspend)
 
   return (
     <View style={styles.container}>
@@ -62,7 +60,7 @@ const InputField = memo(({ label, name, formik, errorMes }: Props) => {
   )
 })
 
-const createStyles = (hasError: boolean) =>
+const createStyles = (hasError: boolean, hasSupspend: boolean) =>
   StyleSheet.create({
     container: {
       marginBottom: 16,
@@ -79,7 +77,7 @@ const createStyles = (hasError: boolean) =>
       paddingVertical: 8,
       borderRadius: 10,
       borderWidth: 2,
-      borderColor: hasError ? '#e03c3c' : '#EDF1F3',
+      borderColor: !hasSupspend && hasError ? '#e03c3c' : '#EDF1F3',
       backgroundColor: '#FFFFFF',
     },
     input: {

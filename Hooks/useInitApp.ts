@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router'
 import { ChangeLoadedData } from 'lib/Store/Slices/UserSlice'
 import { useDispatch } from 'react-redux'
 import { GetAcknowledgments } from 'Services/GetAcknowledgments'
@@ -6,16 +7,17 @@ import { GetCompanys } from 'Services/Storage'
 
 export const useInitApp = () => {
   const dispatch = useDispatch()
+  const router = useRouter()
 
   const init = async () => {
     await Promise.all([
-      GetNfcs(dispatch),
-      GetAcknowledgments('monthly', dispatch),
-      GetAcknowledgments('weekly', dispatch),
-      GetAcknowledgments('daily', dispatch),
+      GetNfcs(dispatch, router),
+      GetAcknowledgments('monthly', dispatch, router),
+      GetAcknowledgments('weekly', dispatch, router),
+      GetAcknowledgments('daily', dispatch, router),
     ])
     await console.log('loaded data ✅')
-    await GetCompanys(dispatch)
+    await GetCompanys(dispatch, router)
     dispatch(ChangeLoadedData(true))
   }
 

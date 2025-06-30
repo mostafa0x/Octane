@@ -10,6 +10,7 @@ import {
 } from 'lib/Store/Slices/UserSlice'
 import { CompanyFace } from 'Types/ItemList'
 import { userDataFace } from 'Types/Store/UserSliceFace'
+import handleLoutOut from './handleLogOut'
 
 export const storeUserInfo = async (
   userToken: string,
@@ -60,7 +61,7 @@ export const clearUserInfo = async () => {
   }
 }
 
-export const GetCompanys = async (dispatch: any) => {
+export const GetCompanys = async (dispatch: any, router: Router) => {
   try {
     const companys = await AsyncStorage.getItem('@companys')
     if (!companys) {
@@ -81,7 +82,7 @@ export const GetCompanys = async (dispatch: any) => {
     const expirdTime = 7 * 24 * 60 * 60 * 1000
     if (now - storedTime >= expirdTime) {
       await AsyncStorage.removeItem('@companys')
-      GetCompanys(dispatch)
+      GetCompanys(dispatch, router)
       console.log('Should Upate')
     } else {
       dispatch(SetCompanys(companysJSON.data))
@@ -89,7 +90,9 @@ export const GetCompanys = async (dispatch: any) => {
     }
   } catch (err: any) {
     console.log(err)
-
+    if (err.status == 403) {
+      handleLoutOut(dispatch, router)
+    }
     throw err
   }
 }

@@ -45,7 +45,8 @@ const HomeContent = React.memo(({ router, userData, width, height }: props) => {
             fontSize: width * 0.032,
             width: width * 1,
           }}>
-          Welcome Back {userData?.name}
+          Welcome Back{' '}
+          {userData?.name && userData.name.charAt(0).toUpperCase() + userData.name.slice(1)}
         </Text>
       </View>
     </>
