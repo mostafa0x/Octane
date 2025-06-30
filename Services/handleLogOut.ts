@@ -1,7 +1,8 @@
 import { changeIsLoadedUserData, ChangeLoadedData, fillUserInfo } from 'lib/Store/Slices/UserSlice'
-import { clearUserInfo } from './Storage'
+
 import { Router } from 'expo-router'
 import { ClearMainData } from 'lib/Store/Slices/MainSlice'
+import { clearUserInfo } from './userSession'
 
 export default async function handleLoutOut(dispatch: any, router: Router) {
   try {

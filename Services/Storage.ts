@@ -51,16 +51,6 @@ export const getUserInfo = async (dispatch: any) => {
   }
 }
 
-export const clearUserInfo = async () => {
-  try {
-    await AsyncStorage.multiRemove(['@userToken', '@userData'])
-    return true
-  } catch (error) {
-    console.error('Error clearing user info:', error)
-    throw `Error clearing user info:, ${error}`
-  }
-}
-
 export const GetCompanys = async (dispatch: any, router: Router) => {
   try {
     const companys = await AsyncStorage.getItem('@companys')

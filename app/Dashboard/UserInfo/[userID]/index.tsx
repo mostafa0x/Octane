@@ -80,9 +80,9 @@ export default function UserInfo() {
 
       switch (nameLower) {
         case 'daily':
-          filteredData = data.acknowledgments.filter((item) =>
+          filteredData = data.acknowledgments.filter((item) => {
             dayjs(item.submission_date).isSame(now, 'day')
-          )
+          })
           break
 
         case 'weekly':
@@ -171,7 +171,10 @@ export default function UserInfo() {
           <Text style={{ textAlign: 'center', fontSize: width * 0.046 }}>{userName}</Text>
 
           {data?.status === 'active' ? null : (
-            <Icon size={30} color="red" source={'block-helper'} />
+            <>
+              <Text>{'  '}</Text>
+              <Icon size={30} color="red" source={'block-helper'} />
+            </>
           )}
         </View>
       </View>

@@ -56,6 +56,7 @@ const createStyles = (width: number) =>
   StyleSheet.create({
     container: {
       width: width * 0.9,
+
       padding: width * 0.02,
       height: '100%',
       flexDirection: 'row',

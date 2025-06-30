@@ -29,7 +29,12 @@ const SerachCompanys = ({
   const styles = createStyles(height, width)
 
   return (
-    <Animatable.View ref={animRef} animation="fadeIn" easing="ease-in-out" style={styles.container}>
+    <Animatable.View
+      ref={animRef}
+      animation="fadeIn"
+      duration={200}
+      easing="ease-in-out"
+      style={styles.container}>
       <FlashList
         data={currentcompanys}
         extraData={selectCompany}
@@ -74,8 +79,7 @@ const createStyles = (height: number, width: number) =>
       borderRadius: 10,
       borderTopRightRadius: 0,
       borderTopLeftRadius: 0,
-
-      marginLeft: 15,
+      marginLeft: width * 0.025,
     },
     listContent: {
       paddingBottom: 0,

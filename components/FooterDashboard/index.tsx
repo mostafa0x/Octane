@@ -17,10 +17,10 @@ function FooterDashboard({ pathName, height, router }: props) {
         backgroundColor: '#c47b9f',
         borderTopRightRadius: 50,
         borderTopLeftRadius: 50,
-        justifyContent: 'center',
+        justifyContent: 'space-evenly',
         alignItems: 'center',
         flexDirection: 'row',
-        gap: 60,
+        gap: 20,
       }}>
       <TouchableOpacity
         style={
