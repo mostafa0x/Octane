@@ -99,7 +99,7 @@ export default function Reposts() {
         />
       </View>
 
-      <View style={{ width: '100%', height: height * 0.15, zIndex: -1 }}>
+      <View style={{ width: '100%', height: height * 0.1, zIndex: -1 }}>
         <Image source={backImg} contentFit="fill" style={{ width: '100%', height: '100%' }} />
       </View>
       <View

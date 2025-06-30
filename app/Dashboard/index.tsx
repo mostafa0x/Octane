@@ -18,13 +18,13 @@ import { GetUsers } from 'lib/Store/Slices/DashboardSlice'
 import FooterDashboard from 'components/FooterDashboard'
 import { NavigationOptions } from 'expo-router/build/global-state/routing'
 import { useQuery } from '@tanstack/react-query'
+import { UsersFace } from 'Types/Store/DashboardSliceFace'
 const avatarIcon = require('../../assets/avatar.png')
 const backImg = require('../../assets/backn.png')
 
 export default function Dashboard() {
   const { width, height } = useWindowDimensions()
   const { userData } = useSelector((state: StateFace) => state.UserReducer)
-  const { users } = useSelector((state: StateFace) => state.DashboardReducer)
   const pathName = usePathname()
   const router = useRouter()
   const dispatch = useDispatch()
@@ -33,7 +33,6 @@ export default function Dashboard() {
     try {
       const res = await axiosClient.get('/admin/users/')
       const data = res.data.users
-      dispatch(GetUsers(data))
       return data
     } catch (err: any) {
       console.log(err)
@@ -44,14 +43,8 @@ export default function Dashboard() {
   const { data, isLoading, isError, error, isFetching } = useQuery({
     queryKey: ['users'],
     queryFn: handleGetUsers,
-    staleTime: 0,
+    staleTime: 30000,
   })
-
-  useEffect(() => {
-    return () => {
-      dispatch(GetUsers([]))
-    }
-  }, [])
 
   return (
     <Animatable.View animation="fadeIn" duration={100} style={{ flex: 1 }}>
@@ -89,11 +82,11 @@ export default function Dashboard() {
               style={{
                 flexDirection: 'row',
                 flexWrap: 'wrap',
-                justifyContent: users.length > 1 ? 'space-between' : 'flex-start',
+                justifyContent: data.length > 1 ? 'space-between' : 'flex-start',
                 gap: 23,
                 paddingHorizontal: 10,
               }}>
-              {users.map((user, index) =>
+              {data?.map((user: UsersFace, index: number) =>
                 user.id == userData?.id ? null : (
                   <TouchableOpacity
                     onPress={() =>

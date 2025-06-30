@@ -95,7 +95,7 @@ const DashboardContent = React.memo(({ router, width, height, label }: props) =>
             contentStyle={{ backgroundColor: 'white' }}
             anchor={
               <TouchableOpacity onPress={() => setVisible((prev) => prev == false && true)}>
-                <Icon color="white" size={40} source={'menu'} />
+                <Icon color="white" size={45} source={'menu'} />
               </TouchableOpacity>
             }>
             <Menu.Item
@@ -113,8 +113,8 @@ const DashboardContent = React.memo(({ router, width, height, label }: props) =>
               onPress={() => {
                 if (userInfo?.status == 'active') {
                   setIsCallSupspend(true)
-                  setVisible(false)
                 }
+                setVisible(false)
               }}
               title={userInfo?.status == 'active' ? 'block' : 'unblock'}
             />

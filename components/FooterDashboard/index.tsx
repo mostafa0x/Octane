@@ -30,11 +30,11 @@ function FooterDashboard({ pathName, height, router }: props) {
             backgroundColor: '#ffffff',
           }
         }
-        onPress={() => pathName !== '/Dashboard' && router.push('/Dashboard')}>
-        <Icon size={50} source={'home'} />
+        onPress={() => pathName !== '/Dashboard' && router.replace('/Dashboard')}>
+        <Icon size={50} source={'account-outline'} />
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => pathName !== '/Dashboard/Reports' && router.push('/Dashboard/Reports')}
+        onPress={() => pathName !== '/Dashboard/Reports' && router.replace('/Dashboard/Reports')}
         style={
           pathName == '/Dashboard/Reports' && {
             borderRadius: 25,
@@ -42,11 +42,11 @@ function FooterDashboard({ pathName, height, router }: props) {
             backgroundColor: '#ffffff',
           }
         }>
-        <Icon size={50} source={'tab-search'} />
+        <Icon size={50} source={'file-find-outline'} />
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() =>
-          pathName !== '/Dashboard/UploadCompanys' && router.push('/Dashboard/UploadCompanys')
+          pathName !== '/Dashboard/UploadCompanys' && router.replace('/Dashboard/UploadCompanys')
         }
         style={
           pathName == '/Dashboard/UploadCompanys' && {
@@ -55,7 +55,7 @@ function FooterDashboard({ pathName, height, router }: props) {
             backgroundColor: '#ffffff',
           }
         }>
-        <Icon size={50} source={'developer-board'} />
+        <Icon size={50} source={'file-upload-outline'} />
       </TouchableOpacity>
     </View>
   )

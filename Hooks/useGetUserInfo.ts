@@ -16,6 +16,7 @@ export default function useGetUserInfo(userID: number) {
     queryKey: ['userInfo', userID],
     queryFn: handleGetUserInfo,
     enabled: !!userID,
+    staleTime: 30000,
   })
 
   return UserInfo

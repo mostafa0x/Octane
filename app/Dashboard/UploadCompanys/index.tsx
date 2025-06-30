@@ -138,7 +138,7 @@ export default function UploadCompanys() {
             onPress={pickExcelFile}
             disabled={uploading}
             style={{
-              backgroundColor: '#0068FF',
+              backgroundColor: '#8d1c47',
               paddingVertical: height * 0.014,
               paddingHorizontal: width * 0.25,
               borderRadius: 10,
@@ -211,7 +211,7 @@ export default function UploadCompanys() {
                   width: '100%',
                   textAlign: 'center',
                   fontWeight: '300',
-                  fontSize: width * 0.032,
+                  fontSize: width * 0.034,
                 }}>
                 The uploaded file will update the existing companies' data. Please make sure all
                 information is correct before proceeding,{' '}
@@ -221,7 +221,7 @@ export default function UploadCompanys() {
                     textAlign: 'center',
                     fontWeight: 'bold',
                     color: 'orange',
-                    fontSize: width * 0.032,
+                    fontSize: width * 0.034,
                   }}>
                   as the current data will be overwritten.
                 </Text>
