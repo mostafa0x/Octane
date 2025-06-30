@@ -39,7 +39,11 @@ function ListCard({ acknowledgments_Current, height, width, type, emptyTXT }: pr
         contentContainerStyle={{ paddingBottom: height * 0.02 }}
         renderItem={({ item }) => <ItemCard item={item} />}
         ListEmptyComponent={() => (
-          <View style={{ marginTop: height * 0.05, alignItems: 'center' }}>
+          <View
+            style={{
+              marginTop: type === 'Reports' ? height * 0.4 : height * 0.05,
+              alignItems: 'center',
+            }}>
             <Text
               style={{
                 fontSize: type == 'Home' ? width * 0.048 : width * 0.034,

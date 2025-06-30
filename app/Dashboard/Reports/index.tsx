@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react'
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
 import ListCard from 'components/List/ListCard'
 import { acknowledgmentsFace } from 'Types/Store/MainSliceFace'
+import useReports from 'Hooks/useReports'
 
 export default function Reposts() {
   const { width, height } = useWindowDimensions()
@@ -25,6 +26,7 @@ export default function Reposts() {
   const [isToVisible, setToVisible] = useState(false)
   const [currData, setCurrData] = useState<acknowledgmentsFace[]>([])
   const [emptyTXT, setEmptyTXT] = useState('')
+  const { data, isLoading, isError, refetch } = useReports(fromDate, toDate)
 
   const formatDate = (date: Date) => date.toISOString().split('T')[0]
 
@@ -63,7 +65,7 @@ export default function Reposts() {
           <View style={{ padding: 10 }}>
             <Text
               style={{ fontWeight: 'bold', marginBottom: height * 0.008, fontSize: width * 0.042 }}>
-              View Report :
+              Fillter Report :
             </Text>
             <View
               style={{ flexDirection: 'row', justifyContent: 'space-around', width: width * 0.9 }}>
