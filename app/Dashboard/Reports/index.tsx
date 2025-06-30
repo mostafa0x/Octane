@@ -16,6 +16,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker'
 import ListCard from 'components/List/ListCard'
 import { acknowledgmentsFace } from 'Types/Store/MainSliceFace'
 import useReports from 'Hooks/useReports'
+import axiosClient from 'lib/api/axiosClient'
 
 export default function Reposts() {
   const { width, height } = useWindowDimensions()
@@ -26,15 +27,50 @@ export default function Reposts() {
   const [isToVisible, setToVisible] = useState(false)
   const [currData, setCurrData] = useState<acknowledgmentsFace[]>([])
   const [emptyTXT, setEmptyTXT] = useState('')
-  const { data, isLoading, isError, refetch } = useReports(fromDate, toDate)
+  const { data, isLoading, isError, error, refetch, isFetching } = useReports(fromDate, toDate)
+  const [isLoadingRes, setIsLoadingRes] = useState(false)
+  const [isErrorRes, setIsErrorRes] = useState<string | null>(null)
 
   const formatDate = (date: Date) => date.toISOString().split('T')[0]
 
+  async function handleExportReports() {
+    if (isLoadingRes && !fromDate && !toDate) return
+    if (fromDate && toDate) {
+      setIsErrorRes(null)
+      setIsLoadingRes(true)
+      try {
+        const res = await axiosClient.get(
+          `/admin/report/export?start=${formatDate(fromDate)}&end=${formatDate(toDate)}`
+        )
+        const data = res.data
+        console.log(data)
+      } catch (err: any) {
+        setIsErrorRes(err.response?.data?.message ?? err.message ?? 'Error Export')
+
+        throw err
+      } finally {
+        setIsLoadingRes(false)
+      }
+    }
+  }
+  useEffect(() => {
+    if (data) {
+      setCurrData(data.acknowledgments)
+    }
+    return () => {
+      setCurrData([])
+    }
+  }, [data])
+
   useEffect(() => {
     if (!fromDate || !toDate) {
-      setEmptyTXT('select frist')
+      return setEmptyTXT('Specify the time period')
+    } else if (!data) {
+      return setEmptyTXT('A problem occurred')
+    } else if (data && data.acknowledgments.length <= 0) {
+      return setEmptyTXT('There are no results from this period.')
     }
-  }, [toDate, fromDate])
+  }, [toDate, fromDate, data])
   return (
     <Animatable.View animation="fadeIn" duration={100} style={{ flex: 1 }}>
       <View style={{ position: 'absolute', top: 0, width: '100%' }}>
@@ -79,26 +115,64 @@ export default function Reposts() {
             </View>
             <View
               style={{
-                marginTop: height * 0.01,
+                marginTop: height * 0.03,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Button
-                style={{ width: width * 0.4 }}
-                mode="contained"
-                onPress={() => setToVisible(true)}>
-                Show
-              </Button>
+              {toDate && fromDate && (
+                <Button
+                  loading={isLoading || isFetching}
+                  buttonColor="#8d1c47"
+                  style={{ width: width * 0.4 }}
+                  mode="contained"
+                  onPress={() => toDate && fromDate && refetch()}>
+                  {isLoading ? 'Loading...' : 'Search'}
+                </Button>
+              )}
             </View>
-            <View>
-              <ListCard
-                type="Reports"
-                acknowledgments_Current={currData ?? []}
-                height={width}
-                width={height}
-                emptyTXT={emptyTXT}
-              />
-            </View>
+            {isError ? (
+              <View
+                style={{ alignItems: 'center', justifyContent: 'center', marginTop: height * 0.1 }}>
+                <Text>{error.message}</Text>
+              </View>
+            ) : isLoading ? (
+              <View
+                style={{ alignItems: 'center', justifyContent: 'center', marginTop: height * 0.1 }}>
+                <ActivityIndicator size={100} />
+              </View>
+            ) : (
+              <View
+                style={{
+                  marginTop: height * 0.02,
+                  borderWidth: 1,
+                  borderRadius: 20,
+                  padding: 20,
+                  paddingVertical: 0,
+                  borderColor: 'grey',
+                }}>
+                <ListCard
+                  type="Reports"
+                  acknowledgments_Current={currData ?? []}
+                  height={width}
+                  width={height}
+                  emptyTXT={emptyTXT}
+                />
+              </View>
+            )}
+            {data?.acknowledgments?.length > 0 && (
+              <View style={{ alignItems: 'center', marginTop: height * 0.02 }}>
+                <Button
+                  onPress={() => handleExportReports()}
+                  style={{ width: width * 0.4 }}
+                  loading={isLoadingRes}
+                  disabled={isLoading}
+                  textColor="white"
+                  buttonColor="#a33307">
+                  Export
+                </Button>
+              </View>
+            )}
+
             <DateTimePickerModal
               isVisible={isFromVisible}
               mode="date"

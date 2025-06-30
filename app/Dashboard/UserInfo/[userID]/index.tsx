@@ -52,6 +52,7 @@ export default function UserInfo() {
   useEffect(() => {
     if (data) {
       setCurrData(data.acknowledgments)
+      handleActive('daily')
     }
 
     return () => {
