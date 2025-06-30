@@ -30,6 +30,7 @@ import { Image } from 'expo-image'
 import AppBar from 'components/App Bar'
 import { debounce } from 'lodash'
 import { CompanyFace } from 'Types/ItemList'
+import SearchCompanyModal from 'components/Models/SearchCompanyModal'
 
 export default function Upload() {
   const backImg = useRef(require('../../assets/backn.png'))
@@ -234,6 +235,7 @@ export default function Upload() {
             </View>
 
             <ShowConfirmModal
+              currCompany={currCompany}
               showConfirmModal={showConfirmModal}
               setShowConfirmModal={setShowConfirmModal}
               formik={formik}
@@ -251,7 +253,7 @@ export default function Upload() {
           </View>
         </View>
       </Animatable.View>
-      <Modal
+      {/* <Modal
         visible={isShowSerachCompany}
         onDismiss={() => setIsShowSerachCompany(false)}
         transparent
@@ -307,7 +309,22 @@ export default function Upload() {
             </View>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
+      <SearchCompanyModal
+        isShowSerachCompany={isShowSerachCompany}
+        setIsShowSerachCompany={setIsShowSerachCompany}
+        searchBoxRef={searchBoxRef}
+        searchQuery={searchQuery}
+        handleSerach={handleSerach}
+        handleClear={handleClear}
+        height={height}
+        width={width}
+        currentcompanys={currentcompanys}
+        formik={formik}
+        SelectCompanyID={SelectCompanyID}
+        selectCompany={selectCompany}
+        getFontSize={getFontSize}
+      />
     </KeyboardAvoidingView>
   )
 }

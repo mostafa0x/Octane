@@ -1,6 +1,7 @@
 import { View, Text, Modal, StyleSheet, BackHandler } from 'react-native'
 import React, { memo, useEffect } from 'react'
 import { ActivityIndicator, Button, HelperText, Icon } from 'react-native-paper'
+import { CompanyFace } from 'Types/ItemList'
 
 interface props {
   showConfirmModal: boolean
@@ -10,6 +11,7 @@ interface props {
   isLoadingRes: boolean
   width: number
   height: number
+  currCompany: CompanyFace | null
 }
 
 function ShowConfirmModal_Modle({
@@ -20,6 +22,7 @@ function ShowConfirmModal_Modle({
   isLoadingRes,
   width,
   height,
+  currCompany,
 }: props) {
   useEffect(() => {
     const backAction = () => {
@@ -72,13 +75,23 @@ function ShowConfirmModal_Modle({
           ) : (
             <View style={{ gap: 24, marginTop: height * 0.04 }}>
               <Text>
-                📦 Company ID:{'  '}
+                📦 Company Name:{'  '}
+                <Text
+                  style={{
+                    fontSize: width * 0.032,
+                    fontWeight: 'bold',
+                  }}>
+                  {currCompany?.name}
+                </Text>
+              </Text>
+              <Text>
+                📦 Company Code:{'  '}
                 <Text
                   style={{
                     fontSize: width * 0.044,
                     fontWeight: 'bold',
                   }}>
-                  {formik.values.company_id}
+                  {currCompany?.code}
                 </Text>
               </Text>
               <Text>
@@ -118,7 +131,7 @@ function ShowConfirmModal_Modle({
                     fontSize: width * 0.044,
                     fontWeight: 'bold',
                   }}>
-                  {formik.values.cards_submitted}
+                  {parseInt(formik.values.cards_submitted)}
                 </Text>
               </Text>
             </View>

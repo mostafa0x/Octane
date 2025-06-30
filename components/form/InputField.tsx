@@ -39,7 +39,9 @@ const InputField = memo(({ label, name, formik, errorMes }: Props) => {
           onSubmitEditing={() => isPassword && formik.handleSubmit()}
           onChangeText={formik.handleChange(name)}
           onBlur={() => formik.handleBlur(name)}
-          value={formik.values?.[name]?.toString()}
+          value={
+            isNumberField ? parseInt(formik.values?.[name]) : formik.values?.[name]?.toString()
+          }
           style={styles.input}
           placeholder={isNumberField ? '0' : label}
           secureTextEntry={isPassword && !showPassword}
