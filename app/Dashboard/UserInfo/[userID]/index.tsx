@@ -1,6 +1,13 @@
-import { View, Text, TouchableOpacity, ActivityIndicator, useWindowDimensions } from 'react-native'
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  useWindowDimensions,
+  Modal,
+} from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
-import { Avatar, Button } from 'react-native-paper'
+import { Avatar, Button, Icon } from 'react-native-paper'
 const backImg = require('../../../../assets/backn.png')
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
@@ -17,9 +24,10 @@ import ListButtonHistory from 'components/List Button History'
 const avatarIcon = require('../../../../assets/avatar.png')
 import dayjs from 'dayjs'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
+import { useUserInfoContext } from 'Providers/UserInfo'
 dayjs.extend(isSameOrAfter)
 
-interface UserInfoFace {
+export interface UserInfoFace {
   acknowledgments: acknowledgmentsFace[]
   allocated: number
   submitted: number
@@ -39,12 +47,11 @@ export default function UserInfo() {
   const { userID, userName, userImage } = useLocalSearchParams()
   const [errorRes, setErrorRes] = useState<string | null>(null)
   const [isLoadingRes, setIsLoadingRes] = useState(false)
-  const [succusRes, setSuccusRes] = useState<string | null>(null)
   const dispatch = useDispatch()
-  const [value, setValue] = React.useState('')
   const currUserID = isArray(userID) ? parseInt(userID[0]) : parseInt(userID)
   const [activeList, setActiveList] = useState('daily')
   const [currData, setCurrData] = useState<acknowledgmentsFace[]>([])
+  const { setUserInfo, isCallSupspend, setIsCallSupspend } = useUserInfoContext()
   const { data, isLoading, isError, error, refetch }: UseQueryResult<UserInfoFace> = useGetUserInfo(
     isArray(userID) ? parseInt(userID[0]) : parseInt(userID)
   )
@@ -52,6 +59,7 @@ export default function UserInfo() {
   useEffect(() => {
     if (data) {
       setCurrData(data.acknowledgments)
+      setUserInfo(data)
       handleActive('daily')
     }
 
@@ -100,19 +108,31 @@ export default function UserInfo() {
 
   const handleSuspendUser = useCallback(async () => {
     if (isLoadingRes) return
+    setIsCallSupspend(false)
     setIsLoadingRes(true)
     setErrorRes(null)
     try {
       const res = await axiosClient.post(`/admin/users/suspend/${currUserID}`)
       await refetch()
+      alert(res.data.message)
       console.log(res.data)
     } catch (err: any) {
       setErrorRes(err.response?.data?.message ?? err.message ?? 'Error Suspend User!')
+      alert(err.response?.data?.message ?? err.message ?? 'Error Suspend User!')
       throw err
     } finally {
       setIsLoadingRes(false)
     }
   }, [currUserID])
+
+  useEffect(() => {
+    if (isCallSupspend) {
+      handleSuspendUser()
+    }
+    return () => {
+      setIsCallSupspend(false)
+    }
+  }, [isCallSupspend])
 
   return (
     <Animatable.View animation="fadeIn" duration={100} style={{ flex: 1 }}>
@@ -123,38 +143,7 @@ export default function UserInfo() {
           source={backImg}
         />
       </View>
-      {data && (
-        <View
-          style={{
-            gap: 10,
-            alignItems: 'center',
-            position: 'absolute',
-            top: height * 0.18,
-            left: width * 0.6,
-            zIndex: 10,
-          }}>
-          <Button
-            loading={isLoadingRes}
-            onPress={() => {
-              if (data?.status == 'active') {
-                handleSuspendUser()
-              }
-            }}
-            textColor="white"
-            icon={'block-helper'}
-            buttonColor={data?.status == 'active' ? 'red' : '#000000'}
-            style={{
-              width: width * 0.2,
-              height: height * 0.04,
-              borderRadius: 100,
-              marginLeft: width * 0.1,
-            }}
-            contentStyle={{ height: height * 0.04 }}
-            labelStyle={{ fontSize: width * 0.028 }}>
-            {data?.status == 'active' ? 'block ' : 'unblock'}
-          </Button>
-        </View>
-      )}
+
       <View style={{ width: '100%', height: height * 0.15, zIndex: -1 }}>
         <Image source={backImg} contentFit="fill" style={{ width: '100%', height: '100%' }} />
       </View>
@@ -164,7 +153,7 @@ export default function UserInfo() {
           top: height * 0.06,
           left: (width - width * 0.3) / 2,
           zIndex: 10,
-          gap: 10,
+          gap: 5,
         }}>
         <TouchableOpacity activeOpacity={0.8}>
           <Avatar.Image
@@ -178,7 +167,13 @@ export default function UserInfo() {
             size={width * 0.3}
           />
         </TouchableOpacity>
-        <Text style={{ textAlign: 'center', fontSize: width * 0.046 }}>{userName}</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+          <Text style={{ textAlign: 'center', fontSize: width * 0.046 }}>{userName}</Text>
+
+          {data?.status === 'active' ? null : (
+            <Icon size={30} color="red" source={'block-helper'} />
+          )}
+        </View>
       </View>
       <View
         style={{
@@ -220,6 +215,21 @@ export default function UserInfo() {
           </View>
         )}
       </View>
+      <Modal
+        animationType="fade"
+        transparent
+        visible={isLoadingRes}
+        onDismiss={() => isLoadingRes === false}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'rgba(0,0,0,0.7)',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <ActivityIndicator size={120} />
+        </View>
+      </Modal>
     </Animatable.View>
   )
 }

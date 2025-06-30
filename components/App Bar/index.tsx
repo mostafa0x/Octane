@@ -1,9 +1,10 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import React, { memo, useRef } from 'react'
+import React, { memo, useRef, useState } from 'react'
 import { Image } from 'expo-image'
 import { Router } from 'expo-router'
 import { userDataFace } from 'Types/Store/UserSliceFace'
-import { Button, Divider, Icon, Menu } from 'react-native-paper'
+import { ActivityIndicator, Button, Divider, Icon, Menu } from 'react-native-paper'
+import { useUserInfoContext } from 'Providers/UserInfo'
 
 interface props {
   sectionPadding?: number
@@ -69,7 +70,7 @@ const ProfileContent = React.memo(({ router, width }: props) => {
 })
 const DashboardContent = React.memo(({ router, width, height, label }: props) => {
   const [visible, setVisible] = React.useState(false)
-
+  const { userInfo, setIsCallSupspend, isCallSupspend } = useUserInfoContext()
   return (
     <>
       <TouchableOpacity
@@ -89,18 +90,33 @@ const DashboardContent = React.memo(({ router, width, height, label }: props) =>
           style={{ position: 'absolute', left: width * 0.88, top: height * 0.007, zIndex: 10 }}>
           <Menu
             visible={visible}
-            onDismiss={() => setVisible((curr) => curr == true && false)}
+            onDismiss={() => setVisible((prev) => prev == true && false)}
             style={{ marginTop: height * 0.043 }}
+            contentStyle={{ backgroundColor: 'white' }}
             anchor={
-              <TouchableOpacity onPress={() => setVisible((curr) => curr == false && true)}>
+              <TouchableOpacity onPress={() => setVisible((prev) => prev == false && true)}>
                 <Icon color="white" size={40} source={'menu'} />
               </TouchableOpacity>
             }>
             <Menu.Item
-              style={{ width: width * 0.2, height: height * 0.03 }}
-              leadingIcon={'block-helper'}
-              onPress={() => {}}
-              title="block"
+              style={{ width: width * 0.1, height: height * 0.03 }}
+              titleStyle={{ color: 'black', fontSize: width * 0.032 }}
+              leadingIcon={() => (
+                <Icon
+                  source={
+                    userInfo?.status === 'suspend' ? 'block-helper' : 'shield-account-outline'
+                  }
+                  size={26}
+                  color="black"
+                />
+              )}
+              onPress={() => {
+                if (userInfo?.status == 'active') {
+                  setIsCallSupspend(true)
+                  setVisible(false)
+                }
+              }}
+              title={userInfo?.status == 'active' ? 'block' : 'unblock'}
             />
           </Menu>
         </TouchableOpacity>
