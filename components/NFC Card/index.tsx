@@ -36,14 +36,14 @@ function NfcCard({ submitted, allocated, height, width }: props) {
           thickness={4.25}
         />
 
-        <View style={{ position: 'absolute', top: 12 }}>
+        <View style={{ position: 'absolute', top: height * 0.012 }}>
           <Icon source={nfcIcon} color="white" size={progressSize.current} />
         </View>
         <Text
           style={{
             color: '#bdcdce',
-            marginTop: 8,
-            fontSize: 18,
+            marginTop: height * 0.008,
+            fontSize: width * 0.038,
             width: width * 0.3,
             textAlign: 'center',
           }}>
@@ -57,16 +57,26 @@ function NfcCard({ submitted, allocated, height, width }: props) {
           height: height * 0.15,
           borderRadius: 50,
         }}></View>
-      <View style={{ flex: 1, justifyContent: 'space-between', paddingLeft: 50 }}>
+      <View style={{ flex: 1, justifyContent: 'space-between', paddingLeft: width * 0.05 }}>
         <View style={{ alignItems: 'center', flexDirection: 'row' }}>
           <Icon size={50} color="#bdcdce" source={nfcIcon} />
           <View style={{ alignItems: 'center', gap: 5 }}>
             <Text
-              style={{ color: '#bdcdce', width: width * 0.2, fontSize: 15, textAlign: 'center' }}>
+              style={{
+                color: '#bdcdce',
+                width: width * 0.2,
+                fontSize: width * 0.028,
+                textAlign: 'center',
+              }}>
               Allocated
             </Text>
             <Text
-              style={{ fontSize: 18, color: '#f7f7f7', fontWeight: 'bold', textAlign: 'center' }}>
+              style={{
+                fontSize: width * 0.032,
+                color: '#f7f7f7',
+                fontWeight: 'bold',
+                textAlign: 'center',
+              }}>
               {allocated}
             </Text>
           </View>
@@ -82,7 +92,12 @@ function NfcCard({ submitted, allocated, height, width }: props) {
           <Icon size={50} color="#5c9dff" source={nfcIcon} />
           <View style={{ alignItems: 'center', gap: 5 }}>
             <Text
-              style={{ color: '#bdcdce', width: width * 0.2, fontSize: 15, textAlign: 'center' }}>
+              style={{
+                color: '#bdcdce',
+                width: width * 0.2,
+                fontSize: width * 0.028,
+                textAlign: 'center',
+              }}>
               Submitted
             </Text>
             <Text

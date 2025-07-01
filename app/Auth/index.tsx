@@ -53,13 +53,13 @@ export default function Auth() {
               buttonColor={authMode == 1 ? 'white' : ''}
               style={{ flex: 1, borderRadius: 20 }}
               contentStyle={{
-                height: 56,
+                height: height * 0.058,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
               labelStyle={{
                 color: authMode == 1 ? '#232447' : '#7D7D91',
-                fontSize: 14,
+                fontSize: width * 0.028,
                 textAlign: 'center',
               }}>
               Log In
@@ -71,13 +71,13 @@ export default function Auth() {
               buttonColor={authMode == 2 ? 'white' : ''}
               style={{ flex: 1, borderRadius: 20 }}
               contentStyle={{
-                height: 56,
+                height: height * 0.058,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
               labelStyle={{
                 color: authMode == 2 ? '#232447' : '#7D7D91',
-                fontSize: 14,
+                fontSize: width * 0.028,
                 textAlign: 'center',
               }}>
               Sign Up

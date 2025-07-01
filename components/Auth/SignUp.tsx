@@ -61,11 +61,11 @@ export default function SignUp({ setIsLoadingRes }: any) {
       keyboardShouldPersistTaps="handled"
       contentContainerStyle={{
         flexGrow: 1,
-        paddingHorizontal: 20,
-        paddingVertical: 40,
+        paddingHorizontal: width * 0.02,
+        paddingVertical: height ** 0.4,
       }}>
       <Animatable.View className="flex-1" animation="fadeIn" duration={400} easing="ease-in-out">
-        <View style={{ marginBottom: 40 }}>
+        <View style={{ marginBottom: height * 0.03 }}>
           <InputField label={'Username'} name={'name'} formik={formik} errorMes={errorMes} />
           <InputField label={'Email'} name={'email'} formik={formik} errorMes={errorMes} />
           <InputField label={'Password'} name={'password'} formik={formik} errorMes={errorMes} />

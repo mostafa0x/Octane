@@ -104,9 +104,7 @@ const DashboardContent = React.memo(({ router, width, height, label }: props) =>
               titleStyle={{ color: 'black', fontSize: width * 0.032 }}
               leadingIcon={() => (
                 <Icon
-                  source={
-                    userInfo?.status === 'suspend' ? 'block-helper' : 'shield-account-outline'
-                  }
+                  source={userInfo?.status === 'active' ? 'block-helper' : 'shield-account-outline'}
                   size={26}
                   color="black"
                 />
