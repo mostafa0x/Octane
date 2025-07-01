@@ -21,14 +21,14 @@ const HomeContent = React.memo(({ router, userData, width, height }: props) => {
     <>
       <TouchableOpacity
         onPress={() => router.push('/Profile')}
-        style={{ position: 'absolute', left: 10, top: height * 0.002, zIndex: 10 }}>
+        style={{ position: 'absolute', left: width * 0.01, top: height * 0.002, zIndex: 10 }}>
         <Image
           style={{ width: width * 0.08, height: height * 0.064 }}
           contentFit="cover"
           source={require('../../assets/LogowithoutTXT.png')}
         />
       </TouchableOpacity>
-      <View style={{ position: 'absolute', left: 60, top: 10, zIndex: 10 }}>
+      <View style={{ position: 'absolute', left: width * 0.1, top: height * 0.01, zIndex: 10 }}>
         <Text
           style={{
             color: '#F1FFF3',
@@ -53,17 +53,17 @@ const HomeContent = React.memo(({ router, userData, width, height }: props) => {
   )
 })
 
-const ProfileContent = React.memo(({ router, width }: props) => {
+const ProfileContent = React.memo(({ router, width, height }: props) => {
   return (
     <>
       <TouchableOpacity
         onPress={() => router.back()}
-        style={{ position: 'absolute', left: 10, top: 0, zIndex: 10 }}>
+        style={{ position: 'absolute', left: width * 0.01, top: 0, zIndex: 10 }}>
         <View style={{ marginTop: 8 }}>
           <Icon size={40} color="white" source="keyboard-backspace" />
         </View>
       </TouchableOpacity>
-      <View style={{ position: 'absolute', left: 60, top: 10, zIndex: 10 }}>
+      <View style={{ position: 'absolute', left: width * 0.1, top: height * 0.01, zIndex: 10 }}>
         <Text style={{ color: '#F1FFF3', fontSize: 24, width: width }}>Profile</Text>
       </View>
     </>
@@ -123,17 +123,17 @@ const DashboardContent = React.memo(({ router, width, height, label }: props) =>
     </>
   )
 })
-const UploadContent = React.memo(({ router, width }: props) => {
+const UploadContent = React.memo(({ router, width, height }: props) => {
   return (
     <>
       <TouchableOpacity
         onPress={() => router.back()}
-        style={{ position: 'absolute', left: 10, top: 0, zIndex: 10 }}>
+        style={{ position: 'absolute', left: width * 0.01, top: 0, zIndex: 10 }}>
         <View style={{ marginTop: 8 }}>
           <Icon size={40} color="white" source="keyboard-backspace" />
         </View>
       </TouchableOpacity>
-      <View style={{ position: 'absolute', left: 60, top: 10, zIndex: 10 }}>
+      <View style={{ position: 'absolute', left: width * 0.1, top: height * 0.01, zIndex: 10 }}>
         <Text style={{ color: '#F1FFF3', fontSize: 24, width: width * 1 }}>
           Upload acknowledgments
         </Text>

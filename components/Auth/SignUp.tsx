@@ -1,4 +1,12 @@
-import { View, ScrollView, useWindowDimensions } from 'react-native'
+import {
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native'
 import { useCallback, useState } from 'react'
 import InputField from 'components/form/InputField'
 import { ActivityIndicator, Button, HelperText } from 'react-native-paper'
@@ -10,9 +18,9 @@ import { API_BASE_URL } from 'config'
 import { useDispatch } from 'react-redux'
 import { SignUpvalidationSchema } from 'lib/Vaildtions/SignupSchema'
 import * as Animatable from 'react-native-animatable'
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 
 export default function SignUp({ setIsLoadingRes }: any) {
-  const { width, height } = useWindowDimensions()
   const [errorMes, setErrorMes] = useState<string | null>(null)
   const [isLoadingBtn, setIsLoadingBtn] = useState(false)
   const router = useRouter()
@@ -38,9 +46,9 @@ export default function SignUp({ setIsLoadingRes }: any) {
 
   const formik = useFormik({
     initialValues: {
-      name: 'sasa',
-      email: 'sasa@octane-tech.io',
-      password: '123456789',
+      name: '',
+      email: '',
+      password: '',
     },
     validationSchema: SignUpvalidationSchema,
     onSubmit: handleSignUp,
@@ -57,63 +65,87 @@ export default function SignUp({ setIsLoadingRes }: any) {
   )
 
   return (
-    <ScrollView
-      keyboardShouldPersistTaps="handled"
-      contentContainerStyle={{
-        flexGrow: 1,
-        paddingHorizontal: width * 0.02,
-        paddingVertical: height ** 0.4,
-      }}>
-      <Animatable.View className="flex-1" animation="fadeIn" duration={400} easing="ease-in-out">
-        <View style={{ marginBottom: height * 0.03 }}>
-          <InputField label={'Username'} name={'name'} formik={formik} errorMes={errorMes} />
-          <InputField label={'Email'} name={'email'} formik={formik} errorMes={errorMes} />
-          <InputField label={'Password'} name={'password'} formik={formik} errorMes={errorMes} />
-        </View>
-
-        <View style={{ alignItems: 'center' }}>
-          {isLoadingBtn ? (
-            <ActivityIndicator size={height * 0.05} />
-          ) : (
-            <Button
-              onPress={() => formik.handleSubmit()}
-              style={{
-                borderRadius: 20,
-                height: height * 0.06,
-                width: width * 0.5,
-                justifyContent: 'center',
-              }}
-              contentStyle={{
-                height: height * 0.09,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-              labelStyle={{
-                fontSize: height * 0.025,
-                height: height * 0.09,
-                textAlignVertical: 'center',
-              }}
-              textColor="#FFFFFF"
-              buttonColor="#8d1c47">
-              Sign Up
-            </Button>
-          )}
-        </View>
-
-        {errorMes && (
-          <View style={{ marginTop: 30, alignItems: 'center' }}>
-            <HelperText
-              style={{
-                fontSize: height * 0.022,
-                color: '#e03c3c',
-              }}
-              type="error"
-              visible={!!errorMes}>
-              {errorMes}
-            </HelperText>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <Animatable.View
+          style={styles.inner}
+          animation="fadeIn"
+          duration={400}
+          easing="ease-in-out">
+          <View style={styles.form}>
+            <InputField label="Username" name="name" formik={formik} errorMes={errorMes} />
+            <InputField label="Email" name="email" formik={formik} errorMes={errorMes} />
+            <InputField label="Password" name="password" formik={formik} errorMes={errorMes} />
           </View>
-        )}
-      </Animatable.View>
-    </ScrollView>
+
+          <View style={styles.buttonWrapper}>
+            {isLoadingBtn ? (
+              <ActivityIndicator size={verticalScale(30)} />
+            ) : (
+              <Button
+                onPress={() => formik.handleSubmit()}
+                style={styles.button}
+                contentStyle={styles.buttonContent}
+                labelStyle={styles.buttonLabel}
+                textColor="#FFFFFF"
+                buttonColor="#8d1c47">
+                Sign Up
+              </Button>
+            )}
+          </View>
+
+          {errorMes && (
+            <View style={styles.errorWrapper}>
+              <HelperText style={styles.errorText} type="error" visible={!!errorMes}>
+                {errorMes}
+              </HelperText>
+            </View>
+          )}
+        </Animatable.View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingHorizontal: scale(12),
+  },
+  inner: {
+    marginTop: verticalScale(20),
+    justifyContent: 'center',
+  },
+  form: {
+    marginBottom: verticalScale(5),
+  },
+  buttonWrapper: {
+    alignItems: 'center',
+    marginTop: verticalScale(2),
+  },
+  button: {
+    borderRadius: moderateScale(20),
+    height: verticalScale(45),
+    width: scale(180),
+    justifyContent: 'center',
+  },
+  buttonContent: {
+    height: verticalScale(50),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonLabel: {
+    fontSize: moderateScale(15),
+    textAlignVertical: 'center',
+  },
+  errorWrapper: {
+    marginTop: verticalScale(20),
+    alignItems: 'center',
+  },
+  errorText: {
+    fontSize: moderateScale(14),
+    color: '#e03c3c',
+  },
+})

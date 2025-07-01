@@ -1,5 +1,5 @@
-import { View, ScrollView, useWindowDimensions } from 'react-native'
-import { useCallback, useEffect, useState } from 'react'
+import { View, ScrollView } from 'react-native'
+import { useCallback, useState } from 'react'
 import InputField from 'components/form/InputField'
 import { ActivityIndicator, Button, HelperText } from 'react-native-paper'
 import { useFormik } from 'formik'
@@ -10,9 +10,9 @@ import { useFocusEffect, useRouter } from 'expo-router'
 import { API_BASE_URL } from 'config'
 import { useDispatch } from 'react-redux'
 import * as Animatable from 'react-native-animatable'
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 
 export default function SignIn({ setIsLoadingRes }: any) {
-  const { width, height } = useWindowDimensions()
   const [errorMes, setErrorMes] = useState<string | null>(null)
   const [isLoadingBtn, setIsLoadingBtn] = useState(false)
   const router = useRouter()
@@ -27,10 +27,8 @@ export default function SignIn({ setIsLoadingRes }: any) {
         const res = await axios.post(`${API_BASE_URL}/auth/login`, formValues)
         const data = res.data
         await storeUserInfo(data.token, data.user, router, dispatch)
-        // router.replace('/');
       } catch (err: any) {
         setIsLoadingBtn(false)
-
         setErrorMes(err.response?.data?.message ?? err.message ?? 'Error Login')
       } finally {
         setIsLoadingRes(false)
@@ -47,12 +45,6 @@ export default function SignIn({ setIsLoadingRes }: any) {
     onSubmit: handleLogin,
   })
 
-  // useEffect(() => {
-  //   router.push('/')
-
-  //   return () => {}
-  // }, [router])
-
   useFocusEffect(
     useCallback(() => {
       return () => {
@@ -68,35 +60,34 @@ export default function SignIn({ setIsLoadingRes }: any) {
       keyboardShouldPersistTaps="handled"
       contentContainerStyle={{
         flexGrow: 1,
-        paddingHorizontal: width * 0.02,
-        paddingVertical: height ** 0.4,
+        paddingHorizontal: scale(12),
+        paddingVertical: verticalScale(24),
       }}>
-      <Animatable.View className="flex-1" animation="fadeIn" duration={400} easing="ease-in-out">
-        <View style={{ marginBottom: height * 0.03 }}>
+      <Animatable.View style={{ flex: 1 }} animation="fadeIn" duration={400} easing="ease-in-out">
+        <View style={{ marginBottom: verticalScale(24) }}>
           <InputField label={'Email'} name={'email'} formik={formik} errorMes={errorMes} />
           <InputField label={'Password'} name={'password'} formik={formik} errorMes={errorMes} />
         </View>
 
         <View style={{ alignItems: 'center' }}>
           {isLoadingBtn ? (
-            <ActivityIndicator size={height * 0.05} />
+            <ActivityIndicator size={moderateScale(32)} />
           ) : (
             <Button
               onPress={() => formik.handleSubmit()}
               style={{
-                borderRadius: 20,
-                height: height * 0.07,
-                width: width * 0.5,
+                borderRadius: moderateScale(20),
+                height: verticalScale(48),
+                width: scale(160),
                 justifyContent: 'center',
               }}
               contentStyle={{
-                height: height * 0.09,
+                height: verticalScale(50),
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
               labelStyle={{
-                fontSize: height * 0.025,
-                height: height * 0.09,
+                fontSize: moderateScale(14),
                 textAlignVertical: 'center',
               }}
               textColor="#FFFFFF"
@@ -107,9 +98,9 @@ export default function SignIn({ setIsLoadingRes }: any) {
         </View>
 
         {errorMes && (
-          <View style={{ marginTop: height * 0.03, alignItems: 'center' }}>
+          <View style={{ marginTop: verticalScale(20), alignItems: 'center' }}>
             <HelperText
-              style={{ fontSize: height * 0.022, height: height * 0.032, color: '#e03c3c' }}
+              style={{ fontSize: moderateScale(12), color: '#e03c3c' }}
               type="error"
               visible={!!errorMes}>
               {errorMes}

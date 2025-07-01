@@ -52,9 +52,9 @@ function SearchCompany_Modal({
         <View
           style={{
             backgroundColor: 'white',
-            width: '90%',
-            height: height * 0.7,
-            padding: 20,
+            width: width * 0.9,
+            height: height * 0.72,
+            padding: width * 0.03,
             borderRadius: 20,
           }}>
           <View style={styles.searchContainer}>
