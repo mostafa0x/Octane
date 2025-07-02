@@ -109,12 +109,12 @@ export default function Profile() {
           borderTopLeftRadius: rw(25),
           borderTopRightRadius: rw(25),
           backgroundColor: 'white',
-          paddingTop: rh(12),
+          paddingTop: rh(10),
         }}>
-        <View style={{ alignItems: 'center', marginBottom: rh(5) }}>
+        <View style={{ alignItems: 'center', marginBottom: rh(10) }}>
           <Text
             style={{
-              fontSize: RFValue(24),
+              fontSize: RFValue(22),
               fontWeight: 'bold',
               width: '100%',
               textAlign: 'center',
@@ -136,7 +136,7 @@ export default function Profile() {
               }}>
               <Icon size={RFValue(30)} source="email-outline" />
             </View>
-            <Text style={{ fontSize: RFValue(14), width: '100%' }}>
+            <Text style={{ fontSize: RFValue(14), width: '100%', fontWeight: 'regular' }}>
               {userData?.email ?? 'loading email...'}
             </Text>
           </View>
@@ -160,7 +160,9 @@ export default function Profile() {
               )}
             </View>
             <View style={{ flexDirection: 'row' }}>
-              <Text style={{ fontSize: RFValue(14), width: rw(40) }}>Change Avatar</Text>
+              <Text style={{ fontSize: RFValue(14), width: rw(40), fontWeight: 'regular' }}>
+                Change Avatar
+              </Text>
               <HelperText
                 type="error"
                 visible={!!errorRes}
@@ -185,7 +187,9 @@ export default function Profile() {
                 }}>
                 <Icon size={RFValue(30)} source="monitor-dashboard" />
               </View>
-              <Text style={{ fontSize: RFValue(14), width: '100%' }}>Dashboard</Text>
+              <Text style={{ fontSize: RFValue(14), width: '100%', fontWeight: 'regular' }}>
+                Dashboard
+              </Text>
             </TouchableOpacity>
           )}
 
@@ -203,7 +207,9 @@ export default function Profile() {
               }}>
               <Icon size={RFValue(30)} source="logout" />
             </View>
-            <Text style={{ fontSize: RFValue(14), width: '100%' }}>Log Out</Text>
+            <Text style={{ fontSize: RFValue(14), width: '100%', fontWeight: 'regular' }}>
+              Log Out
+            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

@@ -20,12 +20,6 @@ const ItemCard = ({ item }: Props) => {
   const [visible, setIsVisible] = useState(false)
   const timeAgo = dayjs(item.submission_date).fromNow()
 
-  const fontSize = useMemo(() => {
-    if (item.delivery_method.length <= 15) return rf(1.6)
-    if (item.delivery_method.length <= 20) return rf(1.5)
-    return rf(1.4)
-  }, [item.delivery_method])
-
   const avatarSize = useRef(rw(12))
   const imgs = useMemo(() => [{ uri: item.image }], [item.image])
 
@@ -35,20 +29,26 @@ const ItemCard = ({ item }: Props) => {
         <Avatar.Image size={avatarSize.current} source={imgs} />
       </TouchableOpacity>
 
-      <View style={[styles.companyInfo, { width: rw(25) }]}>
-        <Text style={[styles.companyName, { fontSize: rf(1.8) }]}>{item.company.name}</Text>
-        <Text style={[styles.companyCode, { fontSize: rf(1.6) }]}>{item.company.code}</Text>
+      <View style={[styles.companyInfo, { width: rw(20) }]}>
+        <Text style={[styles.companyName, { fontSize: rf(1.5) }]}>{item.company.name}</Text>
+        <Text style={[styles.companyCode, { fontSize: rf(1.2) }]}>{item.company.code}</Text>
       </View>
 
       <View style={styles.separator} />
-      <View style={styles.cardsBox}>
-        <Text style={{ fontSize: rf(1.6), color: '#2d47bb' }}>{item.cards_submitted}</Text>
+      <View style={(styles.cardsBox, { width: rw(10) })}>
+        <Text style={{ fontSize: rf(1.6), color: '#2d47bb', textAlign: 'center' }}>
+          {item.cards_submitted}
+        </Text>
       </View>
 
       <View style={styles.separator} />
       <View style={styles.detailsBox}>
-        <Text style={[styles.deliveryMethod, { fontSize }]}>{item.delivery_method}</Text>
-        <Text style={[styles.stateTime, { fontSize: rf(1.6) }]}>{item.state_time}</Text>
+        <Text style={[styles.deliveryMethod, { fontSize: rf(1.5), fontWeight: 'regular' }]}>
+          {item.delivery_method}
+        </Text>
+        <Text style={[styles.stateTime, { fontSize: rf(1.4), fontWeight: 'regular' }]}>
+          {item.state_time}
+        </Text>
       </View>
     </View>
   )
