@@ -1,14 +1,6 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ActivityIndicator,
-  useWindowDimensions,
-  Modal,
-} from 'react-native'
+import { View, Text, TouchableOpacity, ActivityIndicator, Modal } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Avatar, Button, Icon } from 'react-native-paper'
-const backImg = require('../../../../assets/backn.png')
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
 import { useDispatch } from 'react-redux'
@@ -21,10 +13,17 @@ import NFCCardDashboard from 'components/NFC Card Dashboard'
 import ListCard from 'components/List/ListCard'
 import axiosClient from 'lib/api/axiosClient'
 import ListButtonHistory from 'components/List Button History'
-const avatarIcon = require('../../../../assets/avatar.png')
 import dayjs from 'dayjs'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import { useUserInfoContext } from 'Providers/UserInfo'
+import {
+  responsiveHeight as rh,
+  responsiveWidth as rw,
+  responsiveFontSize as rf,
+} from 'react-native-responsive-dimensions'
+
+const avatarIcon = require('../../../../assets/avatar.png')
+const backImg = require('../../../../assets/backn.png')
 dayjs.extend(isSameOrAfter)
 
 export interface UserInfoFace {
@@ -43,7 +42,7 @@ const ErrorFC = ({ error }: { error: Error }) => {
 }
 
 export default function UserInfo() {
-  const { width, height } = useWindowDimensions()
+  const { width, height } = { width: rw(100), height: rh(100) }
   const { userID, userName, userImage } = useLocalSearchParams()
   const [errorRes, setErrorRes] = useState<string | null>(null)
   const [isLoadingRes, setIsLoadingRes] = useState(false)
@@ -52,9 +51,8 @@ export default function UserInfo() {
   const [activeList, setActiveList] = useState('daily')
   const [currData, setCurrData] = useState<acknowledgmentsFace[]>([])
   const { setUserInfo, isCallSupspend, setIsCallSupspend } = useUserInfoContext()
-  const { data, isLoading, isError, error, refetch }: UseQueryResult<UserInfoFace> = useGetUserInfo(
-    isArray(userID) ? parseInt(userID[0]) : parseInt(userID)
-  )
+  const { data, isLoading, isError, error, refetch }: UseQueryResult<UserInfoFace> =
+    useGetUserInfo(currUserID)
 
   useEffect(() => {
     if (data) {
@@ -62,45 +60,35 @@ export default function UserInfo() {
       setUserInfo(data)
       handleActive('daily')
     }
-
-    return () => {
-      setCurrData([])
-    }
+    return () => setCurrData([])
   }, [data])
 
   const handleActive = useCallback(
     (period: string) => {
       const nameLower = period.toLowerCase()
       setActiveList(nameLower)
-
       if (!data?.acknowledgments) return
-
       const now = dayjs()
       let filteredData: acknowledgmentsFace[] = []
-
       switch (nameLower) {
         case 'daily':
-          filteredData = data.acknowledgments.filter((item) => {
+          filteredData = data.acknowledgments.filter((item) =>
             dayjs(item.submission_date).isSame(now, 'day')
-          })
+          )
           break
-
         case 'weekly':
           filteredData = data.acknowledgments.filter((item) =>
             dayjs(item.submission_date).isSame(now, 'week')
           )
           break
-
         case 'monthly':
           filteredData = data.acknowledgments.filter((item) =>
             dayjs(item.submission_date).isSame(now, 'month')
           )
           break
-
         default:
           filteredData = data.acknowledgments
       }
-
       setCurrData(filteredData)
     },
     [data?.acknowledgments]
@@ -115,11 +103,9 @@ export default function UserInfo() {
       const res = await axiosClient.post(`/admin/users/suspend/${currUserID}`)
       await refetch()
       alert(res.data.message)
-      console.log(res.data)
     } catch (err: any) {
       setErrorRes(err.response?.data?.message ?? err.message ?? 'Error Suspend User!')
       alert(err.response?.data?.message ?? err.message ?? 'Error Suspend User!')
-      throw err
     } finally {
       setIsLoadingRes(false)
     }
@@ -129,71 +115,57 @@ export default function UserInfo() {
     if (isCallSupspend) {
       handleSuspendUser()
     }
-    return () => {
-      setIsCallSupspend(false)
-    }
+    return () => setIsCallSupspend(false)
   }, [isCallSupspend])
 
   return (
     <Animatable.View animation="fadeIn" duration={100} style={{ flex: 1 }}>
-      <View style={{ position: 'absolute', top: height * 0.1, width: '100%' }}>
-        <Image
-          style={{ width: '100%', height: height * 0.25 }}
-          contentFit="fill"
-          source={backImg}
-        />
+      <View style={{ position: 'absolute', top: rh(10), width: '100%' }}>
+        <Image style={{ width: '100%', height: rh(25) }} contentFit="fill" source={backImg} />
       </View>
 
-      <View style={{ width: '100%', height: height * 0.15, zIndex: -1 }}>
+      <View style={{ width: '100%', height: rh(15), zIndex: -1 }}>
         <Image source={backImg} contentFit="fill" style={{ width: '100%', height: '100%' }} />
       </View>
+
       <View
         style={{
           position: 'absolute',
-          top: height * 0.06,
-          left: (width - width * 0.3) / 2,
+          top: rh(6),
+          left: rw(35),
           zIndex: 10,
           gap: 5,
         }}>
         <TouchableOpacity activeOpacity={0.8}>
-          <Avatar.Image
-            source={
-              userImage
-                ? {
-                    uri: userImage,
-                  }
-                : avatarIcon
-            }
-            size={width * 0.3}
-          />
+          <Avatar.Image source={userImage ? { uri: userImage } : avatarIcon} size={rw(30)} />
         </TouchableOpacity>
         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-          <Text style={{ textAlign: 'center', fontSize: width * 0.046 }}>{userName}</Text>
-
+          <Text style={{ textAlign: 'center', fontSize: rf(2.1) }}>{userName}</Text>
           {data?.status === 'active' ? null : (
             <>
               <Text>{'  '}</Text>
-              <Icon size={30} color="red" source={'block-helper'} />
+              <Icon size={rf(3)} color="red" source={'block-helper'} />
             </>
           )}
         </View>
       </View>
+
       <View
         style={{
           flex: 1,
           borderTopLeftRadius: 100,
           borderTopRightRadius: 100,
           backgroundColor: 'white',
-          paddingHorizontal: width * 0.05,
+          paddingHorizontal: rw(5),
         }}>
         {isError ? (
           <ErrorFC error={error} />
         ) : isLoading ? (
-          <View style={{ marginTop: height * 0.2 }}>
+          <View style={{ marginTop: rh(20) }}>
             <ActivityIndicator size={70} />
           </View>
         ) : (
-          <View style={{ marginVertical: height * 0.1, gap: 20 }}>
+          <View style={{ marginVertical: rh(10), gap: rh(0.5) }}>
             <NFCCardDashboard
               submitted={data?.submitted ?? 0}
               allocated={data?.allocated ?? 0}
@@ -202,22 +174,12 @@ export default function UserInfo() {
               userID={currUserID}
               refetch={refetch}
             />
-            <ListButtonHistory
-              activeList={activeList}
-              searchHeight={height * 0.07}
-              cardWidth={width * 0.9}
-              handleActive={handleActive}
-            />
-
-            <ListCard
-              type="Dashboard"
-              acknowledgments_Current={currData ?? []}
-              height={width}
-              width={height}
-            />
+            <ListButtonHistory activeList={activeList} handleActive={handleActive} />
+            <ListCard type="Dashboard" acknowledgments_Current={currData ?? []} />
           </View>
         )}
       </View>
+
       <Modal
         animationType="fade"
         transparent

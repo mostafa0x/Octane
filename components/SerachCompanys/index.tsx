@@ -4,7 +4,11 @@ import * as Animatable from 'react-native-animatable'
 import { FlashList } from '@shopify/flash-list'
 import { CompanyFace } from 'Types/ItemList'
 import ItemCard_CS from './ItemCard'
-import { HelperText, Searchbar } from 'react-native-paper'
+import {
+  responsiveHeight as rh,
+  responsiveWidth as rw,
+  responsiveFontSize as rf,
+} from 'react-native-responsive-dimensions'
 
 type AnimatableView = Animatable.View
 
@@ -28,7 +32,6 @@ const SerachCompanys = ({
   setIsShowSerachCompany,
 }: Props) => {
   const animRef = useRef<AnimatableView>(null)
-  const styles = createStyles(height, width)
 
   return (
     <Animatable.View
@@ -64,27 +67,26 @@ const SerachCompanys = ({
   )
 }
 
-const createStyles = (height: number, width: number) =>
-  StyleSheet.create({
-    container: {
-      height: height * 0.5,
-      width: '100%',
-      padding: 2,
-      borderRadius: 10,
-    },
-    listContent: {
-      paddingBottom: 0,
-    },
-    emptyContainer: {
-      marginTop: 50,
-      alignItems: 'center',
-    },
-    emptyText: {
-      fontSize: width * 0.032,
-      opacity: 0.7,
-      width: '100%',
-      textAlign: 'center',
-    },
-  })
+const styles = StyleSheet.create({
+  container: {
+    height: rh(50),
+    width: '100%',
+    padding: rw(2),
+    borderRadius: rf(2),
+  },
+  listContent: {
+    paddingBottom: 0,
+  },
+  emptyContainer: {
+    marginTop: rh(6),
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: rf(1.6),
+    opacity: 0.7,
+    width: '100%',
+    textAlign: 'center',
+  },
+})
 
 export default memo(SerachCompanys)

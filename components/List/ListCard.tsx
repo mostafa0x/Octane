@@ -49,7 +49,7 @@ function ListCard({ acknowledgments_Current, type, emptyTXT }: props) {
             }}>
             <Text
               style={{
-                fontSize: type === 'Home' ? rf(1.8) : rf(1.4),
+                fontSize: type === 'Home' ? rf(1.8) : rf(2),
                 opacity: 0.7,
                 width: rw(40),
                 textAlign: 'center',

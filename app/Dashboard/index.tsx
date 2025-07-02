@@ -1,46 +1,38 @@
-import { View, Text, TouchableOpacity, useWindowDimensions, ScrollView } from 'react-native'
-import { ActivityIndicator, Avatar, HelperText, Icon } from 'react-native-paper'
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
+import { ActivityIndicator } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
-import { Href, Route, RouteInputParams, usePathname, useRouter } from 'expo-router'
+import { useRouter } from 'expo-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
-import handleLoutOut from 'Services/handleLogOut'
-import AppBar from 'components/App Bar'
-import { useEffect, useRef, useState } from 'react'
-import ShowImageOptions from 'components/Models/showImageOptions'
-import { useFormik } from 'formik'
-import UploadAvatar from 'Services/UploadAvatar'
-import { changeImageProfile } from 'lib/Store/Slices/UserSlice'
-import { storeUserInfo, UpdataUserInfo } from 'Services/Storage'
-import axiosClient from 'lib/api/axiosClient'
-import { GetUsers } from 'lib/Store/Slices/DashboardSlice'
-import FooterDashboard from 'components/FooterDashboard'
-import { NavigationOptions } from 'expo-router/build/global-state/routing'
+import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import axiosClient from 'lib/api/axiosClient'
 import { UsersFace } from 'Types/Store/DashboardSliceFace'
+import {
+  responsiveHeight as rh,
+  responsiveWidth as rw,
+  responsiveFontSize as rf,
+} from 'react-native-responsive-dimensions'
+
 const avatarIcon = require('../../assets/avatar.png')
 const backImg = require('../../assets/backn.png')
 
 export default function Dashboard() {
-  const { width, height } = useWindowDimensions()
   const { userData } = useSelector((state: StateFace) => state.UserReducer)
-  const pathName = usePathname()
   const router = useRouter()
-  const dispatch = useDispatch()
 
   async function handleGetUsers() {
     try {
       const res = await axiosClient.get('/admin/users/')
-      const data = res.data.users
-      return data
+      return res.data.users
     } catch (err: any) {
       console.log(err)
-
       throw err
     }
   }
-  const { data, isLoading, isError, error, isFetching } = useQuery({
+
+  const { data, isLoading, isFetching } = useQuery({
     queryKey: ['users'],
     queryFn: handleGetUsers,
     staleTime: 30000,
@@ -48,31 +40,24 @@ export default function Dashboard() {
 
   return (
     <Animatable.View animation="fadeIn" duration={100} style={{ flex: 1 }}>
-      <View style={{ position: 'absolute', top: height * 0.2, width: '100%' }}>
-        <Image
-          style={{ width: '100%', height: height * 0.25 }}
-          contentFit="fill"
-          source={backImg}
-        />
+      {/* الخلفية العلوية */}
+      <View style={{ position: 'absolute', top: rh(20), width: '100%' }}>
+        <Image style={{ width: '100%', height: rh(25) }} contentFit="fill" source={backImg} />
       </View>
-
-      <View style={{ width: '100%', height: height * 0.2, zIndex: -1 }}>
+      <View style={{ width: '100%', height: rh(20), zIndex: -1 }}>
         <Image source={backImg} contentFit="fill" style={{ width: '100%', height: '100%' }} />
       </View>
+
+      {/* المحتوى */}
       <View
         style={{
           flex: 1,
           borderTopLeftRadius: 100,
           borderTopRightRadius: 100,
           backgroundColor: 'white',
-          paddingTop: height * 0.05,
+          paddingTop: rh(5),
         }}>
-        <ScrollView
-          contentContainerStyle={{
-            flexGrow: 1,
-            paddingHorizontal: 24,
-            paddingBottom: 100,
-          }}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: rh(10) }}>
           {isLoading || isFetching ? (
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
               <ActivityIndicator color="blue" size={80} />
@@ -82,12 +67,11 @@ export default function Dashboard() {
               style={{
                 flexDirection: 'row',
                 flexWrap: 'wrap',
-                justifyContent: data.length > 1 ? 'space-between' : 'flex-start',
-                gap: 23,
-                paddingHorizontal: 10,
+                justifyContent: 'flex-start',
+                paddingHorizontal: rw(5),
               }}>
               {data?.map((user: UsersFace, index: number) =>
-                user.id == userData?.id ? null : (
+                user.id === userData?.id ? null : (
                   <TouchableOpacity
                     onPress={() =>
                       router.push({
@@ -97,30 +81,27 @@ export default function Dashboard() {
                     }
                     key={index}
                     style={{
-                      width: width * 0.25,
-                      marginBottom: 20,
+                      width: rw(30), // ✅ 3 عناصر في كل صف
                       alignItems: 'center',
+                      marginBottom: rh(3),
                     }}>
                     <Image
                       style={{
                         borderWidth: 0.5,
                         backgroundColor: '#8d1c47',
                         borderRadius: 20,
-                        width: '100%',
-                        height: height * 0.11,
-                        aspectRatio: 1,
-                        alignItems: 'center',
-                        justifyContent: 'space-around',
+                        width: rw(25),
+                        height: rw(25),
                       }}
                       contentFit="cover"
                       source={user?.image ? { uri: user.image } : avatarIcon}
                     />
                     <Text
                       style={{
-                        fontSize: width * 0.038,
+                        fontSize: rf(1.8),
                         color: 'black',
                         textAlign: 'center',
-                        marginTop: height * 0.008,
+                        marginTop: rh(1),
                         width: '100%',
                       }}>
                       {user.name}

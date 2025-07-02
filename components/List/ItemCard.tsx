@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   cardsBox: {
     alignItems: 'center',
     justifyContent: 'center',
-    minWidth: 30,
+    minWidth: rw(3),
   },
   detailsBox: {
     gap: 4,
