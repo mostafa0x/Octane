@@ -15,6 +15,7 @@ interface Props {
   formik: any
   selectCompany: number
   SelectCompanyID: (id: number, name: string) => void
+  setIsShowSerachCompany: any
 }
 
 const SerachCompanys = ({
@@ -24,6 +25,7 @@ const SerachCompanys = ({
   formik,
   selectCompany,
   SelectCompanyID,
+  setIsShowSerachCompany,
 }: Props) => {
   const animRef = useRef<AnimatableView>(null)
   const styles = createStyles(height, width)
@@ -49,6 +51,7 @@ const SerachCompanys = ({
             formik={formik}
             SelectCompanyID={SelectCompanyID}
             selectCompany={selectCompany}
+            setIsShowSerachCompany={setIsShowSerachCompany}
           />
         )}
         ListEmptyComponent={() => (

@@ -10,47 +10,51 @@ interface Props {
   formik: any
   SelectCompanyID: (id: number, name: string) => void
   selectCompany: number
+  setIsShowSerachCompany: any
 }
 
-const ItemCard_CS = memo(({ item, width, formik, SelectCompanyID, selectCompany }: Props) => {
-  const styles = createStyles(width)
-  const isSelected = formik.values?.company_id === item.id
+const ItemCard_CS = memo(
+  ({ item, width, formik, SelectCompanyID, selectCompany, setIsShowSerachCompany }: Props) => {
+    const styles = createStyles(width)
+    const isSelected = formik.values?.company_id === item.id
 
-  const handlePress = useCallback(() => {
-    if (selectCompany === item.id) {
-      SelectCompanyID(0, '')
-    } else {
-      SelectCompanyID(item.id, item.name)
-    }
-  }, [item.id, item.name, selectCompany, SelectCompanyID])
+    const handlePress = useCallback(() => {
+      if (selectCompany === item.id) {
+        SelectCompanyID(0, '')
+      } else {
+        SelectCompanyID(item.id, item.name)
+        setIsShowSerachCompany(false)
+      }
+    }, [item.id, item.name, selectCompany, SelectCompanyID])
 
-  const shortName = item.name
+    const shortName = item.name
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.nameContainer}>
-        <Text style={styles.nameText}>{shortName}</Text>
+    return (
+      <View style={styles.container}>
+        <View style={styles.nameContainer}>
+          <Text style={styles.nameText}>{shortName}</Text>
+        </View>
+
+        <View style={styles.codeContainer}>
+          <Text style={styles.codeText}>{item.code}</Text>
+        </View>
+
+        <TouchableOpacity style={styles.buttonContainer}>
+          <Button
+            onPress={handlePress}
+            style={styles.button}
+            contentStyle={styles.buttonContent}
+            buttonColor={isSelected ? '#b86482' : '#8d1c47'}
+            textColor="white"
+            compact
+            mode="contained">
+            {isSelected ? 'Cancel' : 'Select'}
+          </Button>
+        </TouchableOpacity>
       </View>
-
-      <View style={styles.codeContainer}>
-        <Text style={styles.codeText}>{item.code}</Text>
-      </View>
-
-      <TouchableOpacity style={styles.buttonContainer}>
-        <Button
-          onPress={handlePress}
-          style={styles.button}
-          contentStyle={styles.buttonContent}
-          buttonColor={isSelected ? '#b86482' : '#8d1c47'}
-          textColor="white"
-          compact
-          mode="contained">
-          {isSelected ? 'Cancel' : 'Select'}
-        </Button>
-      </TouchableOpacity>
-    </View>
-  )
-})
+    )
+  }
+)
 
 const createStyles = (width: number) =>
   StyleSheet.create({

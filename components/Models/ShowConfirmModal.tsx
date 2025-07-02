@@ -2,6 +2,11 @@ import { View, Text, Modal, StyleSheet, BackHandler } from 'react-native'
 import React, { memo, useEffect } from 'react'
 import { ActivityIndicator, Button, HelperText, Icon } from 'react-native-paper'
 import { CompanyFace } from 'Types/ItemList'
+import {
+  responsiveHeight as rh,
+  responsiveWidth as rw,
+  responsiveFontSize as rf,
+} from 'react-native-responsive-dimensions'
 
 interface props {
   showConfirmModal: boolean
@@ -20,15 +25,11 @@ function ShowConfirmModal_Modle({
   formik,
   errorApi,
   isLoadingRes,
-  width,
-  height,
   currCompany,
 }: props) {
   useEffect(() => {
     const backAction = () => {
-      if (isLoadingRes) {
-        return true
-      }
+      if (isLoadingRes) return true
       return false
     }
     const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction)
@@ -46,108 +47,52 @@ function ShowConfirmModal_Modle({
       <View style={styles.centeredOverlay}>
         <View style={styles.confirmBox}>
           <Text style={styles.confirmTitle}>Confirm Submission</Text>
-          {/* 
-                {formik.values.image ? (
-                  <View style={{ alignItems: 'center', marginVertical: 10 }}>
-                    <Animatable.Image
-                      animation="fadeIn"
-                      duration={500}
-                      source={{ uri: formik.values.image }}
-                      style={{ width: 120, height: 120, borderRadius: 8 }}
-                      resizeMode="cover"
-                    />
-                  </View>
-                ) : null} */}
+
           {errorApi ? (
-            <View style={{ marginTop: height * 0.04 }} className=" items-center">
-              <Icon color="#e03c3c" size={100} source={'information'} />
-              <HelperText style={{ fontSize: width * 0.042 }} visible={!!errorApi} type="error">
+            <View style={styles.errorContainer}>
+              <Icon color="#e03c3c" size={rf(8)} source={'information'} />
+              <HelperText style={styles.helperText} visible={!!errorApi} type="error">
                 {errorApi}
               </HelperText>
             </View>
           ) : (
-            <View style={{ gap: 24, marginTop: height * 0.04 }}>
-              <Text>
-                📦 Company Name:{'  '}
-                <Text
-                  style={{
-                    fontSize: width * 0.032,
-                    fontWeight: 'bold',
-                  }}>
-                  {currCompany?.name}
-                </Text>
+            <View style={styles.detailsContainer}>
+              <Text style={styles.textItem}>
+                📦 Company Name: <Text style={styles.boldText}>{currCompany?.name}</Text>
               </Text>
-              <Text>
-                📦 Company Code:{'  '}
-                <Text
-                  style={{
-                    fontSize: width * 0.044,
-                    fontWeight: 'bold',
-                  }}>
-                  {currCompany?.code}
-                </Text>
+              <Text style={styles.textItem}>
+                📦 Company Code: <Text style={styles.boldText}>{currCompany?.code}</Text>
               </Text>
-              <Text>
-                📝 Submission Type:{'  '}
-                <Text
-                  style={{
-                    fontSize: width * 0.044,
-                    fontWeight: 'bold',
-                  }}>
+              <Text style={styles.textItem}>
+                📝 Submission Type:{' '}
+                <Text style={styles.boldText}>
                   {formik.values.submission_type.split('_').join(' ')}
                 </Text>
               </Text>
-              <Text>
-                🚚 Delivery Method:{'  '}
-                <Text
-                  style={{
-                    fontSize: width * 0.044,
-                    fontWeight: 'bold',
-                  }}>
+              <Text style={styles.textItem}>
+                🚚 Delivery Method:{' '}
+                <Text style={styles.boldText}>
                   {formik.values.delivery_method.split('_').join(' ')}
                 </Text>
               </Text>
-              <Text>
-                🕒 State Time:{'  '}
-                <Text
-                  style={{
-                    fontSize: width * 0.044,
-                    fontWeight: 'bold',
-                  }}>
-                  {formik.values.state_time.split('_').join(' ')}
-                </Text>
+              <Text style={styles.textItem}>
+                🕒 State Time:{' '}
+                <Text style={styles.boldText}>{formik.values.state_time.split('_').join(' ')}</Text>
               </Text>
-              <Text>
-                💳 Cards Submitted:{'  '}
-                <Text
-                  style={{
-                    fontSize: width * 0.044,
-                    fontWeight: 'bold',
-                  }}>
-                  {parseInt(formik.values.cards_submitted)}
-                </Text>
+              <Text style={styles.textItem}>
+                💳 Cards Submitted:{' '}
+                <Text style={styles.boldText}>{parseInt(formik.values.cards_submitted)}</Text>
               </Text>
             </View>
           )}
 
           {isLoadingRes ? (
-            <View style={{ marginTop: height * 0.05 }} className=" items-center justify-center">
-              <ActivityIndicator size={50} />
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size={rf(6)} />
             </View>
           ) : (
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginTop: height * 0.05,
-              }}>
-              <Button
-                mode="contained"
-                onPress={() => {
-                  //  setShowConfirmModal(false)
-                  formik.handleSubmit()
-                }}
-                buttonColor="#4CAF50">
+            <View style={styles.actionsContainer}>
+              <Button mode="contained" onPress={formik.handleSubmit} buttonColor="#4CAF50">
                 {errorApi ? 'Try again' : 'Confirm'}
               </Button>
               <Button
@@ -165,34 +110,6 @@ function ShowConfirmModal_Modle({
 }
 
 const styles = StyleSheet.create({
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'flex-end',
-  },
-  modalContainer: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    textAlign: 'center',
-    marginBottom: 15,
-  },
-  optionBtn: {
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    backgroundColor: '#f2f2f2',
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  optionText: {
-    fontSize: 16,
-    textAlign: 'center',
-  },
   centeredOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
@@ -200,18 +117,45 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   confirmBox: {
-    width: '85%',
-
+    width: rw(85),
     backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 15,
+    padding: rw(5),
+    borderRadius: rw(4),
     elevation: 5,
   },
   confirmTitle: {
-    fontSize: 24,
+    fontSize: rf(3),
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: rh(2),
     textAlign: 'center',
+  },
+  detailsContainer: {
+    gap: rh(2.5),
+    marginTop: rh(2),
+  },
+  textItem: {
+    fontSize: rf(2),
+  },
+  boldText: {
+    fontWeight: 'bold',
+    fontSize: rf(2.2),
+  },
+  errorContainer: {
+    marginTop: rh(3),
+    alignItems: 'center',
+  },
+  helperText: {
+    fontSize: rf(1.8),
+  },
+  loadingContainer: {
+    marginTop: rh(4),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  actionsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: rh(4),
   },
 })
 

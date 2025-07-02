@@ -141,7 +141,7 @@ export default function Upload() {
 
   const segmentedButtons = useMemo(() => {
     return ['submission_type', 'delivery_method', 'state_time'].map((item) => (
-      <SegmentedBtn key={item} name={item} height={rh(100)} width={rw(100)} formik={formik} />
+      <SegmentedBtn key={item} name={item} formik={formik} />
     ))
   }, [formik])
 

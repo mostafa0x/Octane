@@ -1,6 +1,11 @@
 import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native'
-import React, { memo, useState } from 'react'
+import React, { memo } from 'react'
 import * as ImagePicker from 'expo-image-picker'
+import {
+  responsiveHeight as rh,
+  responsiveWidth as rw,
+  responsiveFontSize as rf,
+} from 'react-native-responsive-dimensions'
 
 interface props {
   formik: any
@@ -33,6 +38,7 @@ function ShowImageOptions_Model({ formik, showImageOptions, setShowImageOptions 
 
     setShowImageOptions(false)
   }
+
   return (
     <Modal
       visible={showImageOptions}
@@ -67,25 +73,25 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     backgroundColor: 'white',
-    padding: 20,
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
+    padding: rw(5),
+    borderTopRightRadius: rw(5),
+    borderTopLeftRadius: rw(5),
   },
   modalTitle: {
-    fontSize: 18,
+    fontSize: rf(2.2),
     fontWeight: '600',
     textAlign: 'center',
-    marginBottom: 15,
+    marginBottom: rh(2),
   },
   optionBtn: {
-    paddingVertical: 12,
-    paddingHorizontal: 20,
+    paddingVertical: rh(2),
+    paddingHorizontal: rw(5),
     backgroundColor: '#f2f2f2',
-    borderRadius: 10,
-    marginBottom: 10,
+    borderRadius: rw(3),
+    marginBottom: rh(1.5),
   },
   optionText: {
-    fontSize: 16,
+    fontSize: rf(2),
     textAlign: 'center',
   },
 })

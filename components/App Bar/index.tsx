@@ -79,13 +79,15 @@ const DashboardContent = React.memo(({ router, label }: props) => {
     <>
       <TouchableOpacity
         onPress={() => router.back()}
-        style={{ position: 'absolute', left: rw(2), top: 0, zIndex: 10 }}>
+        style={{ position: 'absolute', left: rw(3), top: 0, zIndex: 10 }}>
         <View style={{ marginTop: 8 }}>
           <Icon size={RFValue(28)} color="white" source="keyboard-backspace" />
         </View>
       </TouchableOpacity>
       <View style={{ position: 'absolute', left: rw(12), top: rh(1), zIndex: 10 }}>
-        <Text style={{ color: '#F1FFF3', fontSize: RFValue(24) }}>{label ?? 'Dashboard'}</Text>
+        <Text style={{ color: '#F1FFF3', fontSize: RFValue(18), fontWeight: 'bold' }}>
+          {label ?? 'Dashboard'}
+        </Text>
       </View>
       {label === 'User information' && (
         <TouchableOpacity style={{ position: 'absolute', left: rw(88), top: rh(0.7), zIndex: 10 }}>

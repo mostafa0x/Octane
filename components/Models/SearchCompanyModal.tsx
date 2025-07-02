@@ -65,6 +65,7 @@ function SearchCompany_Modal({
             formik={formik}
             SelectCompanyID={SelectCompanyID}
             selectCompany={selectCompany}
+            setIsShowSerachCompany={setIsShowSerachCompany}
           />
 
           <View style={styles.buttonWrapper}>

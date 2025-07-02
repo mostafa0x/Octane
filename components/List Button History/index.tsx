@@ -24,7 +24,7 @@ function ListButtonHistory({ activeList, handleActive }: props) {
         marginTop: rh(2),
         height,
         width,
-        borderRadius: 22,
+        borderRadius: rw(4),
         backgroundColor: '#c47b9f',
         flexDirection: 'row',
         justifyContent: 'space-around',
@@ -35,7 +35,7 @@ function ListButtonHistory({ activeList, handleActive }: props) {
           key={item}
           onPress={() => handleActive(item)}
           mode={activeList === item ? 'contained' : 'text'}
-          style={{ width: buttonWidth, height: buttonHeight, borderRadius: 25 }}
+          style={{ width: buttonWidth, height: buttonHeight, borderRadius: rw(25) }}
           labelStyle={{
             fontSize: rf(1.7),
             color: activeList === item ? '#eff1f1' : '#052224',

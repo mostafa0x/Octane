@@ -1,6 +1,11 @@
-import { View, Text, Keyboard } from 'react-native'
+import { View, Text, Keyboard, StyleSheet } from 'react-native'
 import React, { memo, useEffect, useRef, useState } from 'react'
 import { HelperText, SegmentedButtons } from 'react-native-paper'
+import {
+  responsiveHeight as rh,
+  responsiveWidth as rw,
+  responsiveFontSize as rf,
+} from 'react-native-responsive-dimensions'
 
 export interface btnArray {
   name: string
@@ -8,13 +13,12 @@ export interface btnArray {
 
 interface props {
   name: string
-  width: number
-  height: number
   formik: any
 }
 
-function SegmentedBtn({ name, width, height, formik }: props) {
+function SegmentedBtn({ name, formik }: props) {
   const [currentBtns, setCurrentBtns] = useState<btnArray[]>([])
+
   const cards_SubmittedBtns = useRef<btnArray[]>([
     { name: 'replacement' },
     { name: 'existing_customer' },
@@ -36,9 +40,8 @@ function SegmentedBtn({ name, width, height, formik }: props) {
 
   return (
     <View>
-      <Text style={{ fontSize: width * 0.028, marginBottom: height * 0.008, color: '#6C7278' }}>
-        {name.split('_').join(' ')}
-      </Text>
+      <Text style={styles.label}>{name.split('_').join(' ')}</Text>
+
       <SegmentedButtons
         value={formik.values?.[name]}
         theme={{ colors: { primary: 'green' } }}
@@ -49,24 +52,19 @@ function SegmentedBtn({ name, width, height, formik }: props) {
           }
           formik.setFieldValue(name, val)
         }}
-        style={{ height: height * 0.035 }}
+        style={styles.segmentedContainer}
         buttons={currentBtns.map((btn) => ({
           value: btn.name,
           label: btn.name.split('_').join(' '),
-          icon: formik.values?.[name] == btn.name ? 'check-bold' : '',
+          icon: formik.values?.[name] === btn.name ? 'check-bold' : '',
           checkedColor: 'green',
           uncheckedColor: 'red',
-          labelStyle: {
-            textAlignVertical: 'center',
-            height: height * 0.017,
-            fontSize: width * 0.025,
-
-            color: 'black',
-          },
+          labelStyle: styles.labelStyle,
         }))}
       />
+
       <HelperText
-        style={{ fontSize: width * 0.03, color: 'red' }}
+        style={styles.helperText}
         type="error"
         visible={formik.touched?.[name] && !!formik.errors?.[name]}>
         {formik.errors?.[name]}
@@ -74,5 +72,26 @@ function SegmentedBtn({ name, width, height, formik }: props) {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  label: {
+    fontSize: rf(1.8),
+    marginBottom: rh(0.8),
+    color: '#6C7278',
+  },
+  segmentedContainer: {
+    height: rh(4),
+  },
+  labelStyle: {
+    textAlignVertical: 'center',
+    height: rh(2),
+    fontSize: rf(1.3),
+    color: 'black',
+  },
+  helperText: {
+    fontSize: rf(1.6),
+    color: 'red',
+  },
+})
 
 export default memo(SegmentedBtn)
