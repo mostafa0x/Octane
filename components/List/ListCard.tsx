@@ -31,7 +31,7 @@ function ListCard({ acknowledgments_Current, type, emptyTXT }: props) {
       animation="fadeIn"
       easing="ease-in-out"
       style={{
-        height: type === 'Home' ? rh(30) : rh(100),
+        height: type === 'Home' ? rh(30) : rh(64),
         width: '100%',
         marginTop: 0,
       }}>

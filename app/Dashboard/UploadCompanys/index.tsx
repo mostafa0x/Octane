@@ -1,25 +1,23 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ActivityIndicator,
-  useWindowDimensions,
-  Modal,
-} from 'react-native'
+import { View, Text, TouchableOpacity, ActivityIndicator, Modal } from 'react-native'
 import React, { useRef, useState } from 'react'
 import * as DocumentPicker from 'expo-document-picker'
 import axiosClient from 'lib/api/axiosClient'
 import { Button, HelperText, Icon } from 'react-native-paper'
-const backImg = require('../../../assets/backn.png')
-import * as Animatable from 'react-native-animatable'
+import {
+  responsiveHeight as rh,
+  responsiveWidth as rw,
+  responsiveFontSize as rf,
+} from 'react-native-responsive-dimensions'
 import { Image } from 'expo-image'
+import * as Animatable from 'react-native-animatable'
 import { UpdateCompanys } from 'Services/Storage'
 import { useDispatch } from 'react-redux'
+
+const backImg = require('../../../assets/backn.png')
 
 export default function UploadCompanys() {
   const [uploading, setUploading] = useState(false)
   const [fileName, setFileName] = useState<string | null>(null)
-  const { width, height } = useWindowDimensions()
   const [errorRes, setErrorRes] = useState<string | null>(null)
   const [succusRes, setSuccusRes] = useState<string | null>(null)
   const [fileRes, setFileRes] = useState<DocumentPicker.DocumentPickerResult>()
@@ -32,6 +30,7 @@ export default function UploadCompanys() {
     { ext: '.xlsx', desc: 'Microsoft Excel' },
     { ext: '.ods', desc: 'OpenDocument Spreadsheet' },
   ])
+
   const uploadExcelFile = async (file: DocumentPicker.DocumentPickerResult) => {
     if (uploading) return
     setErrorRes(null)
@@ -56,7 +55,6 @@ export default function UploadCompanys() {
       })
       setSuccusRes(response.data.message)
       await UpdateCompanys(dispatch)
-      console.log('Upload success:', response.data)
     } catch (err: any) {
       setErrorRes(err.response?.data?.message ?? 'Error Upload File!')
       throw err
@@ -66,19 +64,25 @@ export default function UploadCompanys() {
   }
 
   const pickExcelFile = async () => {
+    setErrorRes(null)
+    setSuccusRes(null)
     try {
       const res = await DocumentPicker.getDocumentAsync({
-        type: [
-          'text/csv', // .csv
-          'application/vnd.ms-excel', // .xls
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
-          'application/vnd.oasis.opendocument.spreadsheet', // .ods
-        ],
+        type: '*/*',
         copyToCacheDirectory: true,
         multiple: false,
       })
       if (!res.canceled && res.assets?.length) {
-        const name = res.assets[0].name
+        const name = res.assets[0].name.toLowerCase()
+
+        const allowedExts = ['.csv', '.xls', '.xlsx', '.ods']
+
+        if (!allowedExts.some((ext) => name.endsWith(ext))) {
+          setErrorRes(
+            '❌ Unsupported file type. Only the following formats are allowed: .csv, .xls, .xlsx, .ods'
+          )
+          return
+        }
         setFileName(name)
         setFileRes(res)
         setConfirmUpload(true)
@@ -90,63 +94,54 @@ export default function UploadCompanys() {
 
   return (
     <Animatable.View animation="fadeIn" duration={100} style={{ flex: 1 }}>
-      <View style={{ position: 'absolute', top: height * 0.2, width: '100%' }}>
-        <Image
-          style={{ width: '100%', height: height * 0.25 }}
-          contentFit="fill"
-          source={backImg}
-        />
+      <View style={{ position: 'absolute', top: rh(20), width: '100%' }}>
+        <Image style={{ width: '100%', height: rh(25) }} contentFit="fill" source={backImg} />
       </View>
 
-      <View style={{ width: '100%', height: height * 0.3, zIndex: -1 }}>
+      <View style={{ width: '100%', height: rh(30), zIndex: -1 }}>
         <Image source={backImg} contentFit="fill" style={{ width: '100%', height: '100%' }} />
       </View>
+
       <View
         style={{
           flex: 1,
           borderTopLeftRadius: 100,
           borderTopRightRadius: 100,
           backgroundColor: 'white',
-          padding: 50,
+          padding: rw(5),
         }}>
-        <View
-          style={{
-            justifyContent: 'center',
-            marginTop: height * 0.01,
-            marginBottom: height * 0.05,
-            gap: 30,
-          }}>
-          <View style={{ padding: 10 }}>
-            <Text
-              style={{ fontWeight: 'bold', marginBottom: height * 0.008, fontSize: width * 0.042 }}>
+        <View style={{ justifyContent: 'center', marginTop: rh(1), marginBottom: rh(5), gap: 30 }}>
+          <View style={{ padding: rw(2) }}>
+            <Text style={{ fontWeight: 'bold', marginBottom: rh(0.8), fontSize: rf(2.2) }}>
               Supported file formats:
             </Text>
             {formats.current.map((item, index) => (
               <View
                 key={index}
-                style={{ flexDirection: 'row', marginBottom: height * 0.004, width: width }}>
-                <Text style={{ fontSize: width * 0.032 }}>{'\u2022'} </Text>
-                <Text style={{ fontSize: width * 0.034, width: '100%' }}>
+                style={{ flexDirection: 'row', marginBottom: rh(0.4), width: '100%' }}>
+                <Text style={{ fontSize: rf(1.8) }}>{'\u2022'} </Text>
+                <Text style={{ fontSize: rf(1.9), width: '100%', fontWeight: 'regular' }}>
                   {item.ext} ({item.desc})
                 </Text>
               </View>
             ))}
           </View>
         </View>
+
         <View style={{ justifyContent: 'center' }}>
           <TouchableOpacity
             onPress={pickExcelFile}
             disabled={uploading}
             style={{
               backgroundColor: '#8d1c47',
-              paddingVertical: height * 0.014,
-              paddingHorizontal: width * 0.25,
+              paddingVertical: rh(1.4),
+              paddingHorizontal: rw(25),
               borderRadius: 10,
               flexDirection: 'row',
               alignItems: 'center',
             }}>
-            <Icon source="file-upload-outline" color="white" size={24} />
-            <Text style={{ color: 'white', fontSize: width * 0.036, marginLeft: width * 0.01 }}>
+            <Icon source="file-upload-outline" color="white" size={rf(3)} />
+            <Text style={{ color: 'white', fontSize: rf(2), textAlign: 'center' }}>
               {uploading ? 'Uploading...' : 'Upload Excel File'}
             </Text>
           </TouchableOpacity>
@@ -154,28 +149,33 @@ export default function UploadCompanys() {
           {fileName && (
             <Text
               style={{
-                marginTop: height * 0.02,
+                marginTop: rh(2),
                 color: '#333',
-                fontSize: width * 0.028,
+                fontSize: rf(1.5),
                 textAlign: 'center',
               }}>
               Selected: {'  '}
-              <Text style={{ fontWeight: 'bold', fontSize: width * 0.032 }}>{fileName}</Text>
+              <Text style={{ fontWeight: 'bold', fontSize: rf(1.4) }}>{fileName}</Text>
             </Text>
           )}
 
           {uploading && (
-            <ActivityIndicator style={{ marginTop: 20 }} size="large" color="#0068FF" />
+            <ActivityIndicator style={{ marginTop: rh(2) }} size="large" color="#0068FF" />
           )}
-          <View style={{ alignItems: 'center', marginTop: height * 0.02 }}>
+
+          <View style={{ alignItems: 'center', marginTop: rh(2) }}>
             <HelperText
-              style={{ fontSize: width * 0.042, textAlign: 'center' }}
+              style={{
+                fontSize: (errorRes?.length ?? 0) >= 35 ? rf(1.4) : rf(2.5),
+                fontWeight: 'regular',
+                textAlign: 'center',
+              }}
               type="error"
               visible={!!errorRes}>
               {errorRes}
             </HelperText>
             <HelperText
-              style={{ fontSize: width * 0.042, color: 'green', width: width, textAlign: 'center' }}
+              style={{ fontSize: rf(2.2), color: 'green', width: '100%', textAlign: 'center' }}
               type="info"
               visible={!!succusRes}>
               {succusRes}
@@ -183,6 +183,7 @@ export default function UploadCompanys() {
           </View>
         </View>
       </View>
+
       <Modal
         animationType="fade"
         transparent
@@ -197,60 +198,48 @@ export default function UploadCompanys() {
           }}>
           <View
             style={{
-              width: width * 0.8,
-              height: height * 0.35,
+              width: rw(80),
+              height: rh(35),
               backgroundColor: '#fff',
-              padding: 20,
+              padding: rw(5),
               borderRadius: 70,
               elevation: 5,
             }}>
-            <View style={{ alignItems: 'center', marginTop: height * 0.01, gap: 15 }}>
+            <View style={{ alignItems: 'center', marginTop: rh(1), gap: 15 }}>
               <Text
                 style={{
-                  padding: 25,
+                  padding: rw(5),
                   width: '100%',
                   textAlign: 'center',
                   fontWeight: '300',
-                  fontSize: width * 0.034,
+                  fontSize: rf(1.5),
                 }}>
                 The uploaded file will update the existing companies' data. Please make sure all
                 information is correct before proceeding,{' '}
-                <Text
-                  style={{
-                    width: '100%',
-                    textAlign: 'center',
-                    fontWeight: 'bold',
-                    color: 'orange',
-                    fontSize: width * 0.034,
-                  }}>
+                <Text style={{ fontWeight: 'bold', color: 'orange', fontSize: rf(1.5) }}>
                   as the current data will be overwritten.
                 </Text>
               </Text>
               <Text
                 style={{
-                  marginTop: height * 0.02,
+                  marginTop: rh(2),
                   color: '#333',
-                  fontSize: width * 0.028,
+                  fontSize: rf(1.4),
                   textAlign: 'center',
-                  width: width * 0.8,
+                  width: '100%',
                 }}>
                 Selected: {'  '}
-                <Text style={{ color: 'red', fontWeight: 'bold', fontSize: width * 0.032 }}>
+                <Text style={{ color: 'red', fontWeight: 'bold', fontSize: rf(1.4) }}>
                   {fileName}
                 </Text>
               </Text>
-              <View
-                style={{
-                  gap: 20,
-                  flexDirection: 'row',
-                  marginTop: height * 0.03,
-                }}>
+              <View style={{ gap: 20, flexDirection: 'row', marginTop: rh(3) }}>
                 <Button
                   onPress={() => setConfirmUpload(false)}
                   buttonColor="#d2e6d4"
                   textColor="black"
-                  contentStyle={{ height: height * 0.05 }}
-                  style={{ width: width * 0.3, height: height * 0.05 }}>
+                  contentStyle={{ height: rh(5) }}
+                  style={{ width: rw(30), height: rh(5) }}>
                   cancel
                 </Button>
                 <Button
@@ -261,8 +250,8 @@ export default function UploadCompanys() {
                   }}
                   buttonColor="#8d1c47"
                   textColor="white"
-                  contentStyle={{ height: height * 0.05 }}
-                  style={{ width: width * 0.3, height: height * 0.05 }}>
+                  contentStyle={{ height: rh(5) }}
+                  style={{ width: rw(30), height: rh(5) }}>
                   confirm
                 </Button>
               </View>

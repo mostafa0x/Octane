@@ -13,11 +13,8 @@ export default function useReports(from: Date | null, to: Date | null) {
       throw 'Select the Date Frist !'
     }
     try {
-      console.log(from)
-
       const res = await axiosClient.get(`/admin/reports?start=${fromDate}&end=${toDate}`)
       const data = res.data
-      console.log(data)
       return data
     } catch (err: any) {
       throw err

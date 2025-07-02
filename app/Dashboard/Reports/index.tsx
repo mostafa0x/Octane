@@ -1,12 +1,10 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ActivityIndicator,
-  useWindowDimensions,
-  Modal,
-} from 'react-native'
+import { View, Text, TouchableOpacity, ActivityIndicator, Modal } from 'react-native'
 import { Button, HelperText, Icon } from 'react-native-paper'
+import {
+  responsiveHeight as rh,
+  responsiveWidth as rw,
+  responsiveFontSize as rf,
+} from 'react-native-responsive-dimensions'
 const backImg = require('../../../assets/backn.png')
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
@@ -22,7 +20,6 @@ import * as Sharing from 'expo-sharing'
 import { Buffer } from 'buffer'
 
 export default function Reposts() {
-  const { width, height } = useWindowDimensions()
   const dispatch = useDispatch()
   const [fromDate, setFromDate] = useState<Date | null>(null)
   const [toDate, setToDate] = useState<Date | null>(null)
@@ -38,16 +35,13 @@ export default function Reposts() {
 
   async function handleExportReports() {
     if (isLoadingRes || !fromDate || !toDate) return
-
     setIsErrorRes(null)
     setIsLoadingRes(true)
 
     try {
       const res = await axiosClient.get(
         `/admin/report/export?start=${formatDate(fromDate)}&end=${formatDate(toDate)}`,
-        {
-          responseType: 'arraybuffer',
-        }
+        { responseType: 'arraybuffer' }
       )
 
       const fileUri =
@@ -71,13 +65,10 @@ export default function Reposts() {
       setIsLoadingRes(false)
     }
   }
+
   useEffect(() => {
-    if (data) {
-      setCurrData(data.acknowledgments)
-    }
-    return () => {
-      setCurrData([])
-    }
+    if (data) setCurrData(data.acknowledgments)
+    return () => setCurrData([])
   }, [data])
 
   useEffect(() => {
@@ -89,107 +80,100 @@ export default function Reposts() {
       return setEmptyTXT('There are no results from this period.')
     }
   }, [toDate, fromDate, data])
+
   return (
     <Animatable.View animation="fadeIn" duration={100} style={{ flex: 1 }}>
       <View style={{ position: 'absolute', top: 0, width: '100%' }}>
-        <Image
-          style={{ width: '100%', height: height * 0.25 }}
-          contentFit="fill"
-          source={backImg}
-        />
+        <Image style={{ width: '100%', height: rh(25) }} contentFit="fill" source={backImg} />
       </View>
 
-      <View style={{ width: '100%', height: height * 0.1, zIndex: -1 }}>
+      <View style={{ width: '100%', height: rh(10), zIndex: -1 }}>
         <Image source={backImg} contentFit="fill" style={{ width: '100%', height: '100%' }} />
       </View>
+
       <View
         style={{
           flex: 1,
           borderTopLeftRadius: 100,
           borderTopRightRadius: 100,
           backgroundColor: 'white',
-          padding: 20,
+          padding: rw(5),
         }}>
-        <View
-          style={{
-            marginTop: height * 0.01,
-            marginBottom: height * 0.05,
-            gap: 30,
-          }}>
-          <View style={{ padding: 10 }}>
-            <View
-              style={{ flexDirection: 'row', justifyContent: 'space-around', width: width * 0.9 }}>
+        <View style={{ marginTop: rh(1), marginBottom: rh(5), gap: 30 }}>
+          <View style={{ padding: rw(2) }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: '100%' }}>
               <Button
-                labelStyle={{ fontSize: width * 0.038, fontWeight: 'bold' }}
+                labelStyle={{ fontSize: rf(1.6), fontWeight: 'bold' }}
                 mode="outlined"
                 onPress={() => setFromVisible(true)}>
                 {fromDate ? `From: ${formatDate(fromDate)}` : 'Select From Date'}
               </Button>
 
               <Button
-                labelStyle={{ fontSize: width * 0.038, fontWeight: 'bold' }}
+                labelStyle={{ fontSize: rf(1.6), fontWeight: 'bold' }}
                 mode="outlined"
                 onPress={() => setToVisible(true)}>
                 {toDate ? `To: ${formatDate(toDate)}` : 'Select To Date'}
               </Button>
             </View>
-            <View
-              style={{
-                marginTop: height * 0.03,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              {toDate && fromDate && (
+
+            {toDate && fromDate && (
+              <View
+                style={{
+                  marginTop: rh(3),
+                  alignItems: 'center',
+                  justifyContent: 'space-around',
+                  flexDirection: 'row',
+                  gap: 10,
+                }}>
                 <Button
                   loading={isLoading || isFetching}
                   buttonColor="#8d1c47"
-                  style={{ width: width * 0.4 }}
+                  style={{ width: rw(40) }}
                   mode="contained"
-                  onPress={() => toDate && fromDate && refetch()}>
+                  onPress={() => refetch()}>
                   {isLoading ? 'Loading...' : 'Search'}
                 </Button>
-              )}
-            </View>
+                {data?.acknowledgments?.length > 0 && (
+                  <Button
+                    onPress={handleExportReports}
+                    style={{ width: rw(30) }}
+                    loading={isLoadingRes}
+                    disabled={isLoading}
+                    textColor="white"
+                    buttonColor="#a33307">
+                    {isLoadingRes ? 'Exporting...' : 'Export'}
+                  </Button>
+                )}
+              </View>
+            )}
+
             {isError ? (
-              <View
-                style={{ alignItems: 'center', justifyContent: 'center', marginTop: height * 0.1 }}>
+              <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: rh(10) }}>
                 <Text>{error.message}</Text>
               </View>
             ) : isLoading ? (
-              <View
-                style={{ alignItems: 'center', justifyContent: 'center', marginTop: height * 0.1 }}>
-                <ActivityIndicator size={100} />
+              <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: rh(10) }}>
+                <ActivityIndicator size={rf(10)} />
               </View>
             ) : (
               <View
                 style={{
-                  marginTop: height * 0.02,
+                  marginTop: rh(2),
                   borderWidth: data ? 1 : 0,
-                  borderRadius: 20,
-                  padding: 10,
+                  borderTopLeftRadius: 20,
+                  borderTopRightRadius: 20,
+
+                  padding: rw(2),
                   paddingVertical: 0,
                   borderColor: 'grey',
+                  borderBottomWidth: 0,
                 }}>
                 <ListCard
                   type="Reports"
                   acknowledgments_Current={currData ?? []}
-                  height={width}
-                  width={height}
                   emptyTXT={emptyTXT}
                 />
-              </View>
-            )}
-            {data?.acknowledgments?.length > 0 && (
-              <View style={{ alignItems: 'center', marginTop: height * 0.02 }}>
-                <Button
-                  onPress={() => handleExportReports()}
-                  style={{ width: width * 0.4 }}
-                  loading={isLoadingRes}
-                  disabled={isLoading}
-                  textColor="white"
-                  buttonColor="#a33307">
-                  {isLoadingRes ? 'Exporting...' : 'Export'}
-                </Button>
               </View>
             )}
 
@@ -213,7 +197,6 @@ export default function Reposts() {
             />
           </View>
         </View>
-        <View style={{ justifyContent: 'center' }}></View>
       </View>
     </Animatable.View>
   )
