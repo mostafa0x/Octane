@@ -72,8 +72,9 @@ function ProtectRoutingProvider({ children }: { children: React.ReactNode }) {
     } else {
       if (shouldRedirectToAuth) {
         router.replace('/Auth')
+      } else {
+        setIsLoading(false)
       }
-      setIsLoading(false)
     }
   }, [
     isMountApp,

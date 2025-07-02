@@ -68,7 +68,14 @@ export default function Auth() {
               width: '100%',
               height: responsiveHeight(25),
             }}>
-            <Image source={logo} contentFit="contain" style={{ width: '100%', height: '100%' }} />
+            <Image
+              source={logo}
+              contentFit="contain"
+              style={{
+                width: '100%',
+                height: '100%',
+              }}
+            />
           </View>
 
           <View
