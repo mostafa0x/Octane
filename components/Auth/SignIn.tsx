@@ -1,41 +1,23 @@
-import { View, ScrollView } from 'react-native'
+import { View, KeyboardAvoidingView, Platform } from 'react-native'
 import { useCallback, useState } from 'react'
+import { useFormik } from 'formik'
 import InputField from 'components/form/InputField'
 import { ActivityIndicator, Button, HelperText } from 'react-native-paper'
-import { useFormik } from 'formik'
-import { LoginSchema } from 'lib/Vaildtions/SignInValid'
+import { responsiveWidth as rw, responsiveHeight as rh } from 'react-native-responsive-dimensions'
+import { RFValue } from 'react-native-responsive-fontsize'
 import axios from 'axios'
-import { storeUserInfo } from 'Services/Storage'
-import { useFocusEffect, useRouter } from 'expo-router'
 import { API_BASE_URL } from 'config'
 import { useDispatch } from 'react-redux'
+import { useRouter } from 'expo-router'
 import * as Animatable from 'react-native-animatable'
-import { responsiveWidth, responsiveHeight } from 'react-native-responsive-dimensions'
-import { RFValue } from 'react-native-responsive-fontsize'
+import { LoginSchema } from 'lib/Vaildtions/SignInValid'
+import { storeUserInfo } from 'Services/Storage'
 
-export default function SignIn({ setIsLoadingRes }: any) {
+export default function SignIn({ setIsLoadingRes, keyboardVisible }: any) {
   const [errorMes, setErrorMes] = useState<string | null>(null)
   const [isLoadingBtn, setIsLoadingBtn] = useState(false)
   const router = useRouter()
   const dispatch = useDispatch()
-
-  async function handleLogin(formValues: any) {
-    if (!isLoadingBtn) {
-      setErrorMes(null)
-      setIsLoadingRes(true)
-      setIsLoadingBtn(true)
-      try {
-        const res = await axios.post(`${API_BASE_URL}/auth/login`, formValues)
-        const data = res.data
-        await storeUserInfo(data.token, data.user, router, dispatch)
-      } catch (err: any) {
-        setIsLoadingBtn(false)
-        setErrorMes(err.response?.data?.message ?? err.message ?? 'Error Login')
-      } finally {
-        setIsLoadingRes(false)
-      }
-    }
-  }
 
   const formik = useFormik({
     initialValues: {
@@ -43,73 +25,77 @@ export default function SignIn({ setIsLoadingRes }: any) {
       password: '123456789',
     },
     validationSchema: LoginSchema,
-    onSubmit: handleLogin,
+    onSubmit: async (formValues) => {
+      if (isLoadingBtn) return
+      setIsLoadingBtn(true)
+      setIsLoadingRes(true)
+      setErrorMes(null)
+      try {
+        const res = await axios.post(`${API_BASE_URL}/auth/login`, formValues)
+        const data = res.data
+        await storeUserInfo(data.token, data.user, router, dispatch)
+      } catch (err: any) {
+        setErrorMes(err.response?.data?.message ?? 'Login Error')
+      } finally {
+        setIsLoadingBtn(false)
+        setIsLoadingRes(false)
+      }
+    },
   })
 
-  useFocusEffect(
-    useCallback(() => {
-      return () => {
-        formik.resetForm()
-        setIsLoadingBtn(false)
-        setErrorMes(null)
-      }
-    }, [])
-  )
-
   return (
-    <ScrollView
-      keyboardShouldPersistTaps="handled"
-      contentContainerStyle={{
-        flexGrow: 1,
-        paddingHorizontal: responsiveWidth(4),
-        paddingVertical: responsiveHeight(3),
+    <Animatable.View
+      animation="fadeIn"
+      duration={400}
+      style={{
+        justifyContent: 'center',
+        paddingHorizontal: rw(4),
       }}>
-      <Animatable.View style={{ flex: 1 }} animation="fadeIn" duration={400} easing="ease-in-out">
-        <View style={{ marginBottom: responsiveHeight(3) }}>
-          <InputField label={'Email'} name={'email'} formik={formik} errorMes={errorMes} />
-          <InputField label={'Password'} name={'password'} formik={formik} errorMes={errorMes} />
-        </View>
+      <View
+        style={{
+          paddingHorizontal: rw(4),
+          paddingVertical: rh(3),
+        }}>
+        <InputField label="Email" name="email" formik={formik} errorMes={errorMes} />
+        <InputField label="Password" name="password" formik={formik} errorMes={errorMes} />
+      </View>
 
-        <View style={{ alignItems: 'center' }}>
-          {isLoadingBtn ? (
-            <ActivityIndicator size={RFValue(28)} />
-          ) : (
-            <Button
-              onPress={() => formik.handleSubmit()}
-              style={{
-                borderRadius: responsiveWidth(5),
-                height: responsiveHeight(6),
-                width: responsiveWidth(40),
-                justifyContent: 'center',
-              }}
-              contentStyle={{
-                height: responsiveHeight(6),
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-              labelStyle={{
-                height: responsiveHeight(3),
-                fontSize: RFValue(14),
-                textAlignVertical: 'center',
-              }}
-              textColor="#FFFFFF"
-              buttonColor="#8d1c47">
-              Log In
-            </Button>
-          )}
-        </View>
-
-        {errorMes && (
-          <View style={{ marginTop: responsiveHeight(2), alignItems: 'center' }}>
-            <HelperText
-              style={{ fontSize: RFValue(12), color: '#e03c3c' }}
-              type="error"
-              visible={!!errorMes}>
-              {errorMes}
-            </HelperText>
-          </View>
+      <View style={{ alignItems: 'center', marginTop: rh(2) }}>
+        {isLoadingBtn ? (
+          <ActivityIndicator size={RFValue(28)} />
+        ) : (
+          <Button
+            onPress={() => formik.handleSubmit()}
+            style={{
+              borderRadius: rw(5),
+              height: rh(6),
+              width: rw(45),
+              justifyContent: 'center',
+            }}
+            contentStyle={{
+              height: rh(6),
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            labelStyle={{
+              fontSize: RFValue(14),
+              textAlignVertical: 'center',
+              height: rh(4),
+            }}
+            textColor="#FFFFFF"
+            buttonColor="#8d1c47">
+            Log In
+          </Button>
         )}
-      </Animatable.View>
-    </ScrollView>
+      </View>
+
+      {!!errorMes && (
+        <HelperText
+          type="error"
+          style={{ textAlign: 'center', marginTop: rh(2), fontSize: RFValue(13) }}>
+          {errorMes}
+        </HelperText>
+      )}
+    </Animatable.View>
   )
 }

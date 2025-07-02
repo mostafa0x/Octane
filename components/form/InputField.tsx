@@ -2,6 +2,8 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import React, { memo, useCallback } from 'react'
 import { Feather } from '@expo/vector-icons'
 import { HelperText } from 'react-native-paper'
+import { responsiveHeight as rh, responsiveWidth as rw } from 'react-native-responsive-dimensions'
+import { RFValue } from 'react-native-responsive-fontsize'
 
 interface Props {
   label: string
@@ -21,7 +23,7 @@ const InputField = memo(({ label, name, formik, errorMes }: Props) => {
       ? errorMes
       : formik.touched?.[name] && !!formik.errors?.[name]
   const shouldShowError = formik.touched?.[name] && !!formik.errors?.[name]
-  const hasSupspend = errorMes == 'Account suspended'
+  const hasSupspend = errorMes === 'Account suspended'
 
   const togglePasswordVisibility = useCallback(() => {
     setShowPassword((prev) => !prev)
@@ -31,8 +33,13 @@ const InputField = memo(({ label, name, formik, errorMes }: Props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
-
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Text style={styles.label}>{label}</Text>
+        <HelperText style={styles.helperText} type="error" visible={shouldShowError}>
+          {shouldShowError && '*'}
+          {formik.errors?.[name]}
+        </HelperText>
+      </View>
       <View style={styles.inputContainer}>
         <TextInput
           keyboardType={isNumberField ? 'numeric' : 'default'}
@@ -50,14 +57,10 @@ const InputField = memo(({ label, name, formik, errorMes }: Props) => {
 
         {isPassword && (
           <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
-            <Feather name={showPassword ? 'eye' : 'eye-off'} color="#ACB5BB" size={25} />
+            <Feather name={showPassword ? 'eye' : 'eye-off'} color="#ACB5BB" size={RFValue(20)} />
           </TouchableOpacity>
         )}
       </View>
-
-      <HelperText style={styles.helperText} type="error" visible={shouldShowError}>
-        {formik.errors?.[name]}
-      </HelperText>
     </View>
   )
 })
@@ -65,38 +68,38 @@ const InputField = memo(({ label, name, formik, errorMes }: Props) => {
 const createStyles = (hasError: boolean, hasSupspend: boolean) =>
   StyleSheet.create({
     container: {
-      marginBottom: 16,
+      marginBottom: rh(2),
     },
     label: {
-      marginBottom: 8,
-      fontSize: 16,
+      marginBottom: rh(0.5),
+      fontSize: RFValue(14),
       color: '#6C7278',
     },
     inputContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      paddingHorizontal: 16,
-      paddingVertical: 8,
-      borderRadius: 10,
+      paddingHorizontal: rw(3),
+      paddingVertical: rh(0.2),
+      borderRadius: rw(3),
       borderWidth: 2,
       borderColor: !hasSupspend && hasError ? '#e03c3c' : '#EDF1F3',
       backgroundColor: '#FFFFFF',
     },
     input: {
       flex: 1,
-      height: 50,
-      fontSize: 14,
+      height: rh(6),
+      fontSize: RFValue(14),
       color: 'black',
       paddingVertical: 0,
     },
     eyeIcon: {
-      padding: 8,
-      marginLeft: 8,
+      padding: rw(1.5),
+      marginLeft: rw(2),
     },
     helperText: {
-      fontSize: 14,
+      fontSize: RFValue(12),
+      width: rw(90),
       color: 'red',
-      marginTop: 4,
     },
   })
 

@@ -22,7 +22,7 @@ import * as Animatable from 'react-native-animatable'
 import { responsiveWidth, responsiveHeight } from 'react-native-responsive-dimensions'
 import { RFValue } from 'react-native-responsive-fontsize'
 
-export default function SignUp({ setIsLoadingRes }: any) {
+export default function SignUp({ setIsLoadingRes, keyboardVisible }: any) {
   const [errorMes, setErrorMes] = useState<string | null>(null)
   const [isLoadingBtn, setIsLoadingBtn] = useState(false)
   const router = useRouter()
@@ -105,7 +105,6 @@ export default function SignUp({ setIsLoadingRes }: any) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     paddingHorizontal: responsiveWidth(4),
   },
@@ -113,7 +112,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   form: {
-    marginBottom: responsiveHeight(0.5),
+    paddingHorizontal: responsiveWidth(4),
+    paddingVertical: responsiveHeight(3),
   },
   buttonWrapper: {
     alignItems: 'center',

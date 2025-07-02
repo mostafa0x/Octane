@@ -47,113 +47,101 @@ export default function Auth() {
   )
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1, backgroundColor: '#661534' }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={{ flex: 1 }}>
+        <View
+          style={{
+            position: 'absolute',
+            top: responsiveHeight(0),
+            width: '100%',
+          }}>
+          <Image
+            style={{ width: '100%', height: responsiveHeight(70) }}
+            contentFit="fill"
+            source={backImg}
+          />
+        </View>
+
         <View style={{ flex: 1 }}>
           <View
             style={{
-              position: 'absolute',
-              top: responsiveHeight(0),
               width: '100%',
+              height: responsiveHeight(25),
             }}>
-            <Image
-              style={{ width: '100%', height: responsiveHeight(70) }}
-              contentFit="fill"
-              source={backImg}
-            />
+            <Image source={logo} contentFit="contain" style={{ width: '100%', height: '100%' }} />
           </View>
 
-          <View style={{ flex: 1 }}>
+          <View
+            style={{
+              flex: 1,
+              borderTopLeftRadius: responsiveWidth(25),
+              borderTopRightRadius: responsiveWidth(25),
+              backgroundColor: 'white',
+              paddingHorizontal: responsiveWidth(5),
+              paddingBottom: responsiveHeight(10),
+              justifyContent: 'flex-start',
+            }}>
             <View
               style={{
-                width: '100%',
-                height: keyboardVisible ? responsiveHeight(11) : responsiveHeight(25),
+                borderRadius: responsiveWidth(25),
+                padding: responsiveWidth(2),
+                marginTop: responsiveHeight(5),
+                height: responsiveHeight(7),
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderWidth: 3,
+                borderColor: '#F5F6F9',
+                backgroundColor: '#e2e4e9',
               }}>
-              {keyboardVisible ? null : (
-                <Image
-                  source={logo}
-                  contentFit="contain"
-                  style={{ width: '100%', height: '100%' }}
-                />
-              )}
+              <Button
+                onPress={() => !isLoadingRes && setAuthMode(1)}
+                mode={authMode === 1 ? 'contained' : 'text'}
+                buttonColor={authMode === 1 ? 'white' : ''}
+                style={{ flex: 1, borderRadius: responsiveWidth(5) }}
+                contentStyle={{
+                  height: responsiveHeight(5),
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                labelStyle={{
+                  color: authMode === 1 ? '#232447' : '#7D7D91',
+                  fontSize: RFValue(14),
+                  textAlign: 'center',
+                  height: responsiveHeight(2.5),
+                }}>
+                Log In
+              </Button>
+
+              <Button
+                onPress={() => !isLoadingRes && setAuthMode(2)}
+                mode={authMode === 2 ? 'contained' : 'text'}
+                buttonColor={authMode === 2 ? 'white' : ''}
+                style={{ flex: 1, borderRadius: responsiveWidth(5) }}
+                contentStyle={{
+                  height: responsiveHeight(5),
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                labelStyle={{
+                  height: responsiveHeight(2.5),
+
+                  color: authMode === 2 ? '#232447' : '#7D7D91',
+                  fontSize: RFValue(14),
+                  textAlign: 'center',
+                }}>
+                Sign Up
+              </Button>
             </View>
 
-            <View
-              style={{
-                flex: 1,
-                borderTopLeftRadius: responsiveWidth(25),
-                borderTopRightRadius: responsiveWidth(25),
-                backgroundColor: 'white',
-                paddingHorizontal: responsiveWidth(5),
-                paddingBottom: responsiveHeight(10),
-                justifyContent: 'flex-start',
-              }}>
-              {keyboardVisible ? null : (
-                <View
-                  style={{
-                    borderRadius: responsiveWidth(25),
-                    padding: responsiveWidth(2),
-                    marginTop: responsiveHeight(5),
-                    height: responsiveHeight(7),
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderWidth: 3,
-                    borderColor: '#F5F6F9',
-                    backgroundColor: '#e2e4e9',
-                  }}>
-                  <Button
-                    onPress={() => !isLoadingRes && setAuthMode(1)}
-                    mode={authMode === 1 ? 'contained' : 'text'}
-                    buttonColor={authMode === 1 ? 'white' : ''}
-                    style={{ flex: 1, borderRadius: responsiveWidth(5) }}
-                    contentStyle={{
-                      height: responsiveHeight(5),
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                    labelStyle={{
-                      color: authMode === 1 ? '#232447' : '#7D7D91',
-                      fontSize: RFValue(14),
-                      textAlign: 'center',
-                      height: responsiveHeight(2.5),
-                    }}>
-                    Log In
-                  </Button>
-
-                  <Button
-                    onPress={() => !isLoadingRes && setAuthMode(2)}
-                    mode={authMode === 2 ? 'contained' : 'text'}
-                    buttonColor={authMode === 2 ? 'white' : ''}
-                    style={{ flex: 1, borderRadius: responsiveWidth(5) }}
-                    contentStyle={{
-                      height: responsiveHeight(5),
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                    labelStyle={{
-                      height: responsiveHeight(2.5),
-
-                      color: authMode === 2 ? '#232447' : '#7D7D91',
-                      fontSize: RFValue(14),
-                      textAlign: 'center',
-                    }}>
-                    Sign Up
-                  </Button>
-                </View>
-              )}
-
-              {authMode === 1 ? (
-                <SignIn setIsLoadingRes={setIsLoadingRes} />
-              ) : (
-                <SignUp setIsLoadingRes={setIsLoadingRes} />
-              )}
-            </View>
+            {authMode === 1 ? (
+              <SignIn keyboardVisible={keyboardVisible} setIsLoadingRes={setIsLoadingRes} />
+            ) : (
+              <SignUp keyboardVisible={keyboardVisible} setIsLoadingRes={setIsLoadingRes} />
+            )}
           </View>
         </View>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+      </View>
+    </TouchableWithoutFeedback>
   )
 }
