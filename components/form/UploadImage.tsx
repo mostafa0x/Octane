@@ -1,8 +1,13 @@
-import { View, Text, TouchableOpacity, Keyboard } from 'react-native'
+import { View, Text, TouchableOpacity, Keyboard, StyleSheet } from 'react-native'
 import React, { memo } from 'react'
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
 import { Button, HelperText } from 'react-native-paper'
+import {
+  responsiveHeight as rh,
+  responsiveWidth as rw,
+  responsiveFontSize as rf,
+} from 'react-native-responsive-dimensions'
 
 interface props {
   formik: any
@@ -12,15 +17,21 @@ interface props {
 }
 
 function UploadImage({ formik, width, height, setShowImageOptions }: props) {
+  const styles = createStyles()
+
   return (
     <>
       {formik.values.image !== '' ? (
         <TouchableOpacity
           onPress={() => setShowImageOptions(true)}
-          className="items-center rounded-2xl border-2 border-gray-200">
+          style={styles.imagePreviewContainer}>
           <Image
             contentFit="contain"
-            style={{ width: width * 0.5, height: height * 0.1 }}
+            style={{
+              width: rw(50),
+              height: rh(10),
+              borderRadius: rw(2),
+            }}
             source={{ uri: formik.values.image }}
           />
         </TouchableOpacity>
@@ -30,6 +41,8 @@ function UploadImage({ formik, width, height, setShowImageOptions }: props) {
             buttonColor="#8d1c47"
             icon="image"
             mode="contained"
+            contentStyle={{ height: rh(4) }}
+            labelStyle={{ fontSize: rf(1.7) }}
             onPress={() => {
               Keyboard.dismiss()
               setShowImageOptions(true)
@@ -39,11 +52,29 @@ function UploadImage({ formik, width, height, setShowImageOptions }: props) {
         </Animatable.View>
       )}
 
-      <HelperText type="error" visible={formik.touched.image && !!formik.errors.image}>
+      <HelperText
+        type="error"
+        visible={formik.touched.image && !!formik.errors.image}
+        style={styles.helperText}>
         {formik.errors.image}
       </HelperText>
     </>
   )
 }
+
+const createStyles = () =>
+  StyleSheet.create({
+    imagePreviewContainer: {
+      alignItems: 'center',
+      borderRadius: rw(4),
+      borderWidth: 2,
+      borderColor: '#D1D5DB',
+      padding: rw(1),
+      marginBottom: rh(1),
+    },
+    helperText: {
+      fontSize: rf(1.5),
+    },
+  })
 
 export default memo(UploadImage)

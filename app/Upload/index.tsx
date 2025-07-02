@@ -1,12 +1,4 @@
-import {
-  View,
-  useWindowDimensions,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-} from 'react-native'
+import { View, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text } from 'react-native'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as Animatable from 'react-native-animatable'
 import { router } from 'expo-router'
@@ -29,10 +21,14 @@ import AppBar from 'components/App Bar'
 import { debounce } from 'lodash'
 import { CompanyFace } from 'Types/ItemList'
 import SearchCompanyModal from 'components/Models/SearchCompanyModal'
+import {
+  responsiveHeight as rh,
+  responsiveWidth as rw,
+  responsiveFontSize as rf,
+} from 'react-native-responsive-dimensions'
 
 export default function Upload() {
   const backImg = useRef(require('../../assets/backn.png'))
-  const { width, height } = useWindowDimensions()
   const { currentcompanys } = useSelector((state: StateFace) => state.CompanyReducer)
   const [selectCompany, setSelectCompany] = useState(0)
   const [isLoadingRes, setIsLoadingRes] = useState(false)
@@ -44,8 +40,6 @@ export default function Upload() {
   const [currCompany, setCurrCompnay] = useState<CompanyFace | null>(null)
   const searchBoxRef = useRef<React.ComponentRef<typeof Searchbar>>(null)
   const dispatch = useDispatch()
-
-  const styles = createStyles(width, height)
 
   const handleUpload = async (formValues: any) => {
     if (isLoadingRes) return
@@ -105,6 +99,7 @@ export default function Upload() {
     }, 300),
     [dispatch]
   )
+
   const handleSerach = useCallback(
     (text: string) => {
       setSearchQuery(text)
@@ -117,7 +112,6 @@ export default function Upload() {
     (id: number, name: string) => {
       setSelectCompany(id)
       formik.setFieldValue('company_id', id)
-      //  handleSerach(name)
     },
     [formik, handleSerach]
   )
@@ -134,43 +128,54 @@ export default function Upload() {
     formik.setFieldTouched('company_id', false)
   }, [])
 
-  const getFontSize = useMemo(() => {
-    if (searchQuery.length <= 30) return width * 0.032
-    if (searchQuery.length <= 40) return width * 0.028
-    return width * 0.026
-  }, [searchQuery, width])
-
   useEffect(() => {
     const findCompany = currentcompanys.find((item) => item.id == formik.values.company_id)
     findCompany && setCurrCompnay(findCompany)
-    return () => {}
   }, [formik.values])
+
+  const getFontSize = useMemo(() => {
+    if (searchQuery.length <= 30) return rw(3.2)
+    if (searchQuery.length <= 40) return rw(2.8)
+    return rw(2.6)
+  }, [searchQuery])
 
   const segmentedButtons = useMemo(() => {
     return ['submission_type', 'delivery_method', 'state_time'].map((item) => (
-      <SegmentedBtn key={item} name={item} height={height} width={width} formik={formik} />
+      <SegmentedBtn key={item} name={item} height={rh(100)} width={rw(100)} formik={formik} />
     ))
-  }, [formik, height, width])
+  }, [formik])
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.keyboardAvoidingView}>
+      style={{ flex: 1 }}>
       <Animatable.View
         animation="fadeIn"
         duration={200}
         easing="ease-in-out"
-        style={styles.animatableView}>
-        <View style={styles.appBarContainer}>
-          <AppBar height={height} type="Upload" router={router} width={width} />
+        style={{ flex: 1, backgroundColor: 'black' }}>
+        <View style={{ width: '100%', height: rh(12) }}>
+          <AppBar type="Upload" router={router} />
         </View>
 
-        <Image style={styles.backgroundImage} contentFit="fill" source={backImg.current} />
+        <Image
+          style={{ position: 'absolute', width: '100%', height: rh(30) }}
+          contentFit="fill"
+          source={backImg.current}
+        />
 
-        <View style={styles.mainContainer}>
+        <View
+          style={{
+            flex: 1,
+            borderTopLeftRadius: rw(12),
+            borderTopRightRadius: rw(12),
+            backgroundColor: 'white',
+            paddingHorizontal: rw(5),
+            paddingVertical: rh(5),
+          }}>
           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <Button
-              style={{ width: width * 0.5 }}
+              style={{ width: rw(50) }}
               buttonColor="#8d1c47"
               textColor="white"
               onPress={() => setIsShowSerachCompany(true)}>
@@ -179,9 +184,9 @@ export default function Upload() {
             {currCompany && (
               <Text
                 style={{
-                  width: width * 0.8,
+                  width: rw(80),
                   textAlign: 'center',
-                  marginTop: height * 0.03,
+                  marginTop: rh(3),
                   fontWeight: '400',
                 }}>
                 Selected :
@@ -190,7 +195,7 @@ export default function Upload() {
                     width: '100%',
                     textAlign: 'center',
                     fontWeight: 'bold',
-                    fontSize: width * 0.032,
+                    fontSize: rw(3.2),
                   }}>
                   {' '}
                   {currCompany?.name} ({currCompany?.code})
@@ -198,29 +203,32 @@ export default function Upload() {
               </Text>
             )}
           </View>
+
           <HelperText
-            style={{ fontSize: width * 0.028, color: 'red' }}
+            style={{ fontSize: rw(2.8), color: 'red' }}
             type="error"
             visible={formik.touched.company_id && !!formik.errors.company_id}>
             {formik.errors.company_id}
           </HelperText>
+
           <InputField
             label={'cards submitted'}
             name={'cards_submitted'}
             formik={formik}
             errorMes={null}
           />
+
           {segmentedButtons}
 
-          <View style={styles.uploadSection}>
+          <View style={{ marginTop: rh(2) }}>
             <UploadImage
               formik={formik}
-              width={width}
-              height={height}
+              width={rw(100)}
+              height={rh(100)}
               setShowImageOptions={setShowImageOptions}
             />
 
-            <View style={styles.buttonContainer}>
+            <View style={{ marginTop: 0 }}>
               <Button
                 loading={isLoadingRes}
                 onPress={() => {
@@ -243,8 +251,8 @@ export default function Upload() {
               formik={formik}
               errorApi={errorApi}
               isLoadingRes={isLoadingRes}
-              width={width}
-              height={height}
+              width={rw(100)}
+              height={rh(100)}
             />
 
             <ShowImageOptions
@@ -254,6 +262,7 @@ export default function Upload() {
             />
           </View>
         </View>
+
         <SearchCompanyModal
           isShowSerachCompany={isShowSerachCompany}
           setIsShowSerachCompany={setIsShowSerachCompany}
@@ -261,8 +270,8 @@ export default function Upload() {
           searchQuery={searchQuery}
           handleSerach={handleSerach}
           handleClear={handleClear}
-          height={height}
-          width={width}
+          height={rh(100)}
+          width={rw(100)}
           currentcompanys={currentcompanys}
           formik={formik}
           SelectCompanyID={SelectCompanyID}
@@ -273,41 +282,3 @@ export default function Upload() {
     </KeyboardAvoidingView>
   )
 }
-
-const createStyles = (width: number, height: number) =>
-  StyleSheet.create({
-    keyboardAvoidingView: {
-      flex: 1,
-    },
-    animatableView: {
-      flex: 1,
-      backgroundColor: 'black',
-    },
-    appBarContainer: {
-      width: '100%',
-      height: height * 0.12,
-    },
-    backgroundImage: {
-      position: 'absolute',
-      width: '100%',
-      height: '30%',
-    },
-    mainContainer: {
-      flex: 1,
-      borderTopLeftRadius: 50,
-      borderTopRightRadius: 50,
-      backgroundColor: 'white',
-      paddingHorizontal: width * 0.05,
-      paddingVertical: height * 0.05,
-    },
-    searchContainer: {
-      marginTop: 20,
-      width: '100%',
-    },
-    uploadSection: {
-      marginTop: height * 0.02,
-    },
-    buttonContainer: {
-      marginTop: 0,
-    },
-  })

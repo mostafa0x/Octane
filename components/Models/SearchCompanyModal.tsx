@@ -1,7 +1,12 @@
-import { View, Text, Modal, StyleSheet } from 'react-native'
+import { View, Modal, StyleSheet } from 'react-native'
 import React, { memo } from 'react'
 import { Button, Searchbar } from 'react-native-paper'
 import SerachCompanys from 'components/SerachCompanys'
+import {
+  responsiveHeight as rh,
+  responsiveWidth as rw,
+  responsiveFontSize as rf,
+} from 'react-native-responsive-dimensions'
 
 interface SearchCompanyModalProps {
   isShowSerachCompany: boolean
@@ -34,29 +39,14 @@ function SearchCompany_Modal({
   selectCompany,
   getFontSize,
 }: SearchCompanyModalProps) {
-  const styles = createStyles(width, height)
-
   return (
     <Modal
       animationType="slide"
       visible={isShowSerachCompany}
       onDismiss={() => setIsShowSerachCompany(false)}
       transparent>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: 'rgba(0,0,0,0.7)',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <View
-          style={{
-            backgroundColor: 'white',
-            width: width * 0.9,
-            height: height * 0.72,
-            padding: width * 0.03,
-            borderRadius: 20,
-          }}>
+      <View style={styles.overlay}>
+        <View style={styles.modalContainer}>
           <View style={styles.searchContainer}>
             <Searchbar
               ref={searchBoxRef}
@@ -76,19 +66,15 @@ function SearchCompany_Modal({
             SelectCompanyID={SelectCompanyID}
             selectCompany={selectCompany}
           />
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-              marginTop: height * 0.02,
-            }}>
+
+          <View style={styles.buttonWrapper}>
             <Button
               onPress={() => setIsShowSerachCompany(false)}
-              contentStyle={{ width: width * 0.3, height: height * 0.05 }}
-              labelStyle={{ fontSize: width * 0.042 }}
+              contentStyle={styles.buttonContent}
+              labelStyle={styles.buttonLabel}
               textColor="white"
               buttonColor="#b86482">
-              cancel
+              Cancel
             </Button>
           </View>
         </View>
@@ -97,42 +83,36 @@ function SearchCompany_Modal({
   )
 }
 
-const createStyles = (width: number, height: number) =>
-  StyleSheet.create({
-    keyboardAvoidingView: {
-      flex: 1,
-    },
-    animatableView: {
-      flex: 1,
-      backgroundColor: 'black',
-    },
-    appBarContainer: {
-      width: '100%',
-      height: height * 0.12,
-    },
-    backgroundImage: {
-      position: 'absolute',
-      width: '100%',
-      height: '30%',
-    },
-    mainContainer: {
-      flex: 1,
-      borderTopLeftRadius: 50,
-      borderTopRightRadius: 50,
-      backgroundColor: 'white',
-      paddingHorizontal: width * 0.05,
-      paddingVertical: height * 0.05,
-    },
-    searchContainer: {
-      marginTop: 20,
-      width: '100%',
-    },
-    uploadSection: {
-      marginTop: height * 0.02,
-    },
-    buttonContainer: {
-      marginTop: 0,
-    },
-  })
+const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    backgroundColor: 'white',
+    width: rw(90),
+    height: rh(72),
+    padding: rw(3),
+    borderRadius: rw(4),
+  },
+  searchContainer: {
+    marginTop: rh(1),
+    width: '100%',
+  },
+  buttonWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: rh(2),
+  },
+  buttonContent: {
+    width: rw(35),
+    height: rh(5),
+  },
+  buttonLabel: {
+    fontSize: rf(1.8),
+  },
+})
 
 export default memo(SearchCompany_Modal)

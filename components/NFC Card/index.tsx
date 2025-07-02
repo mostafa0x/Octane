@@ -38,15 +38,15 @@ function NfcCard({ submitted, allocated }: props) {
           thickness={4.25}
         />
 
-        <View style={{ position: 'absolute', top: responsiveHeight(0.9) }}>
+        <View style={{ position: 'absolute', top: responsiveHeight(-0.2) }}>
           <Icon source={nfcIcon} color="white" size={progressSize} />
         </View>
 
         <Text
           style={{
             color: '#bdcdce',
-            marginTop: responsiveHeight(0.8),
-            fontSize: RFValue(11),
+            marginTop: responsiveHeight(2),
+            fontSize: RFValue(14),
             width: responsiveWidth(30),
             textAlign: 'center',
           }}>
