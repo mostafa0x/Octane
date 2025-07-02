@@ -6,6 +6,7 @@ import {
   Text,
   TouchableWithoutFeedback,
   Keyboard,
+  ScrollView,
 } from 'react-native'
 import { useCallback, useState } from 'react'
 import InputField from 'components/form/InputField'
@@ -18,7 +19,8 @@ import { API_BASE_URL } from 'config'
 import { useDispatch } from 'react-redux'
 import { SignUpvalidationSchema } from 'lib/Vaildtions/SignupSchema'
 import * as Animatable from 'react-native-animatable'
-import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
+import { responsiveWidth, responsiveHeight } from 'react-native-responsive-dimensions'
+import { RFValue } from 'react-native-responsive-fontsize'
 
 export default function SignUp({ setIsLoadingRes }: any) {
   const [errorMes, setErrorMes] = useState<string | null>(null)
@@ -65,87 +67,81 @@ export default function SignUp({ setIsLoadingRes }: any) {
   )
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <Animatable.View
-          style={styles.inner}
-          animation="fadeIn"
-          duration={400}
-          easing="ease-in-out">
-          <View style={styles.form}>
-            <InputField label="Username" name="name" formik={formik} errorMes={errorMes} />
-            <InputField label="Email" name="email" formik={formik} errorMes={errorMes} />
-            <InputField label="Password" name="password" formik={formik} errorMes={errorMes} />
-          </View>
+    <View style={styles.container}>
+      <Animatable.View style={styles.inner} animation="fadeIn" duration={400} easing="ease-in-out">
+        <View style={styles.form}>
+          <InputField label="Username" name="name" formik={formik} errorMes={errorMes} />
+          <InputField label="Email" name="email" formik={formik} errorMes={errorMes} />
+          <InputField label="Password" name="password" formik={formik} errorMes={errorMes} />
+        </View>
 
-          <View style={styles.buttonWrapper}>
-            {isLoadingBtn ? (
-              <ActivityIndicator size={verticalScale(30)} />
-            ) : (
-              <Button
-                onPress={() => formik.handleSubmit()}
-                style={styles.button}
-                contentStyle={styles.buttonContent}
-                labelStyle={styles.buttonLabel}
-                textColor="#FFFFFF"
-                buttonColor="#8d1c47">
-                Sign Up
-              </Button>
-            )}
-          </View>
-
-          {errorMes && (
-            <View style={styles.errorWrapper}>
-              <HelperText style={styles.errorText} type="error" visible={!!errorMes}>
-                {errorMes}
-              </HelperText>
-            </View>
+        <View style={styles.buttonWrapper}>
+          {isLoadingBtn ? (
+            <ActivityIndicator size={RFValue(28)} />
+          ) : (
+            <Button
+              onPress={() => formik.handleSubmit()}
+              style={styles.button}
+              contentStyle={styles.buttonContent}
+              labelStyle={styles.buttonLabel}
+              textColor="#FFFFFF"
+              buttonColor="#8d1c47">
+              Sign Up
+            </Button>
           )}
-        </Animatable.View>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+        </View>
+
+        {errorMes && (
+          <View style={styles.errorWrapper}>
+            <HelperText style={styles.errorText} type="error" visible={!!errorMes}>
+              {errorMes}
+            </HelperText>
+          </View>
+        )}
+      </Animatable.View>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: scale(12),
+    justifyContent: 'center',
+    paddingHorizontal: responsiveWidth(4),
   },
   inner: {
-    marginTop: verticalScale(20),
     justifyContent: 'center',
   },
   form: {
-    marginBottom: verticalScale(5),
+    marginBottom: responsiveHeight(0.5),
   },
   buttonWrapper: {
     alignItems: 'center',
-    marginTop: verticalScale(2),
+    marginTop: responsiveHeight(0),
   },
   button: {
-    borderRadius: moderateScale(20),
-    height: verticalScale(45),
-    width: scale(180),
+    borderRadius: responsiveWidth(5),
+    height: responsiveHeight(6),
+    width: responsiveWidth(45),
     justifyContent: 'center',
   },
   buttonContent: {
-    height: verticalScale(50),
+    height: responsiveHeight(6),
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonLabel: {
-    fontSize: moderateScale(15),
+    fontSize: RFValue(15),
+    height: responsiveHeight(3),
+
     textAlignVertical: 'center',
   },
   errorWrapper: {
-    marginTop: verticalScale(20),
+    marginTop: responsiveHeight(2.5),
     alignItems: 'center',
   },
   errorText: {
-    fontSize: moderateScale(14),
+    fontSize: RFValue(14),
     color: '#e03c3c',
   },
 })
