@@ -57,13 +57,16 @@ const ProfileContent = React.memo(({ router }: props) => {
     <>
       <TouchableOpacity
         onPress={() => router.back()}
-        style={{ position: 'absolute', left: rw(1), top: 0, zIndex: 10 }}>
+        style={{ position: 'absolute', left: rw(3), top: 0, zIndex: 10 }}>
         <View style={{ marginTop: 8 }}>
           <Icon size={RFValue(28)} color="white" source="keyboard-backspace" />
         </View>
       </TouchableOpacity>
-      <View style={{ position: 'absolute', left: rw(10), top: rh(1), zIndex: 10 }}>
-        <Text style={{ color: '#F1FFF3', fontSize: RFValue(18), width: rw(100) }}>Profile</Text>
+      <View style={{ position: 'absolute', left: rw(12), top: rh(1), zIndex: 10 }}>
+        <Text
+          style={{ color: '#F1FFF3', fontSize: RFValue(18), width: rw(100), fontWeight: 'bold' }}>
+          Profile
+        </Text>
       </View>
     </>
   )

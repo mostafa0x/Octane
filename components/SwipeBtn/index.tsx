@@ -3,32 +3,36 @@ import React, { useCallback } from 'react'
 import { View } from 'react-native'
 import { SwipeButton } from 'react-native-expo-swipe-button'
 import { Icon } from 'react-native-paper'
+import {
+  responsiveHeight as rh,
+  responsiveWidth as rw,
+  responsiveFontSize as rf,
+} from 'react-native-responsive-dimensions'
 
 interface props {
-  height: number
-  width: number
   router: Router
 }
 
-export default function SwipeBtn({ height, width, router }: props) {
+export default function SwipeBtn({ router }: props) {
   const handleComplete = useCallback(() => {
     router.push('/Upload')
-  }, [])
+  }, [router])
 
   return (
     <View style={{ alignItems: 'center' }}>
       <SwipeButton
-        height={height * 0.05}
-        width={width * 0.87}
+        height={rh(5)}
+        width={rw(87)}
         goBackToStart={true}
-        circleBackgroundColor={'#8d1c47'}
+        circleBackgroundColor="#8d1c47"
         underlayStyle={{ backgroundColor: '#c47b9f' }}
-        underlayTitle="Swipe up to open the page "
-        titleStyle={{ width: width * 0.8, fontSize: width * 0.024 }}
+        underlayTitleStyle={{ fontSize: rf(1.3), width: rw(80) }}
+        underlayTitle="Swipe up to open"
         title="Swipe to upload acknowledgment"
+        titleStyle={{ width: rw(80), fontSize: rf(1.3) }}
         onComplete={handleComplete}
         iconContainerStyle={{}}
-        Icon={<Icon color="#bdcdce" size={60} source="plus" />}
+        Icon={<Icon color="#bdcdce" size={rf(6)} source="plus" />}
       />
     </View>
   )

@@ -61,7 +61,6 @@ const MainSlice = createSlice({
           item.company.code.toString().includes(keyword)
         )
       })
-      //  console.log(filtered)
 
       state.acknowledgments_Current = filtered
     },

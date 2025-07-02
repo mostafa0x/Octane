@@ -1,21 +1,29 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View } from 'react-native'
 import React, { memo } from 'react'
 import { Button } from 'react-native-paper'
+import {
+  responsiveHeight as rh,
+  responsiveWidth as rw,
+  responsiveFontSize as rf,
+} from 'react-native-responsive-dimensions'
 
 interface props {
   activeList: string
-  searchHeight: number
-  cardWidth: number
   handleActive: (period: string) => void
 }
 
-function ListButtonHistory({ activeList, searchHeight, cardWidth, handleActive }: props) {
+function ListButtonHistory({ activeList, handleActive }: props) {
+  const height = rh(7)
+  const width = rw(90)
+  const buttonWidth = width / 3 - 10
+  const buttonHeight = height * 0.8
+
   return (
     <View
       style={{
-        marginTop: 20,
-        height: searchHeight,
-        width: cardWidth,
+        marginTop: rh(2),
+        height,
+        width,
         borderRadius: 22,
         backgroundColor: '#c47b9f',
         flexDirection: 'row',
@@ -27,16 +35,15 @@ function ListButtonHistory({ activeList, searchHeight, cardWidth, handleActive }
           key={item}
           onPress={() => handleActive(item)}
           mode={activeList === item ? 'contained' : 'text'}
-          style={{ width: cardWidth / 3 - 10, height: searchHeight * 0.8, borderRadius: 25 }}
+          style={{ width: buttonWidth, height: buttonHeight, borderRadius: 25 }}
           labelStyle={{
-            fontSize: 15,
-
+            fontSize: rf(1.7),
             color: activeList === item ? '#eff1f1' : '#052224',
           }}
           buttonColor={activeList === item ? '#8d1c47' : '#c47b9f'}
           contentStyle={{
             justifyContent: 'center',
-            height: searchHeight * 0.8,
+            height: buttonHeight,
           }}>
           {item.charAt(0).toUpperCase() + item.slice(1)}
         </Button>

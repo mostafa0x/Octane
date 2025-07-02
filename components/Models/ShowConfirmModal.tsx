@@ -37,13 +37,6 @@ function ShowConfirmModal_Modle({
     }
   }, [isLoadingRes])
 
-  useEffect(() => {
-    const date = new Date()
-    console.log(date.getTime())
-
-    return () => {}
-  }, [])
-
   return (
     <Modal
       visible={showConfirmModal}

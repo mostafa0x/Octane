@@ -4,22 +4,25 @@ import * as Animatable from 'react-native-animatable'
 import { FlashList } from '@shopify/flash-list'
 import ItemCard from './ItemCard'
 import { acknowledgmentsFace } from 'Types/Store/MainSliceFace'
+import {
+  responsiveHeight as rh,
+  responsiveWidth as rw,
+  responsiveFontSize as rf,
+} from 'react-native-responsive-dimensions'
+
 type AnimatableView = Animatable.View
 
 interface props {
   acknowledgments_Current: acknowledgmentsFace[]
-  height: number
-  width: number
   type: string
   emptyTXT?: string
 }
 
-function ListCard({ acknowledgments_Current, height, width, type, emptyTXT }: props) {
+function ListCard({ acknowledgments_Current, type, emptyTXT }: props) {
   const animRef = useRef<AnimatableView>(null)
 
   useEffect(() => {
-    if (animRef.current && animRef.current.fadeIn) animRef.current?.fadeIn(100)
-    return () => {}
+    if (animRef.current?.fadeIn) animRef.current.fadeIn(100)
   }, [acknowledgments_Current])
 
   return (
@@ -28,27 +31,27 @@ function ListCard({ acknowledgments_Current, height, width, type, emptyTXT }: pr
       animation="fadeIn"
       easing="ease-in-out"
       style={{
-        height: type == 'Home' ? height * 0.3 : height,
+        height: type === 'Home' ? rh(30) : rh(100),
         width: '100%',
-        marginTop: height * 0.0,
+        marginTop: 0,
       }}>
       <FlashList
         data={acknowledgments_Current}
         estimatedItemSize={70}
         keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={{ paddingBottom: height * 0.02 }}
+        contentContainerStyle={{ paddingBottom: rh(2) }}
         renderItem={({ item }) => <ItemCard item={item} />}
         ListEmptyComponent={() => (
           <View
             style={{
-              marginTop: type === 'Reports' ? height * 0.4 : height * 0.05,
+              marginTop: type === 'Reports' ? rh(40) : rh(5),
               alignItems: 'center',
             }}>
             <Text
               style={{
-                fontSize: type == 'Home' ? width * 0.048 : width * 0.034,
+                fontSize: type === 'Home' ? rf(1.8) : rf(1.4),
                 opacity: 0.7,
-                width: width * 0.4,
+                width: rw(40),
                 textAlign: 'center',
                 fontWeight: '300',
               }}>

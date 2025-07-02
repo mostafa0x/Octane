@@ -160,7 +160,7 @@ export default function Profile() {
               )}
             </View>
             <View style={{ flexDirection: 'row' }}>
-              <Text style={{ fontSize: RFValue(12), width: rw(40) }}>Change Avatar</Text>
+              <Text style={{ fontSize: RFValue(14), width: rw(40) }}>Change Avatar</Text>
               <HelperText
                 type="error"
                 visible={!!errorRes}
@@ -185,7 +185,7 @@ export default function Profile() {
                 }}>
                 <Icon size={RFValue(30)} source="monitor-dashboard" />
               </View>
-              <Text style={{ fontSize: RFValue(12), width: '100%' }}>Dashboard</Text>
+              <Text style={{ fontSize: RFValue(14), width: '100%' }}>Dashboard</Text>
             </TouchableOpacity>
           )}
 
@@ -203,7 +203,7 @@ export default function Profile() {
               }}>
               <Icon size={RFValue(30)} source="logout" />
             </View>
-            <Text style={{ fontSize: RFValue(12), width: '100%' }}>Log Out</Text>
+            <Text style={{ fontSize: RFValue(14), width: '100%' }}>Log Out</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

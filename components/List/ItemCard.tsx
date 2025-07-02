@@ -1,9 +1,15 @@
 import React, { useMemo, useRef, useState } from 'react'
-import { TouchableOpacity, View, StyleSheet, useWindowDimensions } from 'react-native'
+import { TouchableOpacity, View, StyleSheet } from 'react-native'
 import { Text, Avatar } from 'react-native-paper'
 import { acknowledgmentsFace } from 'Types/Store/MainSliceFace'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import {
+  responsiveWidth as rw,
+  responsiveHeight as rh,
+  responsiveFontSize as rf,
+} from 'react-native-responsive-dimensions'
+
 dayjs.extend(relativeTime)
 
 interface Props {
@@ -11,39 +17,38 @@ interface Props {
 }
 
 const ItemCard = ({ item }: Props) => {
-  const { width } = useWindowDimensions()
   const [visible, setIsVisible] = useState(false)
   const timeAgo = dayjs(item.submission_date).fromNow()
 
   const fontSize = useMemo(() => {
-    if (item.delivery_method.length <= 15) return width * 0.028
-    if (item.delivery_method.length <= 20) return width * 0.024
-    return width * 0.024
-  }, [item.delivery_method, width])
+    if (item.delivery_method.length <= 15) return rf(1.6)
+    if (item.delivery_method.length <= 20) return rf(1.5)
+    return rf(1.4)
+  }, [item.delivery_method])
 
-  const avatarSize = useRef(width * 0.12)
+  const avatarSize = useRef(rw(12))
   const imgs = useMemo(() => [{ uri: item.image }], [item.image])
 
   return (
-    <View style={[styles.container, { padding: width * 0.035 }]}>
+    <View style={[styles.container, { padding: rw(3.5) }]}>
       <TouchableOpacity onPress={() => setIsVisible(true)}>
         <Avatar.Image size={avatarSize.current} source={imgs} />
       </TouchableOpacity>
 
-      <View style={[styles.companyInfo, { width: width * 0.25 }]}>
-        <Text style={[styles.companyName, { fontSize: width * 0.032 }]}>{item.company.name}</Text>
-        <Text style={[styles.companyCode, { fontSize: width * 0.03 }]}>{item.company.code}</Text>
+      <View style={[styles.companyInfo, { width: rw(25) }]}>
+        <Text style={[styles.companyName, { fontSize: rf(1.8) }]}>{item.company.name}</Text>
+        <Text style={[styles.companyCode, { fontSize: rf(1.6) }]}>{item.company.code}</Text>
       </View>
 
       <View style={styles.separator} />
       <View style={styles.cardsBox}>
-        <Text style={{ fontSize: width * 0.03 }}>{item.cards_submitted}</Text>
+        <Text style={{ fontSize: rf(1.6), color: '#2d47bb' }}>{item.cards_submitted}</Text>
       </View>
 
       <View style={styles.separator} />
       <View style={styles.detailsBox}>
         <Text style={[styles.deliveryMethod, { fontSize }]}>{item.delivery_method}</Text>
-        <Text style={[styles.stateTime, { fontSize: width * 0.03 }]}>{item.state_time}</Text>
+        <Text style={[styles.stateTime, { fontSize: rf(1.6) }]}>{item.state_time}</Text>
       </View>
     </View>
   )
@@ -58,7 +63,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   companyInfo: {
-    marginLeft: 12,
+    marginLeft: rw(3),
     gap: 4,
     flexShrink: 1,
   },
@@ -70,10 +75,10 @@ const styles = StyleSheet.create({
     color: '#0068FF',
   },
   separator: {
-    height: 40,
+    height: rh(5),
     width: 1,
     backgroundColor: '#00D09E',
-    marginHorizontal: 10,
+    marginHorizontal: rw(2),
   },
   cardsBox: {
     alignItems: 'center',

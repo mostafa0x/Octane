@@ -38,7 +38,7 @@ function NfcCard({ submitted, allocated }: props) {
           thickness={4.25}
         />
 
-        <View style={{ position: 'absolute', top: responsiveHeight(1.2) }}>
+        <View style={{ position: 'absolute', top: responsiveHeight(0.9) }}>
           <Icon source={nfcIcon} color="white" size={progressSize} />
         </View>
 
@@ -64,7 +64,7 @@ function NfcCard({ submitted, allocated }: props) {
 
       <View style={{ flex: 1, justifyContent: 'space-between', paddingLeft: responsiveWidth(5) }}>
         <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-          <Icon size={RFValue(26)} color="#bdcdce" source={nfcIcon} />
+          <Icon size={RFValue(40)} color="#bdcdce" source={nfcIcon} />
           <View style={{ alignItems: 'center', gap: 5 }}>
             <Text
               style={{
@@ -77,7 +77,7 @@ function NfcCard({ submitted, allocated }: props) {
             </Text>
             <Text
               style={{
-                fontSize: RFValue(12),
+                fontSize: RFValue(18),
                 color: '#f7f7f7',
                 fontWeight: 'bold',
                 textAlign: 'center',
@@ -89,14 +89,15 @@ function NfcCard({ submitted, allocated }: props) {
 
         <View
           style={{
+            marginLeft: responsiveWidth(2),
             backgroundColor: '#ffffff',
-            width: responsiveWidth(30),
+            width: responsiveWidth(33),
             height: responsiveHeight(0.2),
             borderRadius: 50,
           }}></View>
 
         <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-          <Icon size={RFValue(26)} color="#5c9dff" source={nfcIcon} />
+          <Icon size={RFValue(40)} color="#5c9dff" source={nfcIcon} />
           <View style={{ alignItems: 'center', gap: 5 }}>
             <Text
               style={{
@@ -109,7 +110,7 @@ function NfcCard({ submitted, allocated }: props) {
             </Text>
             <Text
               style={{
-                fontSize: RFValue(14),
+                fontSize: RFValue(18),
                 color: '#5c9dff',
                 fontWeight: 'bold',
                 textAlign: 'center',

@@ -8,7 +8,6 @@ const UploadAvatar = async (stateForms: any) => {
       },
     })
     const data = res.data
-    console.log(data)
     return data
   } catch (err: any) {
     console.log(err)

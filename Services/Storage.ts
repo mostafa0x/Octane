@@ -3,11 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Router } from 'expo-router'
 import axiosClient from 'lib/api/axiosClient'
 import { SetCompanys } from 'lib/Store/Slices/CompanySlice'
-import {
-  changeImageProfile,
-  changeIsLoadedUserData,
-  fillUserInfo,
-} from 'lib/Store/Slices/UserSlice'
+import { changeIsLoadedUserData, fillUserInfo } from 'lib/Store/Slices/UserSlice'
 import { CompanyFace } from 'Types/ItemList'
 import { userDataFace } from 'Types/Store/UserSliceFace'
 import handleLoutOut from './handleLogOut'

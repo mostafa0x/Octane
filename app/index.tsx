@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Keyboard,
   TouchableWithoutFeedback,
-  ScrollView,
 } from 'react-native'
 import { Searchbar } from 'react-native-paper'
 import { Image } from 'expo-image'
@@ -61,64 +60,42 @@ export default function Home() {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.keyboardAvoidingView}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
-          <Animatable.View
-            style={styles.animatableView}
-            animation="fadeIn"
-            duration={200}
-            easing="ease-in-out">
-            <Image style={styles.backgroundImage} contentFit="fill" source={backImg.current} />
+      <View style={styles.animatableView}>
+        <Image style={styles.backgroundImage} contentFit="fill" source={backImg.current} />
 
-            <AppBar
-              type="Home"
-              sectionPadding={responsiveWidth(5)}
-              router={router}
-              userData={userData}
+        <AppBar
+          type="Home"
+          sectionPadding={responsiveWidth(5)}
+          router={router}
+          userData={userData}
+        />
+
+        <View style={styles.imageContainer}>
+          <Image source={backImg.current} contentFit="fill" style={styles.fullImage} />
+        </View>
+
+        <View style={styles.mainContainer}>
+          <NfcCard submitted={submitted} allocated={allocated} />
+
+          <ListButtonHistory activeList={activeList} handleActive={handleActive} />
+
+          <View style={styles.searchContainer}>
+            <Searchbar
+              ref={searchBoxRef}
+              placeholder="Search"
+              value={searchQuery}
+              onChangeText={handleSerach}
+              onClearIconPress={() => handleActive(activeList)}
             />
+          </View>
 
-            <View style={styles.imageContainer}>
-              <Image source={backImg.current} contentFit="fill" style={styles.fullImage} />
-            </View>
+          <ListCard type="Home" acknowledgments_Current={acknowledgments_Current} />
 
-            <View style={styles.mainContainer}>
-              <NfcCard submitted={submitted} allocated={allocated} />
-
-              <ListButtonHistory
-                activeList={activeList}
-                searchHeight={responsiveHeight(7)}
-                cardWidth={responsiveWidth(90)}
-                handleActive={handleActive}
-              />
-
-              <View style={styles.searchContainer}>
-                <Searchbar
-                  ref={searchBoxRef}
-                  placeholder="Search"
-                  value={searchQuery}
-                  onChangeText={handleSerach}
-                  onClearIconPress={() => handleActive(activeList)}
-                />
-              </View>
-
-              <ListCard
-                type="Home"
-                acknowledgments_Current={acknowledgments_Current}
-                height={responsiveHeight(100)}
-                width={responsiveWidth(100)}
-              />
-
-              <View style={styles.swipeBtnContainer}>
-                <SwipeBtn
-                  width={responsiveWidth(100)}
-                  height={responsiveHeight(100)}
-                  router={router}
-                />
-              </View>
-            </View>
-          </Animatable.View>
-        </ScrollView>
-      </TouchableWithoutFeedback>
+          <View style={styles.swipeBtnContainer}>
+            <SwipeBtn router={router} />
+          </View>
+        </View>
+      </View>
     </KeyboardAvoidingView>
   )
 }
