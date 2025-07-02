@@ -1,33 +1,35 @@
 import { View, Text } from 'react-native'
-import React, { memo, useRef } from 'react'
+import React, { memo } from 'react'
 import * as Progress from 'react-native-progress'
 import { Icon } from 'react-native-paper'
+import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
+import { RFValue } from 'react-native-responsive-fontsize'
+
 const nfcIcon = require('../../assets/nfc.png')
 
 interface props {
   submitted: number
   allocated: number
-  height: number
-  width: number
 }
 
-function NfcCard({ submitted, allocated, height, width }: props) {
-  const cardWidth = useRef(width * 0.9)
-  const cardHeight = useRef(height * 0.18)
-  const progressSize = useRef(Math.min(width, height) * 0.18)
+function NfcCard({ submitted, allocated }: props) {
+  const cardWidth = responsiveWidth(90)
+  const cardHeight = responsiveHeight(18)
+  const progressSize = responsiveWidth(18)
+
   return (
     <View
       style={{
-        height: cardHeight.current,
-        width: cardWidth.current,
+        height: cardHeight,
+        width: cardWidth,
         flexDirection: 'row',
-        borderRadius: 31,
+        borderRadius: responsiveWidth(7.5),
         backgroundColor: '#8d1c47',
-        padding: 20,
+        padding: responsiveWidth(5),
       }}>
       <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
         <Progress.Circle
-          size={progressSize.current}
+          size={progressSize}
           progress={allocated > 0 ? submitted / allocated : 0}
           showsText={false}
           color="#0068FF"
@@ -36,43 +38,46 @@ function NfcCard({ submitted, allocated, height, width }: props) {
           thickness={4.25}
         />
 
-        <View style={{ position: 'absolute', top: height * 0.012 }}>
-          <Icon source={nfcIcon} color="white" size={progressSize.current} />
+        <View style={{ position: 'absolute', top: responsiveHeight(1.2) }}>
+          <Icon source={nfcIcon} color="white" size={progressSize} />
         </View>
+
         <Text
           style={{
             color: '#bdcdce',
-            marginTop: height * 0.008,
-            fontSize: width * 0.038,
-            width: width * 0.3,
+            marginTop: responsiveHeight(0.8),
+            fontSize: RFValue(11),
+            width: responsiveWidth(30),
             textAlign: 'center',
           }}>
           NFC tracker
         </Text>
       </View>
+
       <View
         style={{
           backgroundColor: '#ffffff',
-          width: width * 0.004,
-          height: height * 0.15,
+          width: responsiveWidth(0.4),
+          height: responsiveHeight(15),
           borderRadius: 50,
         }}></View>
-      <View style={{ flex: 1, justifyContent: 'space-between', paddingLeft: width * 0.05 }}>
+
+      <View style={{ flex: 1, justifyContent: 'space-between', paddingLeft: responsiveWidth(5) }}>
         <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-          <Icon size={50} color="#bdcdce" source={nfcIcon} />
+          <Icon size={RFValue(26)} color="#bdcdce" source={nfcIcon} />
           <View style={{ alignItems: 'center', gap: 5 }}>
             <Text
               style={{
                 color: '#bdcdce',
-                width: width * 0.2,
-                fontSize: width * 0.028,
+                width: responsiveWidth(20),
+                fontSize: RFValue(10),
                 textAlign: 'center',
               }}>
               Allocated
             </Text>
             <Text
               style={{
-                fontSize: width * 0.032,
+                fontSize: RFValue(12),
                 color: '#f7f7f7',
                 fontWeight: 'bold',
                 textAlign: 'center',
@@ -81,27 +86,34 @@ function NfcCard({ submitted, allocated, height, width }: props) {
             </Text>
           </View>
         </View>
+
         <View
           style={{
             backgroundColor: '#ffffff',
-            width: width * 0.3,
-            height: height * 0.002,
+            width: responsiveWidth(30),
+            height: responsiveHeight(0.2),
             borderRadius: 50,
           }}></View>
+
         <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-          <Icon size={50} color="#5c9dff" source={nfcIcon} />
+          <Icon size={RFValue(26)} color="#5c9dff" source={nfcIcon} />
           <View style={{ alignItems: 'center', gap: 5 }}>
             <Text
               style={{
                 color: '#bdcdce',
-                width: width * 0.2,
-                fontSize: width * 0.028,
+                width: responsiveWidth(20),
+                fontSize: RFValue(10),
                 textAlign: 'center',
               }}>
               Submitted
             </Text>
             <Text
-              style={{ fontSize: 18, color: '#5c9dff', fontWeight: 'bold', textAlign: 'center' }}>
+              style={{
+                fontSize: RFValue(14),
+                color: '#5c9dff',
+                fontWeight: 'bold',
+                textAlign: 'center',
+              }}>
               +{submitted}
             </Text>
           </View>

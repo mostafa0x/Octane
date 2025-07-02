@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, useWindowDimensions, ScrollView } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
 import { ActivityIndicator, Avatar, HelperText, Icon } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
@@ -13,17 +13,20 @@ import { useFormik } from 'formik'
 import UploadAvatar from 'Services/UploadAvatar'
 import { changeImageProfile } from 'lib/Store/Slices/UserSlice'
 import { storeUserInfo, UpdataUserInfo } from 'Services/Storage'
+import { responsiveHeight as rh, responsiveWidth as rw } from 'react-native-responsive-dimensions'
+import { RFValue } from 'react-native-responsive-fontsize'
+
 const avatarIcon = require('../../assets/avatar.png')
 const backImg = require('../../assets/backn.png')
 
 export default function Profile() {
-  const { width, height } = useWindowDimensions()
   const { userData } = useSelector((state: StateFace) => state.UserReducer)
   const router = useRouter()
   const dispatch = useDispatch()
   const [showImageOptions, setShowImageOptions] = useState(false)
   const [isLoadingRes, setIsLoadingRes] = useState(false)
   const [errorRes, setErrorRes] = useState<string | null>(null)
+
   async function handleChangeAvatar(formValues: any) {
     if (isLoadingRes) return
     setIsLoadingRes(true)
@@ -58,6 +61,7 @@ export default function Profile() {
       setIsLoadingRes(false)
     }
   }
+
   const formik = useFormik({
     initialValues: { image: '' },
     onSubmit: handleChangeAvatar,
@@ -66,6 +70,7 @@ export default function Profile() {
   async function callLogOut() {
     await handleLoutOut(dispatch, router)
   }
+
   useEffect(() => {
     if (isLoadingRes) return
     if (formik.values.image !== '' && !isLoadingRes) {
@@ -74,144 +79,135 @@ export default function Profile() {
     return () => {}
   }, [formik.values])
 
-  const avatarSize = width * 0.4
+  const avatarSize = rw(40)
 
   return (
     <Animatable.View animation="fadeIn" duration={200} easing="ease-in-out" style={{ flex: 1 }}>
-      <AppBar type="Profile" router={router} userData={userData} width={width} height={height} />
-      <View style={{ position: 'absolute', top: height * 0.2, width: '100%' }}>
-        <Image
-          style={{ width: '100%', height: height * 0.25 }}
-          contentFit="fill"
-          source={backImg}
-        />
+      <AppBar type="Profile" router={router} userData={userData} />
+
+      <View style={{ position: 'absolute', top: rh(20), width: '100%' }}>
+        <Image style={{ width: '100%', height: rh(25) }} contentFit="fill" source={backImg} />
       </View>
 
-      <View style={{ width: '100%', height: height * 0.2 }}>
+      <View style={{ width: '100%', height: rh(20) }}>
         <Image source={backImg} contentFit="fill" style={{ width: '100%', height: '100%' }} />
       </View>
 
-      <View
-        style={{
-          position: 'absolute',
-          top: height * 0.09,
-          left: (width - avatarSize) / 2,
-          zIndex: 10,
-        }}>
+      <View style={{ position: 'absolute', top: rh(9), left: rw(30), zIndex: 10 }}>
         <TouchableOpacity onPress={() => setShowImageOptions(true)} activeOpacity={0.8}>
           <Avatar.Image
-            source={
-              userData?.image
-                ? {
-                    uri: userData?.image,
-                  }
-                : avatarIcon
-            }
+            source={userData?.image ? { uri: userData?.image } : avatarIcon}
             size={avatarSize}
           />
         </TouchableOpacity>
       </View>
 
       <ScrollView
-        contentContainerStyle={{
-          flexGrow: 1,
-          paddingHorizontal: 24,
-          paddingBottom: 100,
-        }}
+        contentContainerStyle={{ flexGrow: 1, paddingHorizontal: rw(6), paddingBottom: rh(12) }}
         style={{
           flex: 1,
-          borderTopLeftRadius: 100,
-          borderTopRightRadius: 100,
+          borderTopLeftRadius: rw(25),
+          borderTopRightRadius: rw(25),
           backgroundColor: 'white',
-          paddingTop: height * 0.12,
+          paddingTop: rh(12),
         }}>
-        <View style={{ alignItems: 'center', marginBottom: 50 }}>
-          <Text style={{ fontSize: 28, fontWeight: 'bold', width: width, textAlign: 'center' }}>
+        <View style={{ alignItems: 'center', marginBottom: rh(5) }}>
+          <Text
+            style={{
+              fontSize: RFValue(24),
+              fontWeight: 'bold',
+              width: '100%',
+              textAlign: 'center',
+            }}>
             {userData?.name}
           </Text>
         </View>
 
-        <View style={{ gap: 30 }}>
+        <View style={{ gap: rh(3) }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
             <View
               style={{
-                height: 60,
-                width: 60,
+                height: rh(7),
+                width: rh(7),
                 justifyContent: 'center',
                 alignItems: 'center',
-                borderRadius: 22,
+                borderRadius: rw(5),
                 backgroundColor: '#6DB6FE',
               }}>
-              <Icon size={40} source="email-outline" />
+              <Icon size={RFValue(30)} source="email-outline" />
             </View>
-            <Text style={{ fontSize: 16, width: width }}>
+            <Text style={{ fontSize: RFValue(14), width: '100%' }}>
               {userData?.email ?? 'loading email...'}
             </Text>
           </View>
+
           <TouchableOpacity
             onPress={() => setShowImageOptions(true)}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
             <View
               style={{
-                height: 60,
-                width: 60,
+                height: rh(7),
+                width: rh(7),
                 justifyContent: 'center',
                 alignItems: 'center',
-                borderRadius: 22,
+                borderRadius: rw(5),
                 backgroundColor: '#6DB6FE',
               }}>
               {isLoadingRes ? (
                 <ActivityIndicator size={30} />
               ) : (
-                <Icon size={40} source="image-edit-outline" />
+                <Icon size={RFValue(30)} source="image-edit-outline" />
               )}
             </View>
             <View style={{ flexDirection: 'row' }}>
-              <Text style={{ fontSize: 16, width: width * 0.4 }}>Change Avatar</Text>
+              <Text style={{ fontSize: RFValue(12), width: rw(40) }}>Change Avatar</Text>
               <HelperText
                 type="error"
                 visible={!!errorRes}
-                style={{ textAlign: 'right', writingDirection: 'rtl', width: width * 0.4 }}>
+                style={{ textAlign: 'right', writingDirection: 'rtl', width: rw(40) }}>
                 {errorRes}
               </HelperText>
             </View>
           </TouchableOpacity>
+
           {userData?.role == 'admin' && (
             <TouchableOpacity
               onPress={() => router.push('/Dashboard')}
               style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
               <View
                 style={{
-                  height: 60,
-                  width: 60,
+                  height: rh(7),
+                  width: rh(7),
                   justifyContent: 'center',
                   alignItems: 'center',
-                  borderRadius: 22,
+                  borderRadius: rw(5),
                   backgroundColor: '#6DB6FE',
                 }}>
-                <Icon size={40} source="monitor-dashboard" />
+                <Icon size={RFValue(30)} source="monitor-dashboard" />
               </View>
-              <Text style={{ fontSize: 16, width: width }}>Dashboard</Text>
+              <Text style={{ fontSize: RFValue(12), width: '100%' }}>Dashboard</Text>
             </TouchableOpacity>
           )}
+
           <TouchableOpacity
             onPress={callLogOut}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
             <View
               style={{
-                height: 60,
-                width: 60,
+                height: rh(7),
+                width: rh(7),
                 justifyContent: 'center',
                 alignItems: 'center',
-                borderRadius: 22,
+                borderRadius: rw(5),
                 backgroundColor: '#eb9053',
               }}>
-              <Icon size={40} source="logout" />
+              <Icon size={RFValue(30)} source="logout" />
             </View>
-            <Text style={{ fontSize: 16, width: width }}>Log Out</Text>
+            <Text style={{ fontSize: RFValue(12), width: '100%' }}>Log Out</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
+
       <ShowImageOptions
         formik={formik}
         showImageOptions={showImageOptions}
