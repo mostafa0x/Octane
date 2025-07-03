@@ -35,8 +35,8 @@ const InputField = memo(({ label, name, formik, errorMes }: Props) => {
     <View style={styles.container}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Text style={styles.label}>{label}</Text>
-        <HelperText style={styles.helperText} type="error" visible={shouldShowError}>
-          {shouldShowError && '*'}
+        <HelperText style={styles.helperText} type="error" visible={!!shouldShowError}>
+          {(shouldShowError || hasError) && '*'}
           {formik.errors?.[name]}
         </HelperText>
       </View>
@@ -74,6 +74,7 @@ const createStyles = (hasError: boolean, hasSupspend: boolean) =>
       marginBottom: rh(0.5),
       fontSize: RFValue(14),
       color: '#6C7278',
+      width: rw(40),
     },
     inputContainer: {
       flexDirection: 'row',
@@ -97,9 +98,10 @@ const createStyles = (hasError: boolean, hasSupspend: boolean) =>
       marginLeft: rw(2),
     },
     helperText: {
-      fontSize: RFValue(12),
-      width: rw(90),
+      fontSize: RFValue(10),
+      width: rw(50),
       color: 'red',
+      textAlign: 'right',
     },
   })
 

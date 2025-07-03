@@ -14,9 +14,10 @@ export interface btnArray {
 interface props {
   name: string
   formik: any
+  themeMode: string
 }
 
-function SegmentedBtn({ name, formik }: props) {
+function SegmentedBtn({ name, formik, themeMode }: props) {
   const [currentBtns, setCurrentBtns] = useState<btnArray[]>([])
 
   const cards_SubmittedBtns = useRef<btnArray[]>([
@@ -40,7 +41,16 @@ function SegmentedBtn({ name, formik }: props) {
 
   return (
     <View>
-      <Text style={styles.label}>{name.split('_').join(' ')}</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Text style={styles.label}>{name.split('_').join(' ')}</Text>
+        <HelperText
+          style={styles.helperText}
+          type="error"
+          visible={formik.touched?.[name] && !!formik.errors?.[name]}>
+          {'*'}
+          {formik.errors?.[name]}
+        </HelperText>
+      </View>
 
       <SegmentedButtons
         value={formik.values?.[name]}
@@ -57,18 +67,15 @@ function SegmentedBtn({ name, formik }: props) {
           value: btn.name,
           label: btn.name.split('_').join(' '),
           icon: formik.values?.[name] === btn.name ? 'check-bold' : '',
-          checkedColor: 'green',
+          checkedColor: themeMode == 'dark' ? 'green' : 'green',
           uncheckedColor: 'red',
-          labelStyle: styles.labelStyle,
+          labelStyle: {
+            color: themeMode == 'dark' ? 'white' : 'black',
+            textAlignVertical: 'center',
+            height: rh(2),
+          },
         }))}
       />
-
-      <HelperText
-        style={styles.helperText}
-        type="error"
-        visible={formik.touched?.[name] && !!formik.errors?.[name]}>
-        {formik.errors?.[name]}
-      </HelperText>
     </View>
   )
 }
@@ -82,15 +89,11 @@ const styles = StyleSheet.create({
   segmentedContainer: {
     height: rh(4),
   },
-  labelStyle: {
-    textAlignVertical: 'center',
-    height: rh(2),
-    fontSize: rf(1.3),
-    color: 'black',
-  },
+
   helperText: {
-    fontSize: rf(1.6),
+    fontSize: rf(1.4),
     color: 'red',
+    textAlign: 'right',
   },
 })
 

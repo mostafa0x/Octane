@@ -1,11 +1,11 @@
-import { View, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text } from 'react-native'
+import { View, Keyboard, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as Animatable from 'react-native-animatable'
 import { router } from 'expo-router'
 import InputField from 'components/form/InputField'
 import { useFormik } from 'formik'
 import { UploadvalidationSchema } from 'lib/Vaildtions/UploadSchema'
-import { Button, HelperText, Searchbar } from 'react-native-paper'
+import { Button, HelperText, Searchbar, Text } from 'react-native-paper'
 import SegmentedBtn from 'components/SegmentedBtn'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
@@ -26,6 +26,7 @@ import {
   responsiveWidth as rw,
   responsiveFontSize as rf,
 } from 'react-native-responsive-dimensions'
+import { useThemeContext } from 'Providers/ThemeContext'
 
 export default function Upload() {
   const backImg = useRef(require('../../assets/backn.png'))
@@ -40,6 +41,7 @@ export default function Upload() {
   const [currCompany, setCurrCompnay] = useState<CompanyFace | null>(null)
   const searchBoxRef = useRef<React.ComponentRef<typeof Searchbar>>(null)
   const dispatch = useDispatch()
+  const { themeMode } = useThemeContext()
 
   const handleUpload = async (formValues: any) => {
     if (isLoadingRes) return
@@ -141,7 +143,7 @@ export default function Upload() {
 
   const segmentedButtons = useMemo(() => {
     return ['submission_type', 'delivery_method', 'state_time'].map((item) => (
-      <SegmentedBtn key={item} name={item} formik={formik} />
+      <SegmentedBtn themeMode={themeMode} key={item} name={item} formik={formik} />
     ))
   }, [formik])
 
@@ -167,11 +169,12 @@ export default function Upload() {
         <View
           style={{
             flex: 1,
-            borderTopLeftRadius: rw(12),
-            borderTopRightRadius: rw(12),
-            backgroundColor: 'white',
+            borderTopLeftRadius: rw(25),
+            borderTopRightRadius: rw(25),
+            backgroundColor: themeMode == 'dark' ? 'black' : 'white',
             paddingHorizontal: rw(5),
             paddingVertical: rh(5),
+            gap: 30,
           }}>
           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <Button
@@ -181,6 +184,13 @@ export default function Upload() {
               onPress={() => setIsShowSerachCompany(true)}>
               Select Company
             </Button>
+            <HelperText
+              style={{ fontSize: rw(2.8), color: 'red', textAlign: 'center' }}
+              type="error"
+              visible={formik.touched.company_id && !!formik.errors.company_id}>
+              {'*'}
+              {formik.errors.company_id}
+            </HelperText>
             {currCompany && (
               <Text
                 style={{
@@ -204,13 +214,6 @@ export default function Upload() {
             )}
           </View>
 
-          <HelperText
-            style={{ fontSize: rw(2.8), color: 'red' }}
-            type="error"
-            visible={formik.touched.company_id && !!formik.errors.company_id}>
-            {formik.errors.company_id}
-          </HelperText>
-
           <InputField
             label={'cards submitted'}
             name={'cards_submitted'}
@@ -223,12 +226,11 @@ export default function Upload() {
           <View style={{ marginTop: rh(2) }}>
             <UploadImage
               formik={formik}
-              width={rw(100)}
-              height={rh(100)}
               setShowImageOptions={setShowImageOptions}
+              themeMode={themeMode}
             />
 
-            <View style={{ marginTop: 0 }}>
+            <View style={{ marginTop: rh(4) }}>
               <Button
                 loading={isLoadingRes}
                 onPress={() => {

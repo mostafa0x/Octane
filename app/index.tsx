@@ -101,7 +101,7 @@ export default function Home() {
               ref={searchBoxRef}
               placeholder="Search"
               placeholderTextColor={'gray'}
-              style={{ backgroundColor: themeMode == 'dark' ? 'white' : 'white' }}
+              style={{ backgroundColor: themeMode == 'dark' ? '#111111' : 'white' }}
               value={searchQuery}
               onChangeText={handleSerach}
               onClearIconPress={() => handleActive(activeList)}
