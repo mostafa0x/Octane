@@ -266,6 +266,7 @@ export default function Upload() {
         </View>
 
         <SearchCompanyModal
+          themeMode={themeMode}
           isShowSerachCompany={isShowSerachCompany}
           setIsShowSerachCompany={setIsShowSerachCompany}
           searchBoxRef={searchBoxRef}

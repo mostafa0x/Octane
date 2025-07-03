@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import React, { memo, useRef } from 'react'
 import * as Animatable from 'react-native-animatable'
 import { FlashList } from '@shopify/flash-list'
@@ -9,27 +9,26 @@ import {
   responsiveWidth as rw,
   responsiveFontSize as rf,
 } from 'react-native-responsive-dimensions'
+import { Text } from 'react-native-paper'
 
 type AnimatableView = Animatable.View
 
 interface Props {
-  height: number
-  width: number
   currentcompanys: CompanyFace[]
   formik: any
   selectCompany: number
   SelectCompanyID: (id: number, name: string) => void
   setIsShowSerachCompany: any
+  themeMode: string
 }
 
 const SerachCompanys = ({
-  height,
-  width,
   currentcompanys,
   formik,
   selectCompany,
   SelectCompanyID,
   setIsShowSerachCompany,
+  themeMode,
 }: Props) => {
   const animRef = useRef<AnimatableView>(null)
 
@@ -48,9 +47,8 @@ const SerachCompanys = ({
         contentContainerStyle={styles.listContent}
         renderItem={({ item }) => (
           <ItemCard_CS
+            themeMode={themeMode}
             item={item}
-            height={height}
-            width={width}
             formik={formik}
             SelectCompanyID={SelectCompanyID}
             selectCompany={selectCompany}
@@ -71,11 +69,12 @@ const styles = StyleSheet.create({
   container: {
     height: rh(50),
     width: '100%',
-    padding: rw(2),
+    paddingHorizontal: rw(2),
     borderRadius: rf(2),
+    overflow: 'hidden',
   },
   listContent: {
-    paddingBottom: 0,
+    paddingBottom: rh(1),
   },
   emptyContainer: {
     marginTop: rh(6),

@@ -22,6 +22,7 @@ interface SearchCompanyModalProps {
   SelectCompanyID: any
   selectCompany: any
   getFontSize: number
+  themeMode: string
 }
 
 function SearchCompany_Modal({
@@ -38,6 +39,7 @@ function SearchCompany_Modal({
   SelectCompanyID,
   selectCompany,
   getFontSize,
+  themeMode,
 }: SearchCompanyModalProps) {
   return (
     <Modal
@@ -46,7 +48,14 @@ function SearchCompany_Modal({
       onDismiss={() => setIsShowSerachCompany(false)}
       transparent>
       <View style={styles.overlay}>
-        <View style={styles.modalContainer}>
+        <View
+          style={{
+            width: rw(100),
+            height: rh(72),
+            padding: rw(3),
+            borderRadius: rw(4),
+            backgroundColor: themeMode == 'dark' ? 'black' : 'white',
+          }}>
           <View style={styles.searchContainer}>
             <Searchbar
               ref={searchBoxRef}
@@ -59,8 +68,7 @@ function SearchCompany_Modal({
           </View>
 
           <SerachCompanys
-            height={height}
-            width={width}
+            themeMode={themeMode}
             currentcompanys={currentcompanys}
             formik={formik}
             SelectCompanyID={SelectCompanyID}
@@ -91,13 +99,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  modalContainer: {
-    backgroundColor: 'white',
-    width: rw(90),
-    height: rh(72),
-    padding: rw(3),
-    borderRadius: rw(4),
-  },
+
   searchContainer: {
     marginTop: rh(1),
     width: '100%',
