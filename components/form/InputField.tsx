@@ -89,7 +89,7 @@ const createStyles = (hasError: boolean, hasSupspend: boolean) =>
     input: {
       flex: 1,
       height: rh(6),
-      fontSize: RFValue(14),
+      fontSize: RFValue(12),
       color: 'black',
       paddingVertical: 0,
     },
@@ -99,9 +99,10 @@ const createStyles = (hasError: boolean, hasSupspend: boolean) =>
     },
     helperText: {
       fontSize: RFValue(10),
-      width: rw(50),
+      width: rw(60),
       color: 'red',
       textAlign: 'right',
+      paddingRight: rw(20),
     },
   })
 

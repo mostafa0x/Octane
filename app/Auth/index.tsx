@@ -84,7 +84,7 @@ export default function Auth() {
               borderTopLeftRadius: responsiveWidth(25),
               borderTopRightRadius: responsiveWidth(25),
               backgroundColor: 'white',
-              paddingHorizontal: responsiveWidth(5),
+              paddingHorizontal: responsiveWidth(3),
               paddingBottom: responsiveHeight(10),
               justifyContent: 'flex-start',
             }}>

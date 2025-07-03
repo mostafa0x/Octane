@@ -112,7 +112,7 @@ function ShowConfirmModal_Modle({
 const styles = StyleSheet.create({
   centeredOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(0,0,0,0.8)',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -134,11 +134,12 @@ const styles = StyleSheet.create({
     marginTop: rh(2),
   },
   textItem: {
-    fontSize: rf(2),
+    fontSize: rf(1.5),
   },
   boldText: {
-    fontWeight: 'bold',
-    fontSize: rf(2.2),
+    fontWeight: '300',
+    fontSize: rf(1.7),
+    textDecorationLine: 'underline',
   },
   errorContainer: {
     marginTop: rh(3),

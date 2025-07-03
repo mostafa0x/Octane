@@ -92,7 +92,7 @@ export default function SignIn({ setIsLoadingRes, keyboardVisible }: any) {
       {!!errorMes && (
         <HelperText
           type="error"
-          style={{ textAlign: 'center', marginTop: rh(2), fontSize: RFValue(13) }}>
+          style={{ textAlign: 'center', marginTop: rh(2), fontSize: RFValue(13), color: 'red' }}>
           {errorMes}
         </HelperText>
       )}

@@ -223,14 +223,14 @@ export default function Upload() {
 
           {segmentedButtons}
 
-          <View style={{ marginTop: rh(2) }}>
+          <View style={{ marginTop: rh(1) }}>
             <UploadImage
               formik={formik}
               setShowImageOptions={setShowImageOptions}
               themeMode={themeMode}
             />
 
-            <View style={{ marginTop: rh(4) }}>
+            <View style={{ marginTop: rh(0) }}>
               <Button
                 loading={isLoadingRes}
                 onPress={() => {
