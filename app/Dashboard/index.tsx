@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
-import { ActivityIndicator } from 'react-native-paper'
+import { View, TouchableOpacity, ScrollView } from 'react-native'
+import { Text, ActivityIndicator } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
 import { useRouter } from 'expo-router'
@@ -14,6 +14,7 @@ import {
   responsiveWidth as rw,
   responsiveFontSize as rf,
 } from 'react-native-responsive-dimensions'
+import { useThemeContext } from 'Providers/ThemeContext'
 
 const avatarIcon = require('../../assets/avatar.png')
 const backImg = require('../../assets/backn.png')
@@ -21,7 +22,7 @@ const backImg = require('../../assets/backn.png')
 export default function Dashboard() {
   const { userData } = useSelector((state: StateFace) => state.UserReducer)
   const router = useRouter()
-
+  const { themeMode } = useThemeContext()
   async function handleGetUsers() {
     try {
       const res = await axiosClient.get('/admin/users/')
@@ -52,7 +53,7 @@ export default function Dashboard() {
           flex: 1,
           borderTopLeftRadius: 100,
           borderTopRightRadius: 100,
-          backgroundColor: 'white',
+          backgroundColor: themeMode == 'dark' ? 'black' : 'white',
           paddingTop: rh(5),
         }}>
         <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: rh(10) }}>
@@ -97,7 +98,7 @@ export default function Dashboard() {
                     <Text
                       style={{
                         fontSize: rf(1.8),
-                        color: 'black',
+                        color: themeMode == 'dark' ? 'white' : 'black',
                         textAlign: 'center',
                         marginTop: rh(1),
                         width: '100%',

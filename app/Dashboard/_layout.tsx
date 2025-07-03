@@ -3,12 +3,14 @@ import React, { useEffect, useState } from 'react'
 import { Stack, usePathname, useRouter } from 'expo-router'
 import AppBar from 'components/App Bar'
 import FooterDashboard from 'components/FooterDashboard'
+import { useThemeContext } from 'Providers/ThemeContext'
 
 export default function LayoutDashboard() {
   const { width, height } = useWindowDimensions()
   const router = useRouter()
   const pathName = usePathname()
   const [label, setLabel] = useState('Dashboard')
+  const { themeMode } = useThemeContext()
 
   useEffect(() => {
     if (pathName == '/Dashboard') {
@@ -25,7 +27,7 @@ export default function LayoutDashboard() {
   }, [pathName])
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'white' }}>
+    <View style={{ flex: 1, backgroundColor: themeMode == 'dark' ? 'black' : 'white' }}>
       <AppBar type="Dashboard" label={label} router={router} />
 
       <Stack screenOptions={{ headerShown: false, animation: 'fade' }} />

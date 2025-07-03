@@ -27,7 +27,7 @@ export default function SwipeBtn({ router, themeMode }: props) {
         goBackToStart={true}
         circleBackgroundColor="#8d1c47"
         titleContainerStyle={{ backgroundColor: themeMode == 'dark' ? 'black' : 'white' }}
-        underlayStyle={{ backgroundColor: '#c47b9f' }}
+        underlayStyle={{ backgroundColor: themeMode == 'dark' ? 'white' : '#c47b9f' }}
         underlayTitleStyle={{ fontSize: rf(1.3), width: rw(80) }}
         underlayTitle="Swipe up to open"
         title="Swipe to upload acknowledgment"

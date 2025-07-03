@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import React, { memo } from 'react'
 import { Icon } from 'react-native-paper'
 import { Router } from 'expo-router'
+import { useThemeContext } from 'Providers/ThemeContext'
 
 interface props {
   pathName: string
@@ -9,12 +10,14 @@ interface props {
   router: Router
 }
 function FooterDashboard({ pathName, height, router }: props) {
+  const { themeMode } = useThemeContext()
+
   return (
     <View
       style={{
         marginTop: height * 0.002,
         height: height * 0.08,
-        backgroundColor: '#c47b9f',
+        backgroundColor: themeMode == 'dark' ? '#ffffff' : '#c47b9f',
         borderTopRightRadius: 50,
         borderTopLeftRadius: 50,
         justifyContent: 'space-evenly',
@@ -27,7 +30,7 @@ function FooterDashboard({ pathName, height, router }: props) {
           pathName == '/Dashboard' && {
             borderRadius: 25,
             padding: 5,
-            backgroundColor: '#ffffff',
+            backgroundColor: themeMode == 'dark' ? 'black' : '#ffffff',
           }
         }
         onPress={() => pathName !== '/Dashboard' && router.replace('/Dashboard')}>
@@ -39,7 +42,7 @@ function FooterDashboard({ pathName, height, router }: props) {
           pathName == '/Dashboard/Reports' && {
             borderRadius: 25,
             padding: 5,
-            backgroundColor: '#ffffff',
+            backgroundColor: themeMode == 'dark' ? 'black' : '#ffffff',
           }
         }>
         <Icon size={50} source={'file-find-outline'} />
@@ -52,7 +55,7 @@ function FooterDashboard({ pathName, height, router }: props) {
           pathName == '/Dashboard/UploadCompanys' && {
             borderRadius: 25,
             padding: 5,
-            backgroundColor: '#ffffff',
+            backgroundColor: themeMode == 'dark' ? 'black' : '#ffffff',
           }
         }>
         <Icon size={50} source={'file-upload-outline'} />
