@@ -1,4 +1,6 @@
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
+import { Text } from 'react-native-paper'
+
 import React, { memo, useEffect, useRef } from 'react'
 import * as Animatable from 'react-native-animatable'
 import { FlashList } from '@shopify/flash-list'
@@ -16,9 +18,10 @@ interface props {
   acknowledgments_Current: acknowledgmentsFace[]
   type: string
   emptyTXT?: string
+  themeMode: string
 }
 
-function ListCard({ acknowledgments_Current, type, emptyTXT }: props) {
+function ListCard({ acknowledgments_Current, type, emptyTXT, themeMode }: props) {
   const animRef = useRef<AnimatableView>(null)
 
   useEffect(() => {
@@ -40,7 +43,7 @@ function ListCard({ acknowledgments_Current, type, emptyTXT }: props) {
         estimatedItemSize={70}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={{ paddingBottom: rh(2) }}
-        renderItem={({ item }) => <ItemCard item={item} />}
+        renderItem={({ item }) => <ItemCard themeMode={themeMode} item={item} />}
         ListEmptyComponent={() => (
           <View
             style={{
@@ -49,7 +52,7 @@ function ListCard({ acknowledgments_Current, type, emptyTXT }: props) {
             }}>
             <Text
               style={{
-                fontSize: type === 'Home' ? rf(1.8) : rf(2),
+                fontSize: type === 'Home' ? rf(2) : rf(2),
                 opacity: 0.7,
                 width: rw(40),
                 textAlign: 'center',

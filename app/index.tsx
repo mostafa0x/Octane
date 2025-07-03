@@ -12,7 +12,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
 import { SearchAcknowledgments, SetAcknowledgments_Current } from 'lib/Store/Slices/MainSlice'
-import { useRouter } from 'expo-router'
+import { usePathname, useRouter } from 'expo-router'
 import NfcCard from 'components/NFC Card'
 import ListButtonHistory from 'components/List Button History'
 import * as Animatable from 'react-native-animatable'
@@ -20,6 +20,7 @@ import ListCard from 'components/List/ListCard'
 import AppBar from 'components/App Bar'
 import SwipeBtn from 'components/SwipeBtn'
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
+import { useThemeContext } from 'Providers/ThemeContext'
 
 export default function Home() {
   const backImg = useRef(require('../assets/backn.png'))
@@ -32,6 +33,8 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('')
   const searchBoxRef = useRef<React.ComponentRef<typeof Searchbar>>(null)
   const router = useRouter()
+  const pathName = usePathname()
+  const { toggleTheme, themeMode } = useThemeContext()
 
   const handleSerach = useCallback(
     (text: string) => {
@@ -54,7 +57,7 @@ export default function Home() {
 
   useEffect(() => {
     handleActive('daily')
-  }, [handleActive])
+  }, [pathName])
 
   return (
     <KeyboardAvoidingView
@@ -74,25 +77,45 @@ export default function Home() {
           <Image source={backImg.current} contentFit="fill" style={styles.fullImage} />
         </View>
 
-        <View style={styles.mainContainer}>
-          <NfcCard submitted={submitted} allocated={allocated} />
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            borderTopLeftRadius: responsiveWidth(25),
+            borderTopRightRadius: responsiveWidth(25),
 
-          <ListButtonHistory activeList={activeList} handleActive={handleActive} />
+            padding: responsiveWidth(5),
+            paddingTop: responsiveHeight(4),
+            backgroundColor: themeMode == 'dark' ? 'black' : 'white',
+          }}>
+          <NfcCard themeMode={themeMode} submitted={submitted} allocated={allocated} />
+
+          <ListButtonHistory
+            themeMode={themeMode}
+            activeList={activeList}
+            handleActive={handleActive}
+          />
 
           <View style={styles.searchContainer}>
             <Searchbar
               ref={searchBoxRef}
               placeholder="Search"
+              placeholderTextColor={'gray'}
+              style={{ backgroundColor: themeMode == 'dark' ? 'white' : 'white' }}
               value={searchQuery}
               onChangeText={handleSerach}
               onClearIconPress={() => handleActive(activeList)}
             />
           </View>
 
-          <ListCard type="Home" acknowledgments_Current={acknowledgments_Current} />
+          <ListCard
+            themeMode={themeMode}
+            type="Home"
+            acknowledgments_Current={acknowledgments_Current}
+          />
 
           <View style={styles.swipeBtnContainer}>
-            <SwipeBtn router={router} />
+            <SwipeBtn themeMode={themeMode} router={router} />
           </View>
         </View>
       </View>
@@ -120,15 +143,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  mainContainer: {
-    flex: 1,
-    alignItems: 'center',
-    borderTopLeftRadius: responsiveWidth(25),
-    borderTopRightRadius: responsiveWidth(25),
-    backgroundColor: 'white',
-    padding: responsiveWidth(5),
-    paddingTop: responsiveHeight(4),
-  },
+  mainContainer: {},
   searchContainer: {
     marginTop: responsiveHeight(2),
     width: responsiveWidth(90),

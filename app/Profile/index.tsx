@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
-import { ActivityIndicator, Avatar, HelperText, Icon } from 'react-native-paper'
+import { View, TouchableOpacity, ScrollView } from 'react-native'
+import { ActivityIndicator, Avatar, Button, HelperText, Icon, Text } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
 import { useRouter } from 'expo-router'
@@ -15,6 +15,7 @@ import { changeImageProfile } from 'lib/Store/Slices/UserSlice'
 import { storeUserInfo, UpdataUserInfo } from 'Services/Storage'
 import { responsiveHeight as rh, responsiveWidth as rw } from 'react-native-responsive-dimensions'
 import { RFValue } from 'react-native-responsive-fontsize'
+import { useThemeContext } from 'Providers/ThemeContext'
 
 const avatarIcon = require('../../assets/avatar.png')
 const backImg = require('../../assets/backn.png')
@@ -26,6 +27,7 @@ export default function Profile() {
   const [showImageOptions, setShowImageOptions] = useState(false)
   const [isLoadingRes, setIsLoadingRes] = useState(false)
   const [errorRes, setErrorRes] = useState<string | null>(null)
+  const { toggleTheme, themeMode } = useThemeContext()
 
   async function handleChangeAvatar(formValues: any) {
     if (isLoadingRes) return
@@ -108,7 +110,7 @@ export default function Profile() {
           flex: 1,
           borderTopLeftRadius: rw(25),
           borderTopRightRadius: rw(25),
-          backgroundColor: 'white',
+          backgroundColor: themeMode === 'light' ? 'white' : '#080101',
           paddingTop: rh(10),
         }}>
         <View style={{ alignItems: 'center', marginBottom: rh(10) }}>
@@ -193,6 +195,24 @@ export default function Profile() {
             </TouchableOpacity>
           )}
 
+          <TouchableOpacity
+            onPress={toggleTheme}
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+            <View
+              style={{
+                height: rh(7),
+                width: rh(7),
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius: rw(5),
+                backgroundColor: '#eb9053',
+              }}>
+              <Icon size={RFValue(30)} source="theme-light-dark" />
+            </View>
+            <Text style={{ fontSize: RFValue(14), width: '100%', fontWeight: 'regular' }}>
+              {themeMode == 'dark' ? 'Dark Mode' : 'lite Mode'}
+            </Text>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={callLogOut}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>

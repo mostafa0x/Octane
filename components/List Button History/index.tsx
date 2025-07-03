@@ -10,9 +10,10 @@ import {
 interface props {
   activeList: string
   handleActive: (period: string) => void
+  themeMode: string
 }
 
-function ListButtonHistory({ activeList, handleActive }: props) {
+function ListButtonHistory({ activeList, handleActive, themeMode }: props) {
   const height = rh(7)
   const width = rw(90)
   const buttonWidth = width / 3 - 10
@@ -25,7 +26,7 @@ function ListButtonHistory({ activeList, handleActive }: props) {
         height,
         width,
         borderRadius: rw(4),
-        backgroundColor: '#c47b9f',
+        backgroundColor: themeMode == 'dark' ? '#000000' : '#c47b9f',
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
@@ -38,9 +39,17 @@ function ListButtonHistory({ activeList, handleActive }: props) {
           style={{ width: buttonWidth, height: buttonHeight, borderRadius: rw(25) }}
           labelStyle={{
             fontSize: rf(1.7),
-            color: activeList === item ? '#eff1f1' : '#052224',
+            color: activeList === item ? '#eff1f1' : themeMode == 'dark' ? '#ffffff' : 'black',
           }}
-          buttonColor={activeList === item ? '#8d1c47' : '#c47b9f'}
+          buttonColor={
+            activeList === item
+              ? themeMode == 'dark'
+                ? '#8d1c47'
+                : '#8d1c47'
+              : themeMode == 'dark'
+                ? '#000000'
+                : '#c47b9f'
+          }
           contentStyle={{
             justifyContent: 'center',
             height: buttonHeight,

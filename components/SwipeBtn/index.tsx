@@ -11,9 +11,10 @@ import {
 
 interface props {
   router: Router
+  themeMode: string
 }
 
-export default function SwipeBtn({ router }: props) {
+export default function SwipeBtn({ router, themeMode }: props) {
   const handleComplete = useCallback(() => {
     router.push('/Upload')
   }, [router])
@@ -25,11 +26,16 @@ export default function SwipeBtn({ router }: props) {
         width={rw(87)}
         goBackToStart={true}
         circleBackgroundColor="#8d1c47"
+        titleContainerStyle={{ backgroundColor: themeMode == 'dark' ? 'black' : 'white' }}
         underlayStyle={{ backgroundColor: '#c47b9f' }}
         underlayTitleStyle={{ fontSize: rf(1.3), width: rw(80) }}
         underlayTitle="Swipe up to open"
         title="Swipe to upload acknowledgment"
-        titleStyle={{ width: rw(80), fontSize: rf(1.3) }}
+        titleStyle={{
+          width: rw(80),
+          fontSize: rf(1.3),
+          color: themeMode == 'dark' ? 'white' : 'black',
+        }}
         onComplete={handleComplete}
         iconContainerStyle={{}}
         Icon={<Icon color="#bdcdce" size={rf(6)} source="plus" />}

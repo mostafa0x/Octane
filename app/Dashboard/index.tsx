@@ -40,7 +40,6 @@ export default function Dashboard() {
 
   return (
     <Animatable.View animation="fadeIn" duration={100} style={{ flex: 1 }}>
-      {/* الخلفية العلوية */}
       <View style={{ position: 'absolute', top: rh(20), width: '100%' }}>
         <Image style={{ width: '100%', height: rh(25) }} contentFit="fill" source={backImg} />
       </View>
@@ -48,7 +47,6 @@ export default function Dashboard() {
         <Image source={backImg} contentFit="fill" style={{ width: '100%', height: '100%' }} />
       </View>
 
-      {/* المحتوى */}
       <View
         style={{
           flex: 1,

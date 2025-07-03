@@ -1,7 +1,7 @@
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 import React, { memo } from 'react'
 import * as Progress from 'react-native-progress'
-import { Icon } from 'react-native-paper'
+import { Icon, Text } from 'react-native-paper'
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
 import { RFValue } from 'react-native-responsive-fontsize'
 
@@ -10,9 +10,10 @@ const nfcIcon = require('../../assets/nfc.png')
 interface props {
   submitted: number
   allocated: number
+  themeMode: string
 }
 
-function NfcCard({ submitted, allocated }: props) {
+function NfcCard({ submitted, allocated, themeMode }: props) {
   const cardWidth = responsiveWidth(90)
   const cardHeight = responsiveHeight(18)
   const progressSize = responsiveWidth(18)
@@ -24,7 +25,7 @@ function NfcCard({ submitted, allocated }: props) {
         width: cardWidth,
         flexDirection: 'row',
         borderRadius: responsiveWidth(7.5),
-        backgroundColor: '#8d1c47',
+        backgroundColor: themeMode === 'dark' ? '#000000' : '#8d1c47',
         padding: responsiveWidth(5),
       }}>
       <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
