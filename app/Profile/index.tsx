@@ -205,12 +205,16 @@ export default function Profile() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 borderRadius: rw(5),
-                backgroundColor: '#eb9053',
+                backgroundColor: themeMode == 'dark' ? 'white' : '#000000',
               }}>
-              <Icon size={RFValue(30)} source="theme-light-dark" />
+              <Icon
+                size={RFValue(30)}
+                color={themeMode == 'dark' ? 'black' : 'white'}
+                source="theme-light-dark"
+              />
             </View>
             <Text style={{ fontSize: RFValue(14), width: '100%', fontWeight: 'regular' }}>
-              {themeMode == 'dark' ? 'Dark Mode' : 'lite Mode'}
+              {themeMode == 'dark' ? 'light Mode' : 'Dark Mode'}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity

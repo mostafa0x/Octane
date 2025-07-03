@@ -61,73 +61,61 @@ export default function Home() {
   }, [pathName, themeMode])
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.keyboardAvoidingView}>
-      <View style={styles.animatableView}>
-        <Image style={styles.backgroundImage} contentFit="fill" source={backImg.current} />
+    <View style={styles.animatableView}>
+      <Image style={styles.backgroundImage} contentFit="fill" source={backImg.current} />
 
-        <AppBar
-          type="Home"
-          sectionPadding={responsiveWidth(5)}
-          router={router}
-          userData={userData}
+      <AppBar type="Home" sectionPadding={responsiveWidth(5)} router={router} userData={userData} />
+
+      <View style={styles.imageContainer}>
+        <Image source={backImg.current} contentFit="fill" style={styles.fullImage} />
+      </View>
+
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          borderTopLeftRadius: responsiveWidth(25),
+          borderTopRightRadius: responsiveWidth(25),
+
+          padding: responsiveWidth(5),
+          paddingTop: responsiveHeight(4),
+          backgroundColor: themeMode == 'dark' ? 'black' : 'white',
+        }}>
+        <NfcCard themeMode={themeMode} submitted={submitted} allocated={allocated} />
+
+        <ListButtonHistory
+          themeMode={themeMode}
+          activeList={activeList}
+          handleActive={handleActive}
         />
 
-        <View style={styles.imageContainer}>
-          <Image source={backImg.current} contentFit="fill" style={styles.fullImage} />
+        <View style={styles.searchContainer}>
+          <Searchbar
+            ref={searchBoxRef}
+            placeholder="Search"
+            placeholderTextColor={'gray'}
+            style={{ backgroundColor: themeMode == 'dark' ? '#111111' : '#f1f1f1' }}
+            value={searchQuery}
+            onChangeText={handleSerach}
+            onClearIconPress={() => handleActive(activeList)}
+          />
         </View>
 
-        <View
-          style={{
-            flex: 1,
-            alignItems: 'center',
-            borderTopLeftRadius: responsiveWidth(25),
-            borderTopRightRadius: responsiveWidth(25),
+        <ListCard
+          themeMode={themeMode}
+          type="Home"
+          acknowledgments_Current={acknowledgments_Current}
+        />
 
-            padding: responsiveWidth(5),
-            paddingTop: responsiveHeight(4),
-            backgroundColor: themeMode == 'dark' ? 'black' : 'white',
-          }}>
-          <NfcCard themeMode={themeMode} submitted={submitted} allocated={allocated} />
-
-          <ListButtonHistory
-            themeMode={themeMode}
-            activeList={activeList}
-            handleActive={handleActive}
-          />
-
-          <View style={styles.searchContainer}>
-            <Searchbar
-              ref={searchBoxRef}
-              placeholder="Search"
-              placeholderTextColor={'gray'}
-              style={{ backgroundColor: themeMode == 'dark' ? '#111111' : '#f1f1f1' }}
-              value={searchQuery}
-              onChangeText={handleSerach}
-              onClearIconPress={() => handleActive(activeList)}
-            />
-          </View>
-
-          <ListCard
-            themeMode={themeMode}
-            type="Home"
-            acknowledgments_Current={acknowledgments_Current}
-          />
-
-          <View style={styles.swipeBtnContainer}>
-            <SwipeBtn themeMode={themeMode} router={router} />
-          </View>
+        <View style={styles.swipeBtnContainer}>
+          <SwipeBtn themeMode={themeMode} router={router} />
         </View>
       </View>
-    </KeyboardAvoidingView>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
-  keyboardAvoidingView: {
-    flex: 1,
-  },
   animatableView: {
     flex: 1,
     backgroundColor: 'black',

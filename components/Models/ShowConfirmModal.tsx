@@ -30,12 +30,12 @@ function ShowConfirmModal_Modle({
   useEffect(() => {
     const backAction = () => {
       if (isLoadingRes) return true
+      setShowConfirmModal(false)
       return false
     }
+
     const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction)
-    return () => {
-      backHandler.remove()
-    }
+    return () => backHandler.remove()
   }, [isLoadingRes])
 
   return (

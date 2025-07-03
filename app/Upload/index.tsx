@@ -75,6 +75,7 @@ export default function Upload() {
 
       const data: acknowledgmentsFace = response.data.acknowledgments[0]
       dispatch(PushNewAcknowledgment({ data: data }))
+      setIsLoadingRes(false)
       router.push('/')
     } catch (err: any) {
       setErrorApi(err?.response?.data.message || err.message)
