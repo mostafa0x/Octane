@@ -255,6 +255,7 @@ export default function Upload() {
               formik={formik}
               errorApi={errorApi}
               isLoadingRes={isLoadingRes}
+              setErrorApi={setErrorApi}
               width={rw(100)}
               height={rh(100)}
             />

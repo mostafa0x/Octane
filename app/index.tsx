@@ -34,7 +34,8 @@ export default function Home() {
   const searchBoxRef = useRef<React.ComponentRef<typeof Searchbar>>(null)
   const router = useRouter()
   const pathName = usePathname()
-  const { toggleTheme, themeMode } = useThemeContext()
+  const { toggleTheme, themeMode }: { toggleTheme: () => void; themeMode: 'light' | 'dark' } =
+    useThemeContext()
 
   const handleSerach = useCallback(
     (text: string) => {
@@ -56,8 +57,8 @@ export default function Home() {
   )
 
   useEffect(() => {
+    handleActive('daily')
     handleSerach('')
-    handleActive('')
   }, [pathName, themeMode])
 
   return (

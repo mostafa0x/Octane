@@ -66,7 +66,7 @@ export default function Auth() {
           <View
             style={{
               width: '100%',
-              height: responsiveHeight(25),
+              height: responsiveHeight(30),
             }}>
             <Image
               source={logo}

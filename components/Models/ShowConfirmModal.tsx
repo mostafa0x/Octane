@@ -17,6 +17,7 @@ interface props {
   width: number
   height: number
   currCompany: CompanyFace | null
+  setErrorApi: any
 }
 
 function ShowConfirmModal_Modle({
@@ -26,6 +27,7 @@ function ShowConfirmModal_Modle({
   errorApi,
   isLoadingRes,
   currCompany,
+  setErrorApi,
 }: props) {
   useEffect(() => {
     const backAction = () => {
@@ -35,7 +37,10 @@ function ShowConfirmModal_Modle({
     }
 
     const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction)
-    return () => backHandler.remove()
+    return () => {
+      backHandler.remove()
+      setErrorApi(null)
+    }
   }, [isLoadingRes])
 
   return (

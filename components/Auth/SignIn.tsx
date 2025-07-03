@@ -48,7 +48,7 @@ export default function SignIn({ setIsLoadingRes, keyboardVisible }: any) {
       animation="fadeIn"
       duration={400}
       style={{
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         paddingHorizontal: rw(4),
       }}>
       <View

@@ -105,7 +105,7 @@ export default function SignUp({ setIsLoadingRes, keyboardVisible }: any) {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     paddingHorizontal: responsiveWidth(4),
   },
   inner: {
