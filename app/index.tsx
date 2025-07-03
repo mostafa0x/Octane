@@ -56,8 +56,9 @@ export default function Home() {
   )
 
   useEffect(() => {
-    handleActive('daily')
-  }, [pathName])
+    handleSerach('')
+    handleActive('')
+  }, [pathName, themeMode])
 
   return (
     <KeyboardAvoidingView
@@ -145,10 +146,11 @@ const styles = StyleSheet.create({
   },
   mainContainer: {},
   searchContainer: {
-    marginTop: responsiveHeight(2),
+    marginTop: responsiveHeight(0.5),
     width: responsiveWidth(90),
   },
   swipeBtnContainer: {
-    marginTop: responsiveHeight(0.5),
+    marginTop: responsiveHeight(2),
+    marginBottom: responsiveHeight(0),
   },
 })

@@ -174,29 +174,30 @@ export default function Upload() {
             backgroundColor: themeMode == 'dark' ? 'black' : 'white',
             paddingHorizontal: rw(5),
             paddingVertical: rh(5),
-            gap: 30,
+            gap: 15,
           }}>
           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-            <Button
-              style={{ width: rw(50) }}
-              buttonColor="#8d1c47"
-              textColor="white"
-              onPress={() => setIsShowSerachCompany(true)}>
-              Select Company
-            </Button>
-            <HelperText
-              style={{ fontSize: rw(2.8), color: 'red', textAlign: 'center' }}
-              type="error"
-              visible={formik.touched.company_id && !!formik.errors.company_id}>
-              {'*'}
-              {formik.errors.company_id}
-            </HelperText>
+            <View>
+              <Button
+                style={{ width: rw(50) }}
+                buttonColor="#8d1c47"
+                textColor="white"
+                onPress={() => setIsShowSerachCompany(true)}>
+                Select Company
+              </Button>
+              <HelperText
+                style={{ fontSize: rw(2.8), color: 'red', textAlign: 'center' }}
+                type="error"
+                visible={formik.touched.company_id && !!formik.errors.company_id}>
+                {'*'}
+                {formik.errors.company_id}
+              </HelperText>
+            </View>
             {currCompany && (
               <Text
                 style={{
                   width: rw(80),
                   textAlign: 'center',
-                  marginTop: rh(3),
                   fontWeight: '400',
                 }}>
                 Selected :
@@ -223,7 +224,7 @@ export default function Upload() {
 
           {segmentedButtons}
 
-          <View style={{ marginTop: rh(1) }}>
+          <View style={{ marginTop: rh(0) }}>
             <UploadImage
               formik={formik}
               setShowImageOptions={setShowImageOptions}

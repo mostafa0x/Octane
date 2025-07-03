@@ -41,7 +41,11 @@ function UploadImage({ formik, setShowImageOptions, themeMode }: props) {
             icon="image"
             mode="contained"
             contentStyle={{ height: rh(4) }}
-            labelStyle={{ fontSize: rf(1.7), color: themeMode == 'dark' ? 'white' : 'white' }}
+            labelStyle={{
+              fontSize: rf(1.7),
+              height: rf(2),
+              color: themeMode == 'dark' ? 'white' : 'white',
+            }}
             onPress={() => {
               Keyboard.dismiss()
               setShowImageOptions(true)
@@ -69,7 +73,6 @@ const createStyles = () =>
       borderWidth: 2,
       borderColor: '#D1D5DB',
       padding: rw(1),
-      marginBottom: rh(1),
     },
     helperText: {
       fontSize: rf(1.5),

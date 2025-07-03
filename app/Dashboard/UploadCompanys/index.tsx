@@ -111,7 +111,7 @@ export default function UploadCompanys() {
           padding: rw(5),
         }}>
         <View style={{ justifyContent: 'center', marginTop: rh(1), marginBottom: rh(5), gap: 30 }}>
-          <View style={{ padding: rw(2) }}>
+          <View style={{ padding: rw(8) }}>
             <Text style={{ fontWeight: 'bold', marginBottom: rh(0.8), fontSize: rf(2.2) }}>
               Supported file formats:
             </Text>

@@ -16,7 +16,6 @@ const ThemeContext = createContext<{
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [themeMode, setThemeMode] = useState<ThemeType>('light')
-
   useEffect(() => {
     const loadTheme = async () => {
       const storedTheme = await AsyncStorage.getItem('app_theme')
@@ -30,6 +29,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const toggleTheme = async () => {
     const newTheme = themeMode === 'dark' ? 'light' : 'dark'
     setThemeMode(newTheme)
+
     await AsyncStorage.setItem('app_theme', newTheme)
   }
 

@@ -51,7 +51,7 @@ function SearchCompany_Modal({
         <View
           style={{
             width: rw(100),
-            height: rh(72),
+            height: rh(68),
             padding: rw(3),
             borderRadius: rw(4),
             backgroundColor: themeMode == 'dark' ? 'black' : 'white',

@@ -73,6 +73,7 @@ function SegmentedBtn({ name, formik, themeMode }: props) {
             color: themeMode == 'dark' ? 'white' : 'black',
             textAlignVertical: 'center',
             height: rh(2),
+            fontSize: rf(1.2),
           },
         }))}
       />
