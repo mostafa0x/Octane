@@ -1,6 +1,6 @@
-import { View, Text, TouchableOpacity, ActivityIndicator, Modal } from 'react-native'
+import { View, TouchableOpacity, ActivityIndicator, Modal } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
-import { Avatar, Button, Icon } from 'react-native-paper'
+import { Avatar, Button, Icon, Text } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
 import { useDispatch } from 'react-redux'
@@ -21,6 +21,7 @@ import {
   responsiveWidth as rw,
   responsiveFontSize as rf,
 } from 'react-native-responsive-dimensions'
+import { useThemeContext } from 'Providers/ThemeContext'
 
 const avatarIcon = require('../../../../assets/avatar.png')
 const backImg = require('../../../../assets/backn.png')
@@ -53,6 +54,7 @@ export default function UserInfo() {
   const { setUserInfo, isCallSupspend, setIsCallSupspend } = useUserInfoContext()
   const { data, isLoading, isError, error, refetch }: UseQueryResult<UserInfoFace> =
     useGetUserInfo(currUserID)
+  const { themeMode } = useThemeContext()
 
   useEffect(() => {
     if (data) {
@@ -155,7 +157,7 @@ export default function UserInfo() {
           flex: 1,
           borderTopLeftRadius: 100,
           borderTopRightRadius: 100,
-          backgroundColor: 'white',
+          backgroundColor: themeMode == 'dark' ? 'black' : 'white',
           paddingHorizontal: rw(5),
         }}>
         {isError ? (
@@ -169,13 +171,20 @@ export default function UserInfo() {
             <NFCCardDashboard
               submitted={data?.submitted ?? 0}
               allocated={data?.allocated ?? 0}
-              height={height}
-              width={width}
               userID={currUserID}
               refetch={refetch}
+              themeMode={themeMode}
             />
-            <ListButtonHistory activeList={activeList} handleActive={handleActive} />
-            <ListCard type="Dashboard" acknowledgments_Current={currData ?? []} />
+            <ListButtonHistory
+              themeMode={themeMode}
+              activeList={activeList}
+              handleActive={handleActive}
+            />
+            <ListCard
+              themeMode={themeMode}
+              type="Dashboard"
+              acknowledgments_Current={currData ?? []}
+            />
           </View>
         )}
       </View>

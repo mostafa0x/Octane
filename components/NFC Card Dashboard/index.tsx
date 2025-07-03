@@ -14,14 +14,13 @@ const nfcIcon = require('../../assets/nfc.png')
 interface props {
   submitted: number
   allocated: number
-  height: number
-  width: number
   userID: number
   refetch: any
+  themeMode: string
 }
 
-function NfcCardDashboard({ submitted, allocated, height, width, userID, refetch }: props) {
-  const progressSize = Math.min(width, height) * 0.18
+function NfcCardDashboard({ submitted, allocated, userID, refetch, themeMode }: props) {
+  const progressSize = rw(18)
   const [valueNum, setValueNum] = useState<any>(0)
   const [isShowModel, setIsShowModel] = useState(false)
   const [isLoadingRes, setIsLoadingRes] = useState(false)
@@ -49,7 +48,15 @@ function NfcCardDashboard({ submitted, allocated, height, width, userID, refetch
   }
 
   return (
-    <View style={styles.cardContainer}>
+    <View
+      style={{
+        flexDirection: 'row',
+        borderRadius: rf(2),
+        backgroundColor: themeMode == 'dark' ? 'black' : '#8d1c47',
+        padding: rw(5),
+        width: rw(90),
+        height: rh(18),
+      }}>
       <TouchableOpacity onPress={() => setIsShowModel(true)} style={styles.leftSection}>
         <Progress.Circle
           size={progressSize}
@@ -136,14 +143,6 @@ function NfcCardDashboard({ submitted, allocated, height, width, userID, refetch
 }
 
 const styles = StyleSheet.create({
-  cardContainer: {
-    flexDirection: 'row',
-    borderRadius: rf(2),
-    backgroundColor: '#8d1c47',
-    padding: rw(5),
-    width: rw(90),
-    height: rh(18),
-  },
   leftSection: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -151,7 +150,7 @@ const styles = StyleSheet.create({
   },
   nfcIconContainer: {
     position: 'absolute',
-    top: rh(0.3),
+    top: rh(0.5),
   },
   addText: {
     color: '#bdcdce',
@@ -199,7 +198,7 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.7)',
+    backgroundColor: 'rgba(0,0,0,0.8)',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -238,6 +237,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: rw(3.2),
+    color: 'red',
   },
 })
 

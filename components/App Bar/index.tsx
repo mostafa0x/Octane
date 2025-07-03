@@ -94,7 +94,7 @@ const DashboardContent = React.memo(({ router, label }: props) => {
           <Menu
             visible={visible}
             onDismiss={() => setVisible(false)}
-            style={{ marginTop: rh(4.3), width: rw(25) }}
+            style={{ marginTop: rh(4.3), width: rw(28) }}
             contentStyle={{ backgroundColor: 'white' }}
             anchor={
               <TouchableOpacity onPress={() => setVisible(true)}>
@@ -102,7 +102,7 @@ const DashboardContent = React.memo(({ router, label }: props) => {
               </TouchableOpacity>
             }>
             <Menu.Item
-              style={{ width: rw(10), height: rh(3) }}
+              style={{ width: rw(12), height: rh(3) }}
               titleStyle={{ color: 'black', fontSize: RFValue(12) }}
               leadingIcon={() => (
                 <Icon
