@@ -47,14 +47,14 @@ function ListCard({ acknowledgments_Current, type, emptyTXT, themeMode }: props)
         ListEmptyComponent={() => (
           <View
             style={{
-              marginTop: type === 'Reports' ? rh(40) : rh(5),
+              marginTop: type === 'Reports' ? rh(20) : rh(5),
               alignItems: 'center',
             }}>
             <Text
               style={{
-                fontSize: type === 'Home' ? rf(2) : rf(2),
+                fontSize: type === 'Home' ? rf(2) : rf(2.5),
                 opacity: 0.7,
-                width: rw(40),
+                width: rw(50),
                 textAlign: 'center',
                 fontWeight: '300',
               }}>

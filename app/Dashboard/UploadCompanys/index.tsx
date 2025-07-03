@@ -1,8 +1,8 @@
-import { View, Text, TouchableOpacity, ActivityIndicator, Modal } from 'react-native'
+import { View, TouchableOpacity, ActivityIndicator, Modal } from 'react-native'
 import React, { useRef, useState } from 'react'
 import * as DocumentPicker from 'expo-document-picker'
 import axiosClient from 'lib/api/axiosClient'
-import { Button, HelperText, Icon } from 'react-native-paper'
+import { Button, HelperText, Icon, Text } from 'react-native-paper'
 import {
   responsiveHeight as rh,
   responsiveWidth as rw,
@@ -12,6 +12,7 @@ import { Image } from 'expo-image'
 import * as Animatable from 'react-native-animatable'
 import { UpdateCompanys } from 'Services/Storage'
 import { useDispatch } from 'react-redux'
+import { useThemeContext } from 'Providers/ThemeContext'
 
 const backImg = require('../../../assets/backn.png')
 
@@ -23,7 +24,7 @@ export default function UploadCompanys() {
   const [fileRes, setFileRes] = useState<DocumentPicker.DocumentPickerResult>()
   const [confirmUpload, setConfirmUpload] = useState(false)
   const dispatch = useDispatch()
-
+  const { themeMode } = useThemeContext()
   const formats = useRef([
     { ext: '.csv', desc: 'Comma-Separated Values' },
     { ext: '.xls', desc: 'Microsoft Excel 97-2003' },
@@ -66,6 +67,8 @@ export default function UploadCompanys() {
   const pickExcelFile = async () => {
     setErrorRes(null)
     setSuccusRes(null)
+    setFileName('')
+
     try {
       const res = await DocumentPicker.getDocumentAsync({
         type: '*/*',
@@ -107,7 +110,7 @@ export default function UploadCompanys() {
           flex: 1,
           borderTopLeftRadius: 100,
           borderTopRightRadius: 100,
-          backgroundColor: 'white',
+          backgroundColor: themeMode == 'dark' ? 'black' : 'white',
           padding: rw(5),
         }}>
         <View style={{ justifyContent: 'center', marginTop: rh(1), marginBottom: rh(5), gap: 30 }}>
@@ -212,6 +215,7 @@ export default function UploadCompanys() {
                   width: '100%',
                   textAlign: 'center',
                   fontWeight: '300',
+                  color: 'black',
                   fontSize: rf(1.5),
                 }}>
                 The uploaded file will update the existing companies' data. Please make sure all

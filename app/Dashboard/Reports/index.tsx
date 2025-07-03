@@ -18,6 +18,7 @@ import axiosClient from 'lib/api/axiosClient'
 import * as FileSystem from 'expo-file-system'
 import * as Sharing from 'expo-sharing'
 import { Buffer } from 'buffer'
+import { useThemeContext } from 'Providers/ThemeContext'
 
 export default function Reposts() {
   const dispatch = useDispatch()
@@ -30,7 +31,7 @@ export default function Reposts() {
   const { data, isLoading, isError, error, refetch, isFetching } = useReports(fromDate, toDate)
   const [isLoadingRes, setIsLoadingRes] = useState(false)
   const [isErrorRes, setIsErrorRes] = useState<string | null>(null)
-
+  const { themeMode } = useThemeContext()
   const formatDate = (date: Date) => date.toISOString().split('T')[0]
 
   async function handleExportReports() {
@@ -96,7 +97,7 @@ export default function Reposts() {
           flex: 1,
           borderTopLeftRadius: 100,
           borderTopRightRadius: 100,
-          backgroundColor: 'white',
+          backgroundColor: themeMode == 'dark' ? 'black' : 'white',
           padding: rw(5),
         }}>
         <View style={{ marginTop: rh(1), marginBottom: rh(5), gap: 30 }}>
@@ -128,6 +129,7 @@ export default function Reposts() {
                 }}>
                 <Button
                   loading={isLoading || isFetching}
+                  labelStyle={{ color: 'white' }}
                   buttonColor="#8d1c47"
                   style={{ width: rw(40) }}
                   mode="contained"
@@ -170,8 +172,9 @@ export default function Reposts() {
                   borderBottomWidth: 0,
                 }}>
                 <ListCard
+                  themeMode={themeMode}
                   type="Reports"
-                  acknowledgments_Current={currData ?? []}
+                  acknowledgments_Current={currData.reverse() ?? []}
                   emptyTXT={emptyTXT}
                 />
               </View>
