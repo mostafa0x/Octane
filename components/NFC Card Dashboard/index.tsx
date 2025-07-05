@@ -103,7 +103,7 @@ function NfcCardDashboard({ submitted, allocated, userID, refetch, themeMode }: 
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>Add Allocate</Text>
+              <Text style={styles.modalTitle}> Allocate</Text>
               <TextInput
                 onChangeText={(text: any) => setValueNum(text)}
                 value={valueNum}
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   },
   inputField: {
     borderWidth: 2,
-    borderRadius: rf(5),
+    borderRadius: rf(3),
     width: rw(50),
     height: rh(9),
     padding: rw(5),

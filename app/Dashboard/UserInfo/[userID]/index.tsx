@@ -155,8 +155,8 @@ export default function UserInfo() {
       <View
         style={{
           flex: 1,
-          borderTopLeftRadius: 100,
-          borderTopRightRadius: 100,
+          borderTopLeftRadius: rw(10),
+          borderTopRightRadius: rw(10),
           backgroundColor: themeMode == 'dark' ? 'black' : 'white',
           paddingHorizontal: rw(5),
         }}>

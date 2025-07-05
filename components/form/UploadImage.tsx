@@ -35,12 +35,13 @@ function UploadImage({ formik, setShowImageOptions, themeMode }: props) {
           />
         </TouchableOpacity>
       ) : (
-        <Animatable.View>
+        <Animatable.View style={{ alignItems: 'center' }}>
           <Button
             buttonColor="#8d1c47"
             icon="image"
             mode="contained"
-            contentStyle={{ height: rh(4) }}
+            style={{ width: rw(50), height: rh(5) }}
+            contentStyle={{ height: rh(5) }}
             labelStyle={{
               fontSize: rf(1.7),
               height: rf(2),

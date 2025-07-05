@@ -39,7 +39,7 @@ function NfcCard({ submitted, allocated, themeMode }: props) {
           thickness={4.25}
         />
 
-        <View style={{ position: 'absolute', top: responsiveHeight(-0.05) }}>
+        <View style={{ position: 'absolute', top: responsiveHeight(-0.2) }}>
           <Icon source={nfcIcon} color="white" size={progressSize} />
         </View>
 

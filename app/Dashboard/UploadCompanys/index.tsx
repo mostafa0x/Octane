@@ -108,8 +108,8 @@ export default function UploadCompanys() {
       <View
         style={{
           flex: 1,
-          borderTopLeftRadius: 100,
-          borderTopRightRadius: 100,
+          borderTopLeftRadius: rw(10),
+          borderTopRightRadius: rw(10),
           backgroundColor: themeMode == 'dark' ? 'black' : 'white',
           padding: rw(5),
         }}>

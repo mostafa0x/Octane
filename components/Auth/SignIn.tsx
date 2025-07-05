@@ -69,7 +69,7 @@ export default function SignIn({ setIsLoadingRes, keyboardVisible }: any) {
             style={{
               borderRadius: rw(5),
               height: rh(6),
-              width: rw(45),
+              width: rw(50),
               justifyContent: 'center',
             }}
             contentStyle={{

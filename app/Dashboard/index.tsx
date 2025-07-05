@@ -33,7 +33,7 @@ export default function Dashboard() {
     }
   }
 
-  const { data, isLoading, isFetching } = useQuery({
+  const { data, isLoading, isFetching, isError, error } = useQuery({
     queryKey: ['users'],
     queryFn: handleGetUsers,
     staleTime: 30000,
@@ -51,15 +51,19 @@ export default function Dashboard() {
       <View
         style={{
           flex: 1,
-          borderTopLeftRadius: 100,
-          borderTopRightRadius: 100,
+          borderTopLeftRadius: rw(10),
+          borderTopRightRadius: rw(10),
           backgroundColor: themeMode == 'dark' ? 'black' : 'white',
           paddingTop: rh(5),
         }}>
         <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: rh(10) }}>
-          {isLoading || isFetching ? (
+          {isError ? (
+            <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: rh(10) }}>
+              <Text style={{ fontSize: rf(3), color: 'red' }}>{error.message}</Text>
+            </View>
+          ) : isLoading || isFetching ? (
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-              <ActivityIndicator color="blue" size={80} />
+              <ActivityIndicator color="black" size={80} />
             </View>
           ) : (
             <View

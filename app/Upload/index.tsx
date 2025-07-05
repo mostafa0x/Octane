@@ -170,30 +170,23 @@ export default function Upload() {
         <View
           style={{
             flex: 1,
-            borderTopLeftRadius: rw(25),
-            borderTopRightRadius: rw(25),
+            borderTopLeftRadius: rw(10),
+            borderTopRightRadius: rw(10),
             backgroundColor: themeMode == 'dark' ? 'black' : 'white',
             paddingHorizontal: rw(5),
             paddingVertical: rh(5),
             gap: 15,
           }}>
-          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-            <View>
-              <Button
-                style={{ width: rw(50) }}
-                buttonColor="#8d1c47"
-                textColor="white"
-                onPress={() => setIsShowSerachCompany(true)}>
-                Select Company
-              </Button>
-              <HelperText
-                style={{ fontSize: rw(2.8), color: 'red', textAlign: 'center' }}
-                type="error"
-                visible={formik.touched.company_id && !!formik.errors.company_id}>
-                {'*'}
-                {formik.errors.company_id}
-              </HelperText>
-            </View>
+          {segmentedButtons}
+
+          <InputField
+            label={'card submitted'}
+            name={'cards_submitted'}
+            formik={formik}
+            errorMes={null}
+          />
+
+          <View style={{ alignItems: 'center', gap: 5 }}>
             {currCompany && (
               <Text
                 style={{
@@ -214,26 +207,33 @@ export default function Upload() {
                 </Text>
               </Text>
             )}
-          </View>
-
-          <InputField
-            label={'cards submitted'}
-            name={'cards_submitted'}
-            formik={formik}
-            errorMes={null}
-          />
-
-          {segmentedButtons}
-
-          <View style={{ marginTop: rh(0) }}>
+            <Button
+              style={{ width: rw(50), height: rh(5) }}
+              contentStyle={{ height: rh(5) }}
+              labelStyle={{ fontSize: rf(1.7) }}
+              buttonColor="#8d1c47"
+              textColor="white"
+              onPress={() => setIsShowSerachCompany(true)}>
+              Select Company
+            </Button>
+            <HelperText
+              style={{ fontSize: rw(2.8), color: 'red', textAlign: 'center' }}
+              type="error"
+              visible={formik.touched.company_id && !!formik.errors.company_id}>
+              {'*'}
+              {formik.errors.company_id}
+            </HelperText>
             <UploadImage
               formik={formik}
               setShowImageOptions={setShowImageOptions}
               themeMode={themeMode}
             />
 
-            <View style={{ marginTop: rh(0) }}>
+            <View style={{ marginTop: rh(0), alignItems: 'center' }}>
               <Button
+                style={{ width: rw(50), height: rh(5) }}
+                contentStyle={{ height: rh(5) }}
+                labelStyle={{ fontWeight: 'bold', fontSize: rf(1.7) }}
                 loading={isLoadingRes}
                 onPress={() => {
                   Keyboard.dismiss()

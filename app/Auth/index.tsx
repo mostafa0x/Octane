@@ -81,8 +81,8 @@ export default function Auth() {
           <View
             style={{
               flex: 1,
-              borderTopLeftRadius: responsiveWidth(25),
-              borderTopRightRadius: responsiveWidth(25),
+              borderTopLeftRadius: responsiveWidth(10),
+              borderTopRightRadius: responsiveWidth(10),
               backgroundColor: 'white',
               paddingHorizontal: responsiveWidth(3),
               paddingBottom: responsiveHeight(10),

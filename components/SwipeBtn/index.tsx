@@ -39,7 +39,7 @@ export default function SwipeBtn({ router, themeMode }: props) {
         onComplete={handleComplete}
         iconContainerStyle={{}}
         circleSize={rf(8)}
-        Icon={<Icon color="#bdcdce" size={rf(6)} source="plus" />}
+        Icon={<Icon color="#ffffff" size={rf(5)} source="arrow-right-thick" />}
       />
     </View>
   )

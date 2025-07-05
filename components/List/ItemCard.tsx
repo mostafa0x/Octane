@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react'
 import { TouchableOpacity, View, StyleSheet } from 'react-native'
-import { Text, Avatar } from 'react-native-paper'
+import { Text, Avatar, Icon } from 'react-native-paper'
 import { acknowledgmentsFace } from 'Types/Store/MainSliceFace'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -42,7 +42,7 @@ const ItemCard = ({ item, themeMode }: Props) => {
       </View>
 
       <View style={styles.separator} />
-      <View style={(styles.cardsBox, { width: rw(10) })}>
+      <View style={(styles.cardsBox, { width: rw(8) })}>
         <Text
           style={{
             fontSize: rf(1.6),
@@ -59,12 +59,12 @@ const ItemCard = ({ item, themeMode }: Props) => {
           style={[
             styles.deliveryMethod,
             {
-              fontSize: rf(1.5),
+              fontSize: rf(1.4),
               fontWeight: 'regular',
               color: themeMode == 'dark' ? '#fafafa' : '#052224',
             },
           ]}>
-          {item.delivery_method}
+          {item.submission_type}
         </Text>
         <Text
           style={[
@@ -74,8 +74,14 @@ const ItemCard = ({ item, themeMode }: Props) => {
               color: themeMode == 'dark' ? '#0068FF' : '#0068FF',
             },
           ]}>
-          {item.state_time}
+          {item.delivery_method}
         </Text>
+      </View>
+      <View style={{ marginLeft: rw(0) }}>
+        <Icon
+          size={30}
+          source={item.state_time == 'on_Time' ? 'clock-check-outline' : 'clock-remove-outline'}
+        />
       </View>
     </View>
   )

@@ -16,6 +16,7 @@ import { storeUserInfo, UpdataUserInfo } from 'Services/Storage'
 import { responsiveHeight as rh, responsiveWidth as rw } from 'react-native-responsive-dimensions'
 import { RFValue } from 'react-native-responsive-fontsize'
 import { useThemeContext } from 'Providers/ThemeContext'
+import FontAwesome from '@expo/vector-icons/FontAwesome'
 
 const avatarIcon = require('../../assets/avatar.png')
 const backImg = require('../../assets/backn.png')
@@ -108,9 +109,9 @@ export default function Profile() {
         contentContainerStyle={{ flexGrow: 1, paddingHorizontal: rw(6), paddingBottom: rh(12) }}
         style={{
           flex: 1,
-          borderTopLeftRadius: rw(25),
-          borderTopRightRadius: rw(25),
-          backgroundColor: themeMode === 'light' ? 'white' : '#080101',
+          borderTopLeftRadius: rw(10),
+          borderTopRightRadius: rw(10),
+          backgroundColor: themeMode === 'light' ? 'white' : '#000000',
           paddingTop: rh(10),
         }}>
         <View style={{ alignItems: 'center', marginBottom: rh(10) }}>
@@ -134,7 +135,7 @@ export default function Profile() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 borderRadius: rw(5),
-                backgroundColor: '#8d1c47',
+                backgroundColor: '#000000',
               }}>
               <Icon size={RFValue(25)} color="white" source="email-outline" />
             </View>
@@ -153,7 +154,7 @@ export default function Profile() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 borderRadius: rw(5),
-                backgroundColor: '#8d1c47',
+                backgroundColor: '#000000',
               }}>
               {isLoadingRes ? (
                 <ActivityIndicator size={30} />
@@ -163,7 +164,7 @@ export default function Profile() {
             </View>
             <View style={{ flexDirection: 'row' }}>
               <Text style={{ fontSize: RFValue(14), width: rw(40), fontWeight: 'regular' }}>
-                Change Avatar
+                Change Picture
               </Text>
               <HelperText
                 type="error"
@@ -185,7 +186,7 @@ export default function Profile() {
                   justifyContent: 'center',
                   alignItems: 'center',
                   borderRadius: rw(5),
-                  backgroundColor: '#8d1c47',
+                  backgroundColor: '#000000',
                 }}>
                 <Icon size={RFValue(25)} color="white" source="monitor-dashboard" />
               </View>
@@ -217,6 +218,22 @@ export default function Profile() {
               {themeMode == 'dark' ? 'light Mode' : 'Dark Mode'}
             </Text>
           </TouchableOpacity> */}
+          <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+            <View
+              style={{
+                height: rh(7),
+                width: rh(7),
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius: rw(5),
+                backgroundColor: '#000000',
+              }}>
+              <FontAwesome name="whatsapp" size={RFValue(35)} color="white" />
+            </View>
+            <Text style={{ fontSize: RFValue(14), width: '100%', fontWeight: 'regular' }}>
+              Contact us
+            </Text>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={callLogOut}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
@@ -227,9 +244,9 @@ export default function Profile() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 borderRadius: rw(5),
-                backgroundColor: '#e4620c',
+                backgroundColor: '#000000',
               }}>
-              <Icon size={RFValue(30)} source="logout" />
+              <Icon size={RFValue(30)} color="white" source="logout" />
             </View>
             <Text style={{ fontSize: RFValue(14), width: '100%', fontWeight: 'regular' }}>
               Log Out

@@ -22,14 +22,14 @@ const HomeContent = React.memo(({ router, userData }: props) => {
     <>
       <TouchableOpacity
         onPress={() => router.push('/Profile')}
-        style={{ position: 'absolute', left: rw(1), top: rh(0.2), zIndex: 10 }}>
+        style={{ position: 'absolute', left: rw(3), top: rh(0.2), zIndex: 10 }}>
         <Image
           style={{ width: rw(8), height: rh(6.4) }}
           contentFit="cover"
           source={require('../../assets/LogowithoutTXT.png')}
         />
       </TouchableOpacity>
-      <View style={{ position: 'absolute', left: rw(10), top: rh(1), zIndex: 10 }}>
+      <View style={{ position: 'absolute', left: rw(13), top: rh(1), zIndex: 10 }}>
         <Text
           style={{
             color: '#F1FFF3',
@@ -57,12 +57,12 @@ const ProfileContent = React.memo(({ router }: props) => {
     <>
       <TouchableOpacity
         onPress={() => router.back()}
-        style={{ position: 'absolute', left: rw(3), top: 0, zIndex: 10 }}>
+        style={{ position: 'absolute', left: rw(3), top: rh(1), zIndex: 10 }}>
         <View style={{ marginTop: 8 }}>
           <Icon size={RFValue(28)} color="white" source="keyboard-backspace" />
         </View>
       </TouchableOpacity>
-      <View style={{ position: 'absolute', left: rw(12), top: rh(1), zIndex: 10 }}>
+      <View style={{ position: 'absolute', left: rw(13), top: rh(2), zIndex: 10 }}>
         <Text
           style={{ color: '#F1FFF3', fontSize: RFValue(18), width: rw(100), fontWeight: 'bold' }}>
           Profile
@@ -79,18 +79,18 @@ const DashboardContent = React.memo(({ router, label }: props) => {
     <>
       <TouchableOpacity
         onPress={() => router.back()}
-        style={{ position: 'absolute', left: rw(3), top: 0, zIndex: 10 }}>
+        style={{ position: 'absolute', left: rw(3), top: rh(1), zIndex: 10 }}>
         <View style={{ marginTop: 8 }}>
           <Icon size={RFValue(28)} color="white" source="keyboard-backspace" />
         </View>
       </TouchableOpacity>
-      <View style={{ position: 'absolute', left: rw(12), top: rh(1), zIndex: 10 }}>
+      <View style={{ position: 'absolute', left: rw(13), top: rh(2), zIndex: 10 }}>
         <Text style={{ color: '#F1FFF3', fontSize: RFValue(18), fontWeight: 'bold' }}>
           {label ?? 'Dashboard'}
         </Text>
       </View>
       {label === 'User information' && (
-        <TouchableOpacity style={{ position: 'absolute', left: rw(88), top: rh(0.7), zIndex: 10 }}>
+        <TouchableOpacity style={{ position: 'absolute', left: rw(88), top: rh(2), zIndex: 10 }}>
           <Menu
             visible={visible}
             onDismiss={() => setVisible(false)}
@@ -115,7 +115,7 @@ const DashboardContent = React.memo(({ router, label }: props) => {
                 if (userInfo?.status === 'active') setIsCallSupspend(true)
                 setVisible(false)
               }}
-              title={userInfo?.status === 'active' ? 'block' : 'unblock'}
+              title={userInfo?.status === 'active' ? 'Suspend' : 'Active'}
             />
           </Menu>
         </TouchableOpacity>
@@ -129,12 +129,12 @@ const UploadContent = React.memo(({ router }: props) => {
     <>
       <TouchableOpacity
         onPress={() => router.back()}
-        style={{ position: 'absolute', left: rw(3), top: 0, zIndex: 10 }}>
+        style={{ position: 'absolute', left: rw(3), top: rh(1), zIndex: 10 }}>
         <View style={{ marginTop: 8 }}>
           <Icon size={RFValue(28)} color="white" source="keyboard-backspace" />
         </View>
       </TouchableOpacity>
-      <View style={{ position: 'absolute', left: rw(12), top: rh(1), zIndex: 10 }}>
+      <View style={{ position: 'absolute', left: rw(12), top: rh(2), zIndex: 10 }}>
         <Text
           style={{ color: '#F1FFF3', fontSize: RFValue(18), width: rw(100), fontWeight: 'bold' }}>
           Upload acknowledgments
@@ -149,12 +149,12 @@ function AppBar({ type, sectionPadding, router, userData, label }: props) {
     <View style={{ position: 'absolute', top: 0, left: 0, zIndex: 50, width: '100%' }}>
       <View
         style={{
-          height: type === 'Home' ? rh(7) : rh(5),
+          height: rh(7),
           width: '100%',
           borderBottomLeftRadius: 30,
           borderBottomRightRadius: 30,
           backgroundColor: 'black',
-          opacity: 0.4,
+          opacity: 0.3,
         }}
       />
       {type === 'Home' && <HomeContent router={router} userData={userData} />}
@@ -168,6 +168,16 @@ function AppBar({ type, sectionPadding, router, userData, label }: props) {
           </Text>
           <Text style={{ color: '#EEEEEE', fontSize: RFValue(14), fontWeight: '300' }}>
             Get Things Done Efficiently and Accurately
+          </Text>
+        </View>
+      )}
+      {label === 'Upload Companys' && (
+        <View style={{ marginTop: rh(5), marginLeft: rw(5), gap: 8, padding: sectionPadding }}>
+          <Text style={{ color: '#EEEEEE', fontSize: RFValue(20), fontWeight: 'bold' }}>
+            Upload company sheet
+          </Text>
+          <Text style={{ color: '#EEEEEE', fontSize: RFValue(14), fontWeight: '300' }}>
+            We handle the rest
           </Text>
         </View>
       )}

@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: responsiveWidth(5),
     height: responsiveHeight(6),
-    width: responsiveWidth(45),
+    width: responsiveWidth(50),
     justifyContent: 'center',
   },
   buttonContent: {

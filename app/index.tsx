@@ -75,9 +75,8 @@ export default function Home() {
         style={{
           flex: 1,
           alignItems: 'center',
-          borderTopLeftRadius: responsiveWidth(25),
-          borderTopRightRadius: responsiveWidth(25),
-
+          borderTopLeftRadius: responsiveWidth(10),
+          borderTopRightRadius: responsiveWidth(10),
           padding: responsiveWidth(5),
           paddingTop: responsiveHeight(4),
           backgroundColor: themeMode == 'dark' ? 'black' : 'white',
