@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     width: responsiveWidth(90),
   },
   swipeBtnContainer: {
-    marginTop: responsiveHeight(2),
+    marginTop: responsiveHeight(1.5),
     marginBottom: responsiveHeight(0),
   },
 })
