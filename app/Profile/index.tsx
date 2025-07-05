@@ -134,9 +134,9 @@ export default function Profile() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 borderRadius: rw(5),
-                backgroundColor: '#6DB6FE',
+                backgroundColor: '#8d1c47',
               }}>
-              <Icon size={RFValue(30)} source="email-outline" />
+              <Icon size={RFValue(25)} color="white" source="email-outline" />
             </View>
             <Text style={{ fontSize: RFValue(14), width: '100%', fontWeight: 'regular' }}>
               {userData?.email ?? 'loading email...'}
@@ -153,12 +153,12 @@ export default function Profile() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 borderRadius: rw(5),
-                backgroundColor: '#6DB6FE',
+                backgroundColor: '#8d1c47',
               }}>
               {isLoadingRes ? (
                 <ActivityIndicator size={30} />
               ) : (
-                <Icon size={RFValue(30)} source="image-edit-outline" />
+                <Icon size={RFValue(25)} color="white" source="image-edit-outline" />
               )}
             </View>
             <View style={{ flexDirection: 'row' }}>
@@ -185,9 +185,9 @@ export default function Profile() {
                   justifyContent: 'center',
                   alignItems: 'center',
                   borderRadius: rw(5),
-                  backgroundColor: '#6DB6FE',
+                  backgroundColor: '#8d1c47',
                 }}>
-                <Icon size={RFValue(30)} source="monitor-dashboard" />
+                <Icon size={RFValue(25)} color="white" source="monitor-dashboard" />
               </View>
               <Text style={{ fontSize: RFValue(14), width: '100%', fontWeight: 'regular' }}>
                 Dashboard
@@ -195,7 +195,7 @@ export default function Profile() {
             </TouchableOpacity>
           )}
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={toggleTheme}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
             <View
@@ -216,7 +216,7 @@ export default function Profile() {
             <Text style={{ fontSize: RFValue(14), width: '100%', fontWeight: 'regular' }}>
               {themeMode == 'dark' ? 'light Mode' : 'Dark Mode'}
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             onPress={callLogOut}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
@@ -227,7 +227,7 @@ export default function Profile() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 borderRadius: rw(5),
-                backgroundColor: '#eb9053',
+                backgroundColor: '#e4620c',
               }}>
               <Icon size={RFValue(30)} source="logout" />
             </View>

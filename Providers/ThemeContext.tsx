@@ -20,7 +20,8 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     const loadTheme = async () => {
       const storedTheme = await AsyncStorage.getItem('app_theme')
       if (storedTheme === 'dark' || storedTheme === 'light') {
-        setThemeMode(storedTheme)
+        storedTheme === 'dark' && (await AsyncStorage.setItem('app_theme', 'light'))
+        setThemeMode('light')
       }
     }
     loadTheme()
