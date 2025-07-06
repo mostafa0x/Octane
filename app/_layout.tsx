@@ -11,6 +11,7 @@ import { Provider } from 'react-redux'
 import { Store } from 'lib/Store'
 import Providers from 'Providers/Providers'
 import { ThemeProvider, useThemeContext } from 'Providers/ThemeContext'
+import 'react-native-gesture-handler'
 
 function AppWithTheme() {
   const { paperTheme } = useThemeContext()

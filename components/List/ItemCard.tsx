@@ -9,6 +9,7 @@ import {
   responsiveHeight as rh,
   responsiveFontSize as rf,
 } from 'react-native-responsive-dimensions'
+import ImageView from 'react-native-image-viewing'
 
 dayjs.extend(relativeTime)
 
@@ -23,67 +24,82 @@ const ItemCard = ({ item, themeMode }: Props) => {
 
   const avatarSize = useRef(rw(12))
   const imgs = useMemo(() => [{ uri: item.image }], [item.image])
+  const Images = useRef([
+    require('../../assets/car1.jpg'),
+    require('../../assets/car2.jpg'),
+    require('../../assets/car3.jpg'),
+    require('../../assets/car4.jpg'),
+  ])
+  const indexImg = useRef(Images.current[Math.floor(Math.random() * Images.current.length)])
 
   return (
-    <View style={[styles.container, { padding: rw(3.5) }]}>
-      <TouchableOpacity onPress={() => setIsVisible(true)}>
-        <Avatar.Image size={avatarSize.current} source={imgs} />
-      </TouchableOpacity>
+    <>
+      <View style={[styles.container, { padding: rw(3.5) }]}>
+        <TouchableOpacity onPress={() => setIsVisible(true)}>
+          <Avatar.Image size={avatarSize.current} source={indexImg.current} />
+        </TouchableOpacity>
 
-      <View style={[styles.companyInfo, { width: rw(20) }]}>
-        <Text
-          style={[
-            styles.companyName,
-            { fontSize: rf(1.5), color: themeMode == 'dark' ? 'white' : '#052224' },
-          ]}>
-          {item.company.name}
-        </Text>
-        <Text style={[styles.companyCode, { fontSize: rf(1.2) }]}>{item.company.code}</Text>
-      </View>
+        <View style={[styles.companyInfo, { width: rw(20) }]}>
+          <Text
+            style={[
+              styles.companyName,
+              { fontSize: rf(1.5), color: themeMode == 'dark' ? 'white' : '#052224' },
+            ]}>
+            {item.company.name}
+          </Text>
+          <Text style={[styles.companyCode, { fontSize: rf(1.2) }]}>{item.company.code}</Text>
+        </View>
 
-      <View style={styles.separator} />
-      <View style={(styles.cardsBox, { width: rw(8) })}>
-        <Text
-          style={{
-            fontSize: rf(1.6),
-            color: themeMode == 'dark' ? '#f7f7f7' : '#295ce9',
-            textAlign: 'center',
-          }}>
-          {item.cards_submitted}
-        </Text>
-      </View>
+        <View style={styles.separator} />
+        <View style={(styles.cardsBox, { width: rw(8) })}>
+          <Text
+            style={{
+              fontSize: rf(1.6),
+              color: themeMode == 'dark' ? '#f7f7f7' : '#295ce9',
+              textAlign: 'center',
+            }}>
+            {item.cards_submitted}
+          </Text>
+        </View>
 
-      <View style={styles.separator} />
-      <View style={styles.detailsBox}>
-        <Text
-          style={[
-            styles.deliveryMethod,
-            {
-              fontSize: rf(1.4),
-              fontWeight: 'regular',
-              color: themeMode == 'dark' ? '#fafafa' : '#052224',
-            },
-          ]}>
-          {item.submission_type}
-        </Text>
-        <Text
-          style={[
-            {
-              fontSize: rf(1.4),
-              fontWeight: 'regular',
-              color: themeMode == 'dark' ? '#0068FF' : '#0068FF',
-            },
-          ]}>
-          {item.delivery_method}
-        </Text>
+        <View style={styles.separator} />
+        <View style={styles.detailsBox}>
+          <Text
+            style={[
+              styles.deliveryMethod,
+              {
+                fontSize: rf(1.4),
+                fontWeight: 'regular',
+                color: themeMode == 'dark' ? '#fafafa' : '#052224',
+              },
+            ]}>
+            {item.submission_type}
+          </Text>
+          <Text
+            style={[
+              {
+                fontSize: rf(1.4),
+                fontWeight: 'regular',
+                color: themeMode == 'dark' ? '#0068FF' : '#0068FF',
+              },
+            ]}>
+            {item.delivery_method}
+          </Text>
+        </View>
+        <View style={{ marginLeft: rw(0) }}>
+          <Icon
+            size={30}
+            source={item.state_time == 'on_Time' ? 'clock-check-outline' : 'clock-remove-outline'}
+          />
+        </View>
       </View>
-      <View style={{ marginLeft: rw(0) }}>
-        <Icon
-          size={30}
-          source={item.state_time == 'on_Time' ? 'clock-check-outline' : 'clock-remove-outline'}
-        />
-      </View>
-    </View>
+      <ImageView
+        images={[{ uri: item.image }]}
+        imageIndex={0}
+        visible={visible}
+        onRequestClose={() => setIsVisible(false)}
+      />
+    </>
   )
 }
 

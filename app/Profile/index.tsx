@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, ScrollView } from 'react-native'
+import { View, TouchableOpacity, ScrollView, Linking } from 'react-native'
 import { ActivityIndicator, Avatar, Button, HelperText, Icon, Text } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
@@ -218,7 +218,9 @@ export default function Profile() {
               {themeMode == 'dark' ? 'light Mode' : 'Dark Mode'}
             </Text>
           </TouchableOpacity> */}
-          <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+          <TouchableOpacity
+            onPress={() => Linking.openURL('https://google.com')}
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
             <View
               style={{
                 height: rh(7),

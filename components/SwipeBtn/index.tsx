@@ -22,7 +22,7 @@ export default function SwipeBtn({ router, themeMode }: props) {
   return (
     <View style={{ alignItems: 'center' }}>
       <SwipeButton
-        height={rh(4)}
+        height={rh(3.5)}
         width={rw(87)}
         goBackToStart={true}
         circleBackgroundColor="#8d1c47"
@@ -38,7 +38,7 @@ export default function SwipeBtn({ router, themeMode }: props) {
         }}
         onComplete={handleComplete}
         iconContainerStyle={{}}
-        circleSize={rf(8)}
+        circleSize={rf(7)}
         Icon={<Icon color="#ffffff" size={rf(5)} source="arrow-right-thick" />}
       />
     </View>
