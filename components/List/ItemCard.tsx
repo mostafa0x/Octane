@@ -32,7 +32,7 @@ const ItemCard = ({ item, themeMode }: Props) => {
           <Avatar.Image size={avatarSize.current} source={indexImg.current} />
         </TouchableOpacity>
 
-        <View style={[styles.companyInfo, { width: rw(20) }]}>
+        <View style={[styles.companyInfo, { width: rw(26) }]}>
           <Text
             style={[
               styles.companyName,

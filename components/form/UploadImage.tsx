@@ -44,7 +44,7 @@ function UploadImage({ formik, setShowImageOptions, themeMode }: props) {
             contentStyle={{ height: rh(5) }}
             labelStyle={{
               fontSize: rf(1.7),
-              height: rf(2),
+              textAlign: 'center',
               color: themeMode == 'dark' ? 'white' : 'white',
             }}
             onPress={() => {

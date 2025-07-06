@@ -23,12 +23,13 @@ export default function SwipeBtn({ router, themeMode }: props) {
     <View style={{ alignItems: 'center' }}>
       <SwipeButton
         height={rh(4)}
-        width={rw(87)}
+        borderRadius={rw(10)}
+        width={rw(90)}
         goBackToStart={true}
         circleBackgroundColor="#8d1c47"
         titleContainerStyle={{ backgroundColor: themeMode == 'dark' ? 'black' : 'white' }}
         underlayStyle={{ backgroundColor: themeMode == 'dark' ? 'white' : '#c47b9f' }}
-        underlayTitleStyle={{ fontSize: rf(1.3), width: rw(80) }}
+        underlayTitleStyle={{ fontSize: rf(1.3), width: rw(60) }}
         underlayTitle="Swipe up to open"
         title="Swipe to upload acknowledgment"
         titleStyle={{
