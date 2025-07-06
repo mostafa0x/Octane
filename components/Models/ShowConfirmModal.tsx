@@ -102,7 +102,10 @@ function ShowConfirmModal_Modle({
               </Button>
               <Button
                 mode="outlined"
-                onPress={() => setShowConfirmModal(false)}
+                onPress={() => {
+                  setShowConfirmModal(false)
+                  setErrorApi(null)
+                }}
                 textColor="#f44336">
                 Cancel
               </Button>

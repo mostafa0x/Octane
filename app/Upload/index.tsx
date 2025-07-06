@@ -30,6 +30,7 @@ import { useThemeContext } from 'Providers/ThemeContext'
 
 export default function Upload() {
   const backImg = useRef(require('../../assets/backn.png'))
+  const { allocated, submitted } = useSelector((state: StateFace) => state.MainReducer)
   const { currentcompanys } = useSelector((state: StateFace) => state.CompanyReducer)
   const [selectCompany, setSelectCompany] = useState(0)
   const [isLoadingRes, setIsLoadingRes] = useState(false)
@@ -44,6 +45,9 @@ export default function Upload() {
   const { themeMode } = useThemeContext()
 
   const handleUpload = async (formValues: any) => {
+    if (+submitted + +formValues.cards_submitted >= allocated) {
+      return setErrorApi('You cannot submit more than allocated cards')
+    }
     if (isLoadingRes) return
     setIsLoadingRes(true)
     setErrorApi(null)
@@ -75,6 +79,7 @@ export default function Upload() {
 
       const data: acknowledgmentsFace = response.data.acknowledgments[0]
       dispatch(PushNewAcknowledgment({ data: data }))
+
       setIsLoadingRes(false)
       router.push('/')
     } catch (err: any) {

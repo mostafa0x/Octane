@@ -1,18 +1,22 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import React, { memo, useRef, useState } from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import { Image } from 'expo-image'
-import { Router } from 'expo-router'
+import { Router, useLocalSearchParams } from 'expo-router'
 import { userDataFace } from 'Types/Store/UserSliceFace'
-import { Icon, Menu } from 'react-native-paper'
+import { Divider, Icon, Menu } from 'react-native-paper'
 import { useUserInfoContext } from 'Providers/UserInfo'
 import { responsiveHeight as rh, responsiveWidth as rw } from 'react-native-responsive-dimensions'
 import { RFValue } from 'react-native-responsive-fontsize'
+import axiosClient from 'lib/api/axiosClient'
+import * as FileSystem from 'expo-file-system'
+import * as Sharing from 'expo-sharing'
+import { Buffer } from 'buffer'
 
 interface props {
   sectionPadding?: number
   router: Router
   userData?: userDataFace | null
-
+  userID?: number
   type?: string
   label?: string
 }
@@ -74,7 +78,32 @@ const ProfileContent = React.memo(({ router }: props) => {
 
 const DashboardContent = React.memo(({ router, label }: props) => {
   const [visible, setVisible] = useState(false)
-  const { userInfo, setIsCallSupspend } = useUserInfoContext()
+  const { userInfo, setIsCallSupspend, userId, userRole } = useUserInfoContext()
+
+  const downloadExcelFile = async () => {
+    try {
+      const downloadUrl = `/admin/report/export/user/${userId}`
+
+      const response = await axiosClient.get(downloadUrl, {
+        responseType: 'arraybuffer',
+      })
+      const fileUri = `${FileSystem.documentDirectory}user_${userId}_report.xlsx`
+
+      await FileSystem.writeAsStringAsync(fileUri, Buffer.from(response.data).toString('base64'), {
+        encoding: FileSystem.EncodingType.Base64,
+      })
+
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(fileUri)
+      } else {
+        alert('The file has been saved, but it cannot be shared on this device.')
+      }
+    } catch (error) {
+      console.log(error)
+
+      alert('Failed to download the report. Please try again.')
+    }
+  }
   return (
     <>
       <TouchableOpacity
@@ -95,27 +124,41 @@ const DashboardContent = React.memo(({ router, label }: props) => {
             visible={visible}
             onDismiss={() => setVisible(false)}
             style={{ marginTop: rh(4.3), width: rw(28) }}
-            contentStyle={{ backgroundColor: 'white' }}
+            contentStyle={{ backgroundColor: 'white', gap: 5 }}
             anchor={
               <TouchableOpacity onPress={() => setVisible(true)}>
                 <Icon color="white" size={RFValue(24)} source={'menu'} />
               </TouchableOpacity>
             }>
+            {userRole === 'user' && (
+              <Menu.Item
+                style={{ width: rw(12), height: rh(5) }}
+                titleStyle={{ color: 'black', fontSize: RFValue(12) }}
+                leadingIcon={() => (
+                  <Icon
+                    source={
+                      userInfo?.status === 'active' ? 'block-helper' : 'shield-account-outline'
+                    }
+                    size={RFValue(16)}
+                    color="black"
+                  />
+                )}
+                onPress={() => {
+                  setIsCallSupspend(true)
+                  setVisible(false)
+                }}
+                title={userInfo?.status === 'active' ? 'Suspend' : 'Active'}
+              />
+            )}
+            {userRole === 'user' && <Divider />}
             <Menu.Item
-              style={{ width: rw(12), height: rh(3) }}
+              style={{ width: rw(12), height: rh(5) }}
               titleStyle={{ color: 'black', fontSize: RFValue(12) }}
-              leadingIcon={() => (
-                <Icon
-                  source={userInfo?.status === 'active' ? 'block-helper' : 'shield-account-outline'}
-                  size={RFValue(16)}
-                  color="black"
-                />
-              )}
+              leadingIcon={() => <Icon source={'download'} size={RFValue(16)} color="black" />}
               onPress={() => {
-                if (userInfo?.status === 'active') setIsCallSupspend(true)
-                setVisible(false)
+                downloadExcelFile()
               }}
-              title={userInfo?.status === 'active' ? 'Suspend' : 'Active'}
+              title={'Export'}
             />
           </Menu>
         </TouchableOpacity>

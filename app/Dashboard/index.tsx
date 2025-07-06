@@ -15,6 +15,7 @@ import {
   responsiveFontSize as rf,
 } from 'react-native-responsive-dimensions'
 import { useThemeContext } from 'Providers/ThemeContext'
+import { useUserInfoContext } from 'Providers/UserInfo'
 
 const avatarIcon = require('../../assets/avatar.png')
 const backImg = require('../../assets/backn.png')
@@ -23,6 +24,8 @@ export default function Dashboard() {
   const { userData } = useSelector((state: StateFace) => state.UserReducer)
   const router = useRouter()
   const { themeMode } = useThemeContext()
+  const { setUserId, setUserRole } = useUserInfoContext()
+
   async function handleGetUsers() {
     try {
       const res = await axiosClient.get('/admin/users/')
@@ -73,45 +76,45 @@ export default function Dashboard() {
                 justifyContent: 'flex-start',
                 paddingHorizontal: rw(5),
               }}>
-              {data?.map((user: UsersFace, index: number) =>
-                user.id === userData?.id ? null : (
-                  <TouchableOpacity
-                    onPress={() =>
-                      router.push({
-                        pathname: `/Dashboard/UserInfo/${user.id}`,
-                        params: { userName: user.name, userImage: user.image },
-                      })
-                    }
-                    key={index}
+              {data?.map((user: UsersFace, index: number) => (
+                <TouchableOpacity
+                  onPress={() => {
+                    setUserRole(user.role)
+                    setUserId(user.id)
+                    router.push({
+                      pathname: `/Dashboard/UserInfo/${user.id}`,
+                      params: { userName: user.name, userImage: user.image },
+                    })
+                  }}
+                  key={index}
+                  style={{
+                    width: rw(30), // ✅ 3 عناصر في كل صف
+                    alignItems: 'center',
+                    marginBottom: rh(3),
+                  }}>
+                  <Image
                     style={{
-                      width: rw(30), // ✅ 3 عناصر في كل صف
-                      alignItems: 'center',
-                      marginBottom: rh(3),
+                      borderWidth: 0.5,
+                      backgroundColor: '#8d1c47',
+                      borderRadius: 20,
+                      width: rw(25),
+                      height: rw(25),
+                    }}
+                    contentFit="cover"
+                    source={user?.image ? { uri: user.image } : avatarIcon}
+                  />
+                  <Text
+                    style={{
+                      fontSize: rf(1.8),
+                      color: themeMode == 'dark' ? 'white' : 'black',
+                      textAlign: 'center',
+                      marginTop: rh(1),
+                      width: '100%',
                     }}>
-                    <Image
-                      style={{
-                        borderWidth: 0.5,
-                        backgroundColor: '#8d1c47',
-                        borderRadius: 20,
-                        width: rw(25),
-                        height: rw(25),
-                      }}
-                      contentFit="cover"
-                      source={user?.image ? { uri: user.image } : avatarIcon}
-                    />
-                    <Text
-                      style={{
-                        fontSize: rf(1.8),
-                        color: themeMode == 'dark' ? 'white' : 'black',
-                        textAlign: 'center',
-                        marginTop: rh(1),
-                        width: '100%',
-                      }}>
-                      {user.name}
-                    </Text>
-                  </TouchableOpacity>
-                )
-              )}
+                    {user.name}
+                  </Text>
+                </TouchableOpacity>
+              ))}
             </View>
           )}
         </ScrollView>

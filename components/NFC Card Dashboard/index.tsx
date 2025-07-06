@@ -8,6 +8,9 @@ import {
   responsiveWidth as rw,
   responsiveFontSize as rf,
 } from 'react-native-responsive-dimensions'
+import { SetAllocated } from 'lib/Store/Slices/MainSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { StateFace } from 'Types/Store/StateFace'
 
 const nfcIcon = require('../../assets/nfc.png')
 
@@ -21,11 +24,12 @@ interface props {
 
 function NfcCardDashboard({ submitted, allocated, userID, refetch, themeMode }: props) {
   const progressSize = rw(18)
+  const { userData } = useSelector((state: StateFace) => state.UserReducer)
   const [valueNum, setValueNum] = useState<any>(0)
   const [isShowModel, setIsShowModel] = useState(false)
   const [isLoadingRes, setIsLoadingRes] = useState(false)
   const [errorRes, setErrorRes] = useState<string | null>(null)
-
+  const dispatch = useDispatch()
   async function handleAddAllocate() {
     if (isLoadingRes) return
     if (!valueNum || valueNum <= 0) {
@@ -34,9 +38,12 @@ function NfcCardDashboard({ submitted, allocated, userID, refetch, themeMode }: 
     setIsLoadingRes(true)
     setErrorRes(null)
     try {
-      await axiosClient.post(`/admin/users/allocate/${userID}`, {
+      const res = await axiosClient.post(`/admin/users/allocate/${userID}`, {
         allocated: parseInt(valueNum),
       })
+      if (userID == userData?.id) {
+        dispatch(SetAllocated(res.data.allocation.allocated + allocated))
+      }
       await refetch()
       setIsShowModel(false)
       setValueNum(0)
