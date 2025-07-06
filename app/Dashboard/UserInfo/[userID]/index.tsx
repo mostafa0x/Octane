@@ -51,7 +51,8 @@ export default function UserInfo() {
   const currUserID = isArray(userID) ? parseInt(userID[0]) : parseInt(userID)
   const [activeList, setActiveList] = useState('daily')
   const [currData, setCurrData] = useState<acknowledgmentsFace[]>([])
-  const { setUserInfo, isCallSupspend, setIsCallSupspend } = useUserInfoContext()
+  const { setUserInfo, isCallSupspend, setIsCallSupspend, isLoadingApi, setIsLoadingApi } =
+    useUserInfoContext()
   const { data, isLoading, isError, error, refetch }: UseQueryResult<UserInfoFace> =
     useGetUserInfo(currUserID)
   const { themeMode } = useThemeContext()
@@ -100,6 +101,7 @@ export default function UserInfo() {
     if (isLoadingRes) return
     setIsCallSupspend(false)
     setIsLoadingRes(true)
+    setIsLoadingApi(true)
     setErrorRes(null)
     try {
       const res = await axiosClient.post(`/admin/users/suspend/${currUserID}`)
@@ -110,6 +112,7 @@ export default function UserInfo() {
       alert(err.response?.data?.message ?? err.message ?? 'Error Suspend User!')
     } finally {
       setIsLoadingRes(false)
+      setIsLoadingApi(false)
     }
   }, [currUserID])
 
@@ -192,8 +195,8 @@ export default function UserInfo() {
       <Modal
         animationType="fade"
         transparent
-        visible={isLoadingRes}
-        onDismiss={() => isLoadingRes === false}>
+        visible={isLoadingApi}
+        onDismiss={() => setIsLoadingApi === false}>
         <View
           style={{
             flex: 1,

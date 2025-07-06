@@ -39,7 +39,7 @@ function ShowConfirmModal_Modle({
     const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction)
     return () => {
       backHandler.remove()
-      setErrorApi(null)
+      // setErrorApi(null)
     }
   }, [isLoadingRes])
 

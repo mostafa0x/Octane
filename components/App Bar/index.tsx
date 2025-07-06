@@ -78,9 +78,14 @@ const ProfileContent = React.memo(({ router }: props) => {
 
 const DashboardContent = React.memo(({ router, label }: props) => {
   const [visible, setVisible] = useState(false)
-  const { userInfo, setIsCallSupspend, userId, userRole } = useUserInfoContext()
+  const { userInfo, setIsCallSupspend, userId, userRole, isLoadingApi, setIsLoadingApi } =
+    useUserInfoContext()
 
   const downloadExcelFile = async () => {
+    if (!userId) return alert('User ID is not available.')
+    if (isLoadingApi) return alert('Please wait, another operation is in progress.')
+    setIsLoadingApi(true)
+
     try {
       const downloadUrl = `/admin/report/export/user/${userId}`
 
@@ -102,6 +107,8 @@ const DashboardContent = React.memo(({ router, label }: props) => {
       console.log(error)
 
       alert('Failed to download the report. Please try again.')
+    } finally {
+      setIsLoadingApi(false)
     }
   }
   return (

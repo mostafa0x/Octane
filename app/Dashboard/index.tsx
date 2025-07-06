@@ -112,6 +112,7 @@ export default function Dashboard() {
                       width: '100%',
                     }}>
                     {user.name}
+                    {user.id === userData?.id ? ' (You)' : ''}
                   </Text>
                 </TouchableOpacity>
               ))}
