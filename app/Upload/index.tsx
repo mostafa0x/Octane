@@ -142,9 +142,9 @@ export default function Upload() {
   }, [formik.values])
 
   const getFontSize = useMemo(() => {
-    if (searchQuery.length <= 30) return rw(3.2)
-    if (searchQuery.length <= 40) return rw(2.8)
-    return rw(2.6)
+    if (searchQuery.length <= 30) return rf(3.2)
+    if (searchQuery.length <= 40) return rf(2.8)
+    return rf(2.6)
   }, [searchQuery])
 
   const segmentedButtons = useMemo(() => {

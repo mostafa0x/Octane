@@ -71,7 +71,7 @@ function SegmentedBtn({ name, formik, themeMode }: props) {
           uncheckedColor: 'red',
           labelStyle: {
             color: themeMode == 'dark' ? 'white' : 'black',
-            textAlignVertical: 'center',
+            textAlign: 'center',
             height: rh(2),
             fontSize: rf(1.2),
           },
@@ -88,7 +88,8 @@ const styles = StyleSheet.create({
     color: '#6C7278',
   },
   segmentedContainer: {
-    height: rh(4),
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   helperText: {
