@@ -165,9 +165,6 @@ export default function Reposts() {
                   borderWidth: data ? 1 : 0,
                   borderTopLeftRadius: 20,
                   borderTopRightRadius: 20,
-
-                  padding: rw(2),
-                  paddingVertical: 0,
                   borderColor: 'grey',
                   borderBottomWidth: 0,
                 }}>

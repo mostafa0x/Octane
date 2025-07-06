@@ -2,16 +2,12 @@ import React, { useMemo, useRef, useState } from 'react'
 import { TouchableOpacity, View, StyleSheet } from 'react-native'
 import { Text, Avatar, Icon } from 'react-native-paper'
 import { acknowledgmentsFace } from 'Types/Store/MainSliceFace'
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
 import {
   responsiveWidth as rw,
   responsiveHeight as rh,
   responsiveFontSize as rf,
 } from 'react-native-responsive-dimensions'
 import ImageView from 'react-native-image-viewing'
-
-dayjs.extend(relativeTime)
 
 interface Props {
   item: acknowledgmentsFace
@@ -20,10 +16,7 @@ interface Props {
 
 const ItemCard = ({ item, themeMode }: Props) => {
   const [visible, setIsVisible] = useState(false)
-  const timeAgo = dayjs(item.submission_date).fromNow()
-
   const avatarSize = useRef(rw(12))
-  const imgs = useMemo(() => [{ uri: item.image }], [item.image])
   const Images = useRef([
     require('../../assets/car1.jpg'),
     require('../../assets/car2.jpg'),
@@ -34,7 +27,7 @@ const ItemCard = ({ item, themeMode }: Props) => {
 
   return (
     <>
-      <View style={[styles.container, { padding: rw(3.5) }]}>
+      <View style={[styles.container, { paddingHorizontal: rw(1), paddingVertical: rw(2.7) }]}>
         <TouchableOpacity onPress={() => setIsVisible(true)}>
           <Avatar.Image size={avatarSize.current} source={indexImg.current} />
         </TouchableOpacity>
@@ -88,7 +81,7 @@ const ItemCard = ({ item, themeMode }: Props) => {
         </View>
         <View style={{ marginLeft: rw(0) }}>
           <Icon
-            size={30}
+            size={rf(3)}
             source={item.state_time == 'on_Time' ? 'clock-check-outline' : 'clock-remove-outline'}
           />
         </View>
@@ -112,7 +105,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   companyInfo: {
-    marginLeft: rw(3),
+    marginLeft: rw(1),
     gap: 4,
     flexShrink: 1,
   },
@@ -124,7 +117,7 @@ const styles = StyleSheet.create({
   },
   separator: {
     height: rh(5),
-    width: 1,
+    width: rw(0.4),
     backgroundColor: '#00D09E',
     marginHorizontal: rw(2),
   },
