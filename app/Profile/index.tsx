@@ -219,7 +219,7 @@ export default function Profile() {
             </Text>
           </TouchableOpacity> */}
           <TouchableOpacity
-            onPress={() => Linking.openURL('https://google.com')}
+            onPress={() => Linking.openURL('https://wa.me/201157231451')}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
             <View
               style={{
