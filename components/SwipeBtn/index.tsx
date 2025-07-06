@@ -28,8 +28,11 @@ export default function SwipeBtn({ router, themeMode }: props) {
         goBackToStart={true}
         circleBackgroundColor="#8d1c47"
         titleContainerStyle={{ backgroundColor: themeMode == 'dark' ? 'black' : 'white' }}
-        underlayStyle={{ backgroundColor: themeMode == 'dark' ? 'white' : '#c47b9f' }}
-        underlayTitleStyle={{ fontSize: rf(1.3), width: rw(60) }}
+        underlayStyle={{
+          backgroundColor: themeMode == 'dark' ? 'white' : '#c47b9f',
+          width: rw(60),
+        }}
+        underlayTitleStyle={{ fontSize: rf(1.3), width: rw(50) }}
         underlayTitle="Swipe up to open"
         title="Swipe to upload acknowledgment"
         titleStyle={{
@@ -39,7 +42,7 @@ export default function SwipeBtn({ router, themeMode }: props) {
         }}
         onComplete={handleComplete}
         iconContainerStyle={{}}
-        circleSize={rf(7)}
+        circleSize={rf(8)}
         Icon={<Icon color="#ffffff" size={rf(6)} source="arrow-right-thick" />}
       />
     </View>

@@ -67,13 +67,18 @@ function SegmentedBtn({ name, formik, themeMode }: props) {
           value: btn.name,
           label: btn.name.split('_').join(' '),
           icon: formik.values?.[name] === btn.name ? 'check-bold' : '',
-          checkedColor: themeMode == 'dark' ? 'green' : 'green',
+          checkedColor: themeMode === 'dark' ? 'green' : 'green',
           uncheckedColor: 'red',
+          style: {
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
           labelStyle: {
-            color: themeMode == 'dark' ? 'white' : 'black',
+            color: themeMode === 'dark' ? 'white' : 'black',
             textAlign: 'center',
-            height: rh(2),
+            textAlignVertical: 'center', // أندرويد فقط
             fontSize: rf(1.4),
+            includeFontPadding: false, // أندرويد فقط
           },
         }))}
       />

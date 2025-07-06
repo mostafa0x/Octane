@@ -71,9 +71,9 @@ function NfcCardDashboard({ submitted, allocated, userID, refetch, themeMode }: 
             progress={allocated > 0 ? submitted / allocated : 0}
             showsText={false}
             color="#0068FF"
-            unfilledColor="#F1FFF3"
+            unfilledColor="#ffffff"
             borderWidth={0.5}
-            thickness={progressSize * 0.05}
+            thickness={progressSize * 0.07}
           />
 
           <View
@@ -86,7 +86,7 @@ function NfcCardDashboard({ submitted, allocated, userID, refetch, themeMode }: 
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Icon source={nfcIcon} color="white" size={progressSize * 0.8} />
+            <Icon source={nfcIcon} color="white" size={progressSize * 0.9} />
           </View>
         </View>
 

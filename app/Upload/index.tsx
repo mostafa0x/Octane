@@ -45,7 +45,7 @@ export default function Upload() {
   const { themeMode } = useThemeContext()
 
   const handleUpload = async (formValues: any) => {
-    if (+submitted + +formValues.cards_submitted >= allocated) {
+    if (+submitted + +formValues.cards_submitted > allocated) {
       return setErrorApi('cannot submit more than allocated cards')
     }
     if (isLoadingRes) return

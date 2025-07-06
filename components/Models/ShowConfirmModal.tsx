@@ -96,10 +96,20 @@ function ShowConfirmModal_Modle({
               <ActivityIndicator size={rf(6)} />
             </View>
           ) : (
-            <View style={styles.actionsContainer}>
-              <Button mode="contained" onPress={formik.handleSubmit} buttonColor="#4CAF50">
-                {errorApi ? 'Try again' : 'Confirm'}
-              </Button>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent:
+                  errorApi !== 'cannot submit more than allocated cards'
+                    ? 'space-between'
+                    : 'center',
+                marginTop: rh(4),
+              }}>
+              {errorApi !== 'cannot submit more than allocated cards' ? (
+                <Button mode="contained" onPress={formik.handleSubmit} buttonColor="#4CAF50">
+                  {errorApi ? 'Try again' : 'Confirm'}
+                </Button>
+              ) : null}
               <Button
                 mode="outlined"
                 onPress={() => {
