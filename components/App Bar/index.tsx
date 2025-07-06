@@ -130,7 +130,7 @@ const DashboardContent = React.memo(({ router, label }: props) => {
           <Menu
             visible={visible}
             onDismiss={() => setVisible(false)}
-            style={{ marginTop: rh(4.3), width: rw(28) }}
+            style={{ marginTop: rh(3.5), width: rw(28) }}
             contentStyle={{ backgroundColor: 'white', gap: 5 }}
             anchor={
               <TouchableOpacity onPress={() => setVisible(true)}>
@@ -142,13 +142,21 @@ const DashboardContent = React.memo(({ router, label }: props) => {
                 style={{ width: rw(12), height: rh(5) }}
                 titleStyle={{ color: 'black', fontSize: RFValue(12) }}
                 leadingIcon={() => (
-                  <Icon
-                    source={
-                      userInfo?.status === 'active' ? 'block-helper' : 'shield-account-outline'
-                    }
-                    size={RFValue(16)}
-                    color="black"
-                  />
+                  <View
+                    style={{
+                      width: rw(6),
+                      height: rh(3),
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Icon
+                      source={
+                        userInfo?.status === 'active' ? 'block-helper' : 'shield-account-outline'
+                      }
+                      size={RFValue(16)}
+                      color="black"
+                    />
+                  </View>
                 )}
                 onPress={() => {
                   setIsCallSupspend(true)
@@ -161,7 +169,17 @@ const DashboardContent = React.memo(({ router, label }: props) => {
             <Menu.Item
               style={{ width: rw(12), height: rh(5) }}
               titleStyle={{ color: 'black', fontSize: RFValue(12) }}
-              leadingIcon={() => <Icon source={'download'} size={RFValue(16)} color="black" />}
+              leadingIcon={() => (
+                <View
+                  style={{
+                    width: rw(6),
+                    height: rh(3),
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Icon source={'download'} size={RFValue(16)} color="black" />
+                </View>
+              )}
               onPress={() => {
                 downloadExcelFile()
               }}

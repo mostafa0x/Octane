@@ -1,4 +1,4 @@
-import { View } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import React, { memo } from 'react'
 import * as Progress from 'react-native-progress'
 import { Icon, Text } from 'react-native-paper'
@@ -29,18 +29,29 @@ function NfcCard({ submitted, allocated, themeMode }: props) {
         padding: responsiveWidth(5),
       }}>
       <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-        <Progress.Circle
-          size={progressSize}
-          progress={allocated > 0 ? submitted / allocated : 0}
-          showsText={false}
-          color="#0068FF"
-          unfilledColor="#F1FFF3"
-          borderWidth={0.5}
-          thickness={4.25}
-        />
+        <View style={{ position: 'relative', width: progressSize, height: progressSize }}>
+          <Progress.Circle
+            size={progressSize}
+            progress={allocated > 0 ? submitted / allocated : 0}
+            showsText={false}
+            color="#0068FF"
+            unfilledColor="#F1FFF3"
+            borderWidth={0.5}
+            thickness={progressSize * 0.05}
+          />
 
-        <View style={{ position: 'absolute', top: responsiveHeight(-0.2) }}>
-          <Icon source={nfcIcon} color="white" size={progressSize} />
+          <View
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: progressSize,
+              height: progressSize,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Icon source={nfcIcon} color="white" size={progressSize * 0.8} />
+          </View>
         </View>
 
         <Text
@@ -124,5 +135,19 @@ function NfcCard({ submitted, allocated, themeMode }: props) {
     </View>
   )
 }
+const styles = StyleSheet.create({
+  iconOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  label: {
+    color: '#bdcdce',
+    marginTop: responsiveHeight(2),
+    fontSize: RFValue(14),
+    width: responsiveWidth(30),
+    textAlign: 'center',
+  },
+})
 
 export default memo(NfcCard)
