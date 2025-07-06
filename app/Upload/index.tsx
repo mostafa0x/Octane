@@ -46,7 +46,7 @@ export default function Upload() {
 
   const handleUpload = async (formValues: any) => {
     if (+submitted + +formValues.cards_submitted >= allocated) {
-      return setErrorApi('You cannot submit more than allocated cards')
+      return setErrorApi('cannot submit more than allocated cards')
     }
     if (isLoadingRes) return
     setIsLoadingRes(true)
