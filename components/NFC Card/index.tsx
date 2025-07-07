@@ -36,24 +36,9 @@ function NfcCard({ submitted, allocated, themeMode }: props) {
             showsText={false}
             color="#0068FF"
             unfilledColor="#ffffff"
-            borderWidth={0.01}
-            style={{ zIndex: 1 }}
+            borderWidth={0.05}
             thickness={progressSize * 0.07}
           />
-          <View
-            style={{
-              position: 'absolute',
-              top: responsiveHeight(0.2),
-              left: 0,
-              width: progressSize - RFValue(2),
-              height: progressSize - RFValue(2),
-              boxSizing: 'content-box',
-              zIndex: 0,
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: '#ffffff',
-              borderRadius: RFValue(70),
-            }}></View>
 
           <View
             style={{
@@ -65,7 +50,7 @@ function NfcCard({ submitted, allocated, themeMode }: props) {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Icon source={nfcIcon} color="black" size={progressSize * 0.9} />
+            <Icon source={nfcIcon} color="white" size={progressSize * 0.9} />
           </View>
         </View>
 
@@ -92,7 +77,7 @@ function NfcCard({ submitted, allocated, themeMode }: props) {
       <View style={{ flex: 1, justifyContent: 'space-between', paddingLeft: responsiveWidth(5) }}>
         <View style={{ alignItems: 'center', flexDirection: 'row' }}>
           <Icon size={RFValue(40)} color="#bdcdce" source={nfcIcon} />
-          <View style={{ alignItems: 'center', gap: 5 }}>
+          <View style={{ alignItems: 'center', gap: responsiveHeight(0.5) }}>
             <Text
               style={{
                 color: '#bdcdce',
@@ -125,7 +110,7 @@ function NfcCard({ submitted, allocated, themeMode }: props) {
 
         <View style={{ alignItems: 'center', flexDirection: 'row' }}>
           <Icon size={RFValue(40)} color="#5c9dff" source={nfcIcon} />
-          <View style={{ alignItems: 'center', gap: 5 }}>
+          <View style={{ alignItems: 'center', gap: responsiveHeight(0.5) }}>
             <Text
               style={{
                 color: '#bdcdce',

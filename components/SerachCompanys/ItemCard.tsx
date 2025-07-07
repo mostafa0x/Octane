@@ -65,6 +65,12 @@ const ItemCard_CS = memo(
             contentStyle={styles.buttonContent}
             textColor="white"
             compact
+            labelStyle={{
+              fontSize: RFValue(10),
+              textAlign: 'center',
+              textAlignVertical: 'center',
+              includeFontPadding: false,
+            }}
             mode="contained">
             {isSelected ? 'Cancel' : 'Select'}
           </Button>

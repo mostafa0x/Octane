@@ -28,7 +28,7 @@ function UploadImage({ formik, setShowImageOptions, themeMode }: props) {
             contentFit="contain"
             style={{
               width: rw(50),
-              height: rh(10),
+              height: rh(7),
               borderRadius: rw(2),
             }}
             source={{ uri: formik.values.image }}
@@ -73,7 +73,6 @@ const createStyles = () =>
       borderRadius: rw(4),
       borderWidth: 2,
       borderColor: '#D1D5DB',
-      padding: rw(1),
     },
     helperText: {
       fontSize: rf(1.5),

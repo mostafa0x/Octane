@@ -139,7 +139,7 @@ export default function UserInfo() {
           top: rh(6),
           left: rw(35),
           zIndex: 10,
-          gap: 5,
+          gap: rh(0.5),
         }}>
         <TouchableOpacity activeOpacity={0.8}>
           <Avatar.Image source={userImage ? { uri: userImage } : avatarIcon} size={rw(30)} />

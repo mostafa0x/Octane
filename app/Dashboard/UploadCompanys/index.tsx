@@ -113,7 +113,8 @@ export default function UploadCompanys() {
           backgroundColor: themeMode == 'dark' ? 'black' : 'white',
           padding: rw(5),
         }}>
-        <View style={{ justifyContent: 'center', marginTop: rh(1), marginBottom: rh(5), gap: 30 }}>
+        <View
+          style={{ justifyContent: 'center', marginTop: rh(1), marginBottom: rh(5), gap: rh(0) }}>
           <View style={{ padding: rw(8) }}>
             <Text style={{ fontWeight: 'bold', marginBottom: rh(0.8), fontSize: rf(2.2) }}>
               Supported file formats:
@@ -208,7 +209,7 @@ export default function UploadCompanys() {
               borderRadius: 70,
               elevation: 5,
             }}>
-            <View style={{ alignItems: 'center', marginTop: rh(1), gap: 15 }}>
+            <View style={{ alignItems: 'center', marginTop: rh(1), gap: rh(0.15) }}>
               <Text
                 style={{
                   padding: rw(5),
@@ -237,7 +238,7 @@ export default function UploadCompanys() {
                   {fileName}
                 </Text>
               </Text>
-              <View style={{ gap: 20, flexDirection: 'row', marginTop: rh(3) }}>
+              <View style={{ gap: rh(3), flexDirection: 'row', marginTop: rh(3) }}>
                 <Button
                   onPress={() => setConfirmUpload(false)}
                   buttonColor="#d2e6d4"

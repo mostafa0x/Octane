@@ -100,7 +100,7 @@ export default function Reposts() {
           backgroundColor: themeMode == 'dark' ? 'black' : 'white',
           padding: rw(5),
         }}>
-        <View style={{ marginTop: rh(1), marginBottom: rh(5), gap: 30 }}>
+        <View style={{ marginTop: rh(1), marginBottom: rh(5), gap: rw(2) }}>
           <View style={{ padding: rw(2) }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: '100%' }}>
               <Button
@@ -125,7 +125,7 @@ export default function Reposts() {
                   alignItems: 'center',
                   justifyContent: 'space-around',
                   flexDirection: 'row',
-                  gap: 10,
+                  gap: rw(2),
                 }}>
                 <Button
                   loading={isLoading || isFetching}

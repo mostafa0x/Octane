@@ -131,13 +131,13 @@ const DashboardContent = React.memo(({ router, label }: props) => {
             visible={visible}
             onDismiss={() => setVisible(false)}
             style={{ marginTop: rh(3.5), width: rw(28) }}
-            contentStyle={{ backgroundColor: 'white', gap: 5 }}
+            contentStyle={{ backgroundColor: 'white', gap: rh(0.5) }}
             anchor={
               <TouchableOpacity onPress={() => setVisible(true)}>
                 <Icon color="white" size={RFValue(24)} source={'menu'} />
               </TouchableOpacity>
             }>
-            {userRole === 'user' && (
+            {userRole !== 'admin' && (
               <Menu.Item
                 style={{ width: rw(12), height: rh(5) }}
                 titleStyle={{ color: 'black', fontSize: RFValue(12) }}
@@ -230,7 +230,7 @@ function AppBar({ type, sectionPadding, router, userData, label }: props) {
       {type === 'Dashboard' && <DashboardContent router={router} label={label} />}
       {type === 'Upload' && <UploadContent router={router} />}
       {type === 'Home' && (
-        <View style={{ marginTop: rh(0.2), gap: 8, padding: sectionPadding }}>
+        <View style={{ marginTop: rh(0.2), gap: rh(0.4), padding: sectionPadding }}>
           <Text style={{ color: '#EEEEEE', fontSize: RFValue(20), fontWeight: 'bold' }}>
             Made for You
           </Text>
@@ -240,7 +240,8 @@ function AppBar({ type, sectionPadding, router, userData, label }: props) {
         </View>
       )}
       {label === 'Upload Companys' && (
-        <View style={{ marginTop: rh(5), marginLeft: rw(5), gap: 8, padding: sectionPadding }}>
+        <View
+          style={{ marginTop: rh(5), marginLeft: rw(5), gap: rh(0.4), padding: sectionPadding }}>
           <Text style={{ color: '#EEEEEE', fontSize: RFValue(20), fontWeight: 'bold' }}>
             Upload company sheet
           </Text>

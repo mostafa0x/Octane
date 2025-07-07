@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
   },
   infoTextBox: {
     alignItems: 'center',
-    gap: 5,
+    gap: rh(0.5),
   },
   labelText: {
     color: '#bdcdce',
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
   modalContent: {
     alignItems: 'center',
     marginTop: rh(1),
-    gap: 15,
+    gap: rh(0.15),
   },
   modalTitle: {
     width: rw(50),

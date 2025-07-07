@@ -14,8 +14,6 @@ interface SearchCompanyModalProps {
   searchBoxRef: React.RefObject<any>
   searchQuery: string
   formik: any
-  height: number
-  width: number
   handleClear: () => void
   handleSerach: (query: string) => void
   currentcompanys: any[]
@@ -31,8 +29,6 @@ function SearchCompany_Modal({
   searchBoxRef,
   searchQuery,
   formik,
-  height,
-  width,
   handleClear,
   handleSerach,
   currentcompanys,

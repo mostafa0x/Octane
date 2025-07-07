@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   },
   companyInfo: {
     marginLeft: rw(1),
-    gap: 4,
+    gap: rh(0.2),
     flexShrink: 1,
   },
   companyName: {
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     minWidth: rw(3),
   },
   detailsBox: {
-    gap: 4,
+    gap: rh(0.4),
     flexShrink: 1,
     flex: 1,
   },

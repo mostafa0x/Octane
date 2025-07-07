@@ -40,6 +40,7 @@ export default function Upload() {
   const [errorApi, setErrorApi] = useState<string | null>(null)
   const [isShowSerachCompany, setIsShowSerachCompany] = useState(false)
   const [currCompany, setCurrCompnay] = useState<CompanyFace | null>(null)
+  const [keyboardVisible, setKeyboardVisible] = useState(false)
   const searchBoxRef = useRef<React.ComponentRef<typeof Searchbar>>(null)
   const dispatch = useDispatch()
   const { themeMode } = useThemeContext()
@@ -141,6 +142,20 @@ export default function Upload() {
     findCompany && setCurrCompnay(findCompany)
   }, [formik.values])
 
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardVisible(true)
+    })
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardVisible(false)
+    })
+
+    return () => {
+      showSubscription.remove()
+      hideSubscription.remove()
+    }
+  }, [])
+
   const getFontSize = useMemo(() => {
     if (searchQuery.length <= 30) return rf(3.2)
     if (searchQuery.length <= 40) return rf(2.8)
@@ -177,64 +192,63 @@ export default function Upload() {
             flex: 1,
             borderTopLeftRadius: rw(10),
             borderTopRightRadius: rw(10),
-            backgroundColor: themeMode == 'dark' ? 'black' : 'white',
+            backgroundColor: 'white',
             paddingHorizontal: rw(5),
             paddingVertical: rh(5),
-            gap: 15,
+            justifyContent: 'space-between',
           }}>
-          {segmentedButtons}
+          <View style={{ gap: rh(0.3) }}>
+            {segmentedButtons}
 
-          <InputField
-            label={'card submitted'}
-            name={'cards_submitted'}
-            formik={formik}
-            errorMes={null}
-          />
-
-          <View style={{ alignItems: 'center', gap: 5 }}>
-            {currCompany && (
-              <Text
-                style={{
-                  width: rw(80),
-                  textAlign: 'center',
-                  fontWeight: '400',
-                }}>
-                Selected :
-                <Text
-                  style={{
-                    width: '100%',
-                    textAlign: 'center',
-                    fontWeight: 'bold',
-                    fontSize: rw(3.2),
-                  }}>
-                  {' '}
-                  {currCompany?.name} ({currCompany?.code})
-                </Text>
-              </Text>
-            )}
-            <Button
-              style={{ width: rw(50), height: rh(5) }}
-              contentStyle={{ height: rh(5) }}
-              labelStyle={{ fontSize: rf(1.7) }}
-              buttonColor="#8d1c47"
-              textColor="white"
-              onPress={() => setIsShowSerachCompany(true)}>
-              Select Company
-            </Button>
-            <HelperText
-              style={{ fontSize: rw(2.8), color: 'red', textAlign: 'center' }}
-              type="error"
-              visible={formik.touched.company_id && !!formik.errors.company_id}>
-              {'*'}
-              {formik.errors.company_id}
-            </HelperText>
-            <UploadImage
+            <InputField
+              label={'card submitted'}
+              name={'cards_submitted'}
               formik={formik}
-              setShowImageOptions={setShowImageOptions}
-              themeMode={themeMode}
+              errorMes={null}
             />
 
-            <View style={{ marginTop: rh(0), alignItems: 'center' }}>
+            <View style={{ alignItems: 'center', gap: rh(0.3) }}>
+              {currCompany && (
+                <Text
+                  style={{
+                    width: rw(80),
+                    textAlign: 'center',
+                    fontWeight: '400',
+                  }}>
+                  Selected :
+                  <Text
+                    style={{
+                      width: '100%',
+                      textAlign: 'center',
+                      fontWeight: 'bold',
+                      fontSize: rf(1.4),
+                    }}>
+                    {' '}
+                    {currCompany?.name} ({currCompany?.code})
+                  </Text>
+                </Text>
+              )}
+              <Button
+                style={{ width: rw(50), height: rh(5) }}
+                contentStyle={{ height: rh(5) }}
+                labelStyle={{ fontSize: rf(1.7) }}
+                buttonColor="#8d1c47"
+                textColor="white"
+                onPress={() => setIsShowSerachCompany(true)}>
+                Select Company
+              </Button>
+              <HelperText
+                style={{ fontSize: rw(2.8), color: 'red', textAlign: 'center' }}
+                type="error"
+                visible={formik.touched.company_id && !!formik.errors.company_id}>
+                {'*'}
+                {formik.errors.company_id}
+              </HelperText>
+              <UploadImage
+                formik={formik}
+                setShowImageOptions={setShowImageOptions}
+                themeMode={themeMode}
+              />
               <Button
                 style={{ width: rw(50), height: rh(5) }}
                 contentStyle={{ height: rh(5) }}
@@ -252,25 +266,27 @@ export default function Upload() {
                 Submit
               </Button>
             </View>
-
-            <ShowConfirmModal
-              currCompany={currCompany}
-              showConfirmModal={showConfirmModal}
-              setShowConfirmModal={setShowConfirmModal}
-              formik={formik}
-              errorApi={errorApi}
-              isLoadingRes={isLoadingRes}
-              setErrorApi={setErrorApi}
-              width={rw(100)}
-              height={rh(100)}
-            />
-
-            <ShowImageOptions
-              formik={formik}
-              showImageOptions={showImageOptions}
-              setShowImageOptions={setShowImageOptions}
-            />
           </View>
+        </View>
+
+        <View style={{ alignItems: 'center' }}>
+          <ShowConfirmModal
+            currCompany={currCompany}
+            showConfirmModal={showConfirmModal}
+            setShowConfirmModal={setShowConfirmModal}
+            formik={formik}
+            errorApi={errorApi}
+            isLoadingRes={isLoadingRes}
+            setErrorApi={setErrorApi}
+            width={rw(100)}
+            height={rh(100)}
+          />
+
+          <ShowImageOptions
+            formik={formik}
+            showImageOptions={showImageOptions}
+            setShowImageOptions={setShowImageOptions}
+          />
         </View>
 
         <SearchCompanyModal
@@ -281,8 +297,6 @@ export default function Upload() {
           searchQuery={searchQuery}
           handleSerach={handleSerach}
           handleClear={handleClear}
-          height={rh(100)}
-          width={rw(100)}
           currentcompanys={currentcompanys}
           formik={formik}
           SelectCompanyID={SelectCompanyID}
