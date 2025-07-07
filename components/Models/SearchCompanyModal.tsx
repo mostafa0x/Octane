@@ -46,9 +46,10 @@ function SearchCompany_Modal({
       <View style={styles.overlay}>
         <View
           style={{
-            width: rw(100),
+            width: rw(90),
             height: rh(68),
             padding: rw(3),
+            paddingHorizontal: rw(1),
             borderRadius: rw(4),
             backgroundColor: themeMode == 'dark' ? 'black' : 'white',
           }}>
@@ -99,6 +100,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     marginTop: rh(1),
     width: '100%',
+    paddingHorizontal: rw(2),
   },
   buttonWrapper: {
     flexDirection: 'row',

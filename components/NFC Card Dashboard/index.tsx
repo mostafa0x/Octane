@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
   modalContent: {
     alignItems: 'center',
     marginTop: rh(1),
-    gap: rh(0.15),
+    gap: rh(1.5),
   },
   modalTitle: {
     width: rw(50),
@@ -245,10 +245,9 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: rf(3),
     width: rw(50),
-    height: rh(9),
-    padding: rw(5),
+    height: rh(6),
     textAlign: 'center',
-    fontSize: rf(2.5),
+    fontSize: rf(2),
   },
   modalButton: {
     width: rw(40),

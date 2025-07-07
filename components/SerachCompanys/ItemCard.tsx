@@ -82,21 +82,20 @@ const ItemCard_CS = memo(
 
 const styles = StyleSheet.create({
   container: {
-    width: rw(90),
+    width: rw(100),
     paddingVertical: rh(1),
     paddingHorizontal: rw(3),
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },
   nameContainer: {
-    width: rw(28),
+    width: rw(38),
   },
 
   codeContainer: {
-    width: rw(30),
+    width: rw(20),
     alignItems: 'center',
   },
   codeText: {
@@ -111,7 +110,7 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: rw(2),
-    width: rw(22),
+    width: rw(20),
   },
   buttonContent: {
     height: rh(4.5),
