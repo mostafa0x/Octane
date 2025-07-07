@@ -34,15 +34,18 @@ function ListCard({ acknowledgments_Current, type, emptyTXT, themeMode }: props)
       animation="fadeIn"
       easing="ease-in-out"
       style={{
-        height: type === 'Home' ? rh(30) : rh(40),
+        height: type === 'Home' ? rh(30) : type === 'Reports' ? rh(65) : rh(40),
         width: '100%',
         marginTop: 0,
+        paddingHorizontal: type === 'Reports' ? rw(2) : rw(0),
       }}>
       <FlashList
         data={acknowledgments_Current}
         estimatedItemSize={70}
         keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={{ paddingBottom: type === 'Home' ? rh(5) : rh(5) }}
+        contentContainerStyle={{
+          paddingBottom: type === 'Home' ? rh(5) : type === 'Reports' ? rh(10) : rh(5),
+        }}
         renderItem={({ item }) => <ItemCard themeMode={themeMode} item={item} />}
         ListEmptyComponent={() => (
           <View
