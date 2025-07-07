@@ -34,7 +34,7 @@ function ListCard({ acknowledgments_Current, type, emptyTXT, themeMode }: props)
       animation="fadeIn"
       easing="ease-in-out"
       style={{
-        height: type === 'Home' ? rh(30) : rh(64),
+        height: type === 'Home' ? rh(30) : rh(40),
         width: '100%',
         marginTop: 0,
       }}>
@@ -42,7 +42,7 @@ function ListCard({ acknowledgments_Current, type, emptyTXT, themeMode }: props)
         data={acknowledgments_Current}
         estimatedItemSize={70}
         keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={{ paddingBottom: rh(2) }}
+        contentContainerStyle={{ paddingBottom: type === 'Home' ? rh(5) : rh(5) }}
         renderItem={({ item }) => <ItemCard themeMode={themeMode} item={item} />}
         ListEmptyComponent={() => (
           <View
