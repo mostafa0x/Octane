@@ -11,6 +11,9 @@ import axiosClient from 'lib/api/axiosClient'
 import * as FileSystem from 'expo-file-system'
 import * as Sharing from 'expo-sharing'
 import { Buffer } from 'buffer'
+import { log } from 'console'
+import { useSelector } from 'react-redux'
+import { StateFace } from 'Types/Store/StateFace'
 
 interface props {
   sectionPadding?: number
@@ -80,6 +83,12 @@ const DashboardContent = React.memo(({ router, label }: props) => {
   const [visible, setVisible] = useState(false)
   const { userInfo, setIsCallSupspend, userId, userRole, isLoadingApi, setIsLoadingApi } =
     useUserInfoContext()
+  const { userData } = useSelector((state: StateFace) => state.UserReducer)
+  useEffect(() => {
+    console.log(userRole)
+
+    return () => {}
+  }, [userRole])
 
   const downloadExcelFile = async () => {
     if (!userId) return alert('User ID is not available.')
@@ -114,7 +123,9 @@ const DashboardContent = React.memo(({ router, label }: props) => {
   return (
     <>
       <TouchableOpacity
-        onPress={() => router.back()}
+        onPress={() => {
+          router.back()
+        }}
         style={{ position: 'absolute', left: rw(3), top: rh(1), zIndex: 10 }}>
         <View style={{ marginTop: 8 }}>
           <Icon size={RFValue(28)} color="white" source="keyboard-backspace" />
@@ -137,7 +148,7 @@ const DashboardContent = React.memo(({ router, label }: props) => {
                 <Icon color="white" size={RFValue(24)} source={'menu'} />
               </TouchableOpacity>
             }>
-            {userRole !== 'admin' && (
+            {userId !== userData?.id && (
               <Menu.Item
                 style={{ width: rw(12), height: rh(5) }}
                 titleStyle={{ color: 'black', fontSize: RFValue(12) }}

@@ -21,7 +21,11 @@ import { useFormik } from 'formik'
 import UploadAvatar from 'Services/UploadAvatar'
 import { changeImageProfile } from 'lib/Store/Slices/UserSlice'
 import { UpdataUserInfo } from 'Services/Storage'
-import { responsiveHeight as rh, responsiveWidth as rw } from 'react-native-responsive-dimensions'
+import {
+  responsiveHeight as rh,
+  responsiveWidth as rw,
+  responsiveFontSize as rf,
+} from 'react-native-responsive-dimensions'
 import { RFValue } from 'react-native-responsive-fontsize'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import SpinnerLoading from 'components/SpinnerLoading'
@@ -262,7 +266,9 @@ export default function Profile() {
           visible={!!isMessageBar}
           onDismiss={() => setIsMessageBar(null)}
           action={{ label: 'done', onPress: () => setIsMessageBar(null) }}>
-          <Text style={{ color: 'white' }}>{isMessageBar}</Text>
+          <Text style={{ color: 'white', fontSize: rf(1.5), paddingVertical: rw(2) }}>
+            {isMessageBar}
+          </Text>
         </Snackbar>
       </Portal>
     </Animatable.View>

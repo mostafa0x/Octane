@@ -1,6 +1,6 @@
 import { View, TouchableOpacity, ActivityIndicator, Modal } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
-import { Avatar, Button, Icon, Text } from 'react-native-paper'
+import { Avatar, Button, Icon, Portal, Snackbar, Text } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
 import { useDispatch } from 'react-redux'
@@ -43,7 +43,6 @@ const ErrorFC = ({ error }: { error: Error }) => {
 }
 
 export default function UserInfo() {
-  const { width, height } = { width: rw(100), height: rh(100) }
   const { userID, userName, userImage } = useLocalSearchParams()
   const [errorRes, setErrorRes] = useState<string | null>(null)
   const [isLoadingRes, setIsLoadingRes] = useState(false)
@@ -55,7 +54,7 @@ export default function UserInfo() {
     useUserInfoContext()
   const { data, isLoading, isError, error, refetch }: UseQueryResult<UserInfoFace> =
     useGetUserInfo(currUserID)
-  const { themeMode } = useThemeContext()
+  const [isMessageBar, setIsMessageBar] = useState<string | null>(null)
 
   useEffect(() => {
     if (data) {
@@ -106,7 +105,7 @@ export default function UserInfo() {
     try {
       const res = await axiosClient.post(`/admin/users/suspend/${currUserID}`)
       await refetch()
-      alert(res.data.message)
+      setIsMessageBar(res.data.message)
     } catch (err: any) {
       setErrorRes(err.response?.data?.message ?? err.message ?? 'Error Suspend User!')
       alert(err.response?.data?.message ?? err.message ?? 'Error Suspend User!')
@@ -146,7 +145,9 @@ export default function UserInfo() {
         </TouchableOpacity>
         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
           <Text style={{ textAlign: 'center', fontSize: rf(2.1) }}>{userName}</Text>
-          {data?.status === 'active' ? null : (
+          {isLoading ? (
+            <ActivityIndicator size={rf(2)} />
+          ) : data?.status === 'active' ? null : (
             <>
               <Text>{'  '}</Text>
               <Icon size={rf(3)} color="red" source={'block-helper'} />
@@ -160,7 +161,7 @@ export default function UserInfo() {
           flex: 1,
           borderTopLeftRadius: rw(10),
           borderTopRightRadius: rw(10),
-          backgroundColor: themeMode == 'dark' ? 'black' : 'white',
+          backgroundColor: 'white',
           paddingHorizontal: rw(5),
         }}>
         {isError ? (
@@ -176,21 +177,20 @@ export default function UserInfo() {
               allocated={data?.allocated ?? 0}
               userID={currUserID}
               refetch={refetch}
-              themeMode={themeMode}
             />
-            <ListButtonHistory
-              themeMode={themeMode}
-              activeList={activeList}
-              handleActive={handleActive}
-            />
-            <ListCard
-              themeMode={themeMode}
-              type="Dashboard"
-              acknowledgments_Current={currData ?? []}
-            />
+            <ListButtonHistory activeList={activeList} handleActive={handleActive} />
+            <ListCard type="Dashboard" acknowledgments_Current={currData ?? []} />
           </View>
         )}
       </View>
+      <Portal>
+        <Snackbar
+          visible={!!isMessageBar}
+          onDismiss={() => setIsMessageBar(null)}
+          action={{ label: 'done', onPress: () => setIsMessageBar(null) }}>
+          <Text style={{ color: 'white', fontSize: rf(1.8) }}>{isMessageBar}</Text>
+        </Snackbar>
+      </Portal>
 
       <Modal
         animationType="fade"

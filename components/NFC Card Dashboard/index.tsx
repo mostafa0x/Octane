@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, Modal, TextInput, StyleSheet } from 'react-native'
 import React, { memo, useState } from 'react'
 import * as Progress from 'react-native-progress'
-import { ActivityIndicator, Button, HelperText, Icon } from 'react-native-paper'
+import { ActivityIndicator, Button, HelperText, Icon, Portal, Snackbar } from 'react-native-paper'
 import axiosClient from 'lib/api/axiosClient'
 import {
   responsiveHeight as rh,
@@ -19,16 +19,17 @@ interface props {
   allocated: number
   userID: number
   refetch: any
-  themeMode: string
 }
 
-function NfcCardDashboard({ submitted, allocated, userID, refetch, themeMode }: props) {
+function NfcCardDashboard({ submitted, allocated, userID, refetch }: props) {
   const progressSize = rw(18)
   const { userData } = useSelector((state: StateFace) => state.UserReducer)
   const [valueNum, setValueNum] = useState<any>(0)
   const [isShowModel, setIsShowModel] = useState(false)
   const [isLoadingRes, setIsLoadingRes] = useState(false)
   const [errorRes, setErrorRes] = useState<string | null>(null)
+  const [isMessageBar, setIsMessageBar] = useState<string | null>(null)
+
   const dispatch = useDispatch()
   async function handleAddAllocate() {
     if (isLoadingRes) return
@@ -45,6 +46,7 @@ function NfcCardDashboard({ submitted, allocated, userID, refetch, themeMode }: 
         dispatch(SetAllocated(res.data.allocation.allocated + allocated))
       }
       await refetch()
+      setIsMessageBar(res.data.message ?? 'NFCs allocated successfully')
       setIsShowModel(false)
       setValueNum(0)
     } catch (err: any) {
@@ -59,7 +61,7 @@ function NfcCardDashboard({ submitted, allocated, userID, refetch, themeMode }: 
       style={{
         flexDirection: 'row',
         borderRadius: rf(2),
-        backgroundColor: themeMode == 'dark' ? 'black' : '#8d1c47',
+        backgroundColor: '#8d1c47',
         padding: rw(5),
         width: rw(90),
         height: rh(18),
@@ -114,6 +116,14 @@ function NfcCardDashboard({ submitted, allocated, userID, refetch, themeMode }: 
           </View>
         </View>
       </View>
+      <Portal>
+        <Snackbar
+          visible={!!isMessageBar}
+          onDismiss={() => setIsMessageBar(null)}
+          action={{ label: 'done', onPress: () => setIsMessageBar(null) }}>
+          <Text style={{ color: 'white', fontSize: rf(1.8) }}>{isMessageBar}</Text>
+        </Snackbar>
+      </Portal>
 
       <Modal
         animationType="fade"
