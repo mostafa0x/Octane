@@ -26,7 +26,6 @@ import {
   responsiveWidth as rw,
   responsiveFontSize as rf,
 } from 'react-native-responsive-dimensions'
-import { useThemeContext } from 'Providers/ThemeContext'
 
 export default function Upload() {
   const backImg = useRef(require('../../assets/backn.png'))
@@ -43,7 +42,6 @@ export default function Upload() {
   const [keyboardVisible, setKeyboardVisible] = useState(false)
   const searchBoxRef = useRef<React.ComponentRef<typeof Searchbar>>(null)
   const dispatch = useDispatch()
-  const { themeMode } = useThemeContext()
 
   const handleUpload = async (formValues: any) => {
     if (+submitted + +formValues.cards_submitted > allocated) {
@@ -164,7 +162,7 @@ export default function Upload() {
 
   const segmentedButtons = useMemo(() => {
     return ['submission_type', 'delivery_method', 'state_time'].map((item) => (
-      <SegmentedBtn themeMode={themeMode} key={item} name={item} formik={formik} />
+      <SegmentedBtn key={item} name={item} formik={formik} />
     ))
   }, [formik])
 
@@ -244,11 +242,7 @@ export default function Upload() {
                 {'*'}
                 {formik.errors.company_id}
               </HelperText>
-              <UploadImage
-                formik={formik}
-                setShowImageOptions={setShowImageOptions}
-                themeMode={themeMode}
-              />
+              <UploadImage formik={formik} setShowImageOptions={setShowImageOptions} />
               <Button
                 style={{ width: rw(50), height: rh(5) }}
                 contentStyle={{ height: rh(5) }}
@@ -290,7 +284,6 @@ export default function Upload() {
         </View>
 
         <SearchCompanyModal
-          themeMode={themeMode}
           isShowSerachCompany={isShowSerachCompany}
           setIsShowSerachCompany={setIsShowSerachCompany}
           searchBoxRef={searchBoxRef}

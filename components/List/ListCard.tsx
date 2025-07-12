@@ -18,10 +18,9 @@ interface props {
   acknowledgments_Current: acknowledgmentsFace[]
   type: string
   emptyTXT?: string
-  themeMode: string
 }
 
-function ListCard({ acknowledgments_Current, type, emptyTXT, themeMode }: props) {
+function ListCard({ acknowledgments_Current, type, emptyTXT }: props) {
   const animRef = useRef<AnimatableView>(null)
 
   useEffect(() => {
@@ -46,7 +45,7 @@ function ListCard({ acknowledgments_Current, type, emptyTXT, themeMode }: props)
         contentContainerStyle={{
           paddingBottom: type === 'Home' ? rh(5) : type === 'Reports' ? rh(10) : rh(5),
         }}
-        renderItem={({ item }) => <ItemCard themeMode={themeMode} item={item} />}
+        renderItem={({ item }) => <ItemCard item={item} />}
         ListEmptyComponent={() => (
           <View
             style={{

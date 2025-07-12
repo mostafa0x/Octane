@@ -1,5 +1,5 @@
-import { View, KeyboardAvoidingView, Platform } from 'react-native'
-import { useCallback, useState } from 'react'
+import { View } from 'react-native'
+import { useState } from 'react'
 import { useFormik } from 'formik'
 import InputField from 'components/form/InputField'
 import { ActivityIndicator, Button, HelperText } from 'react-native-paper'
@@ -13,7 +13,7 @@ import * as Animatable from 'react-native-animatable'
 import { LoginSchema } from 'lib/Vaildtions/SignInValid'
 import { storeUserInfo } from 'Services/Storage'
 
-export default function SignIn({ setIsLoadingRes, keyboardVisible }: any) {
+export default function SignIn({ setIsLoadingRes }: any) {
   const [errorMes, setErrorMes] = useState<string | null>(null)
   const [isLoadingBtn, setIsLoadingBtn] = useState(false)
   const router = useRouter()

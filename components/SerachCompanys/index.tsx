@@ -19,7 +19,6 @@ interface Props {
   selectCompany: number
   SelectCompanyID: (id: number, name: string) => void
   setIsShowSerachCompany: any
-  themeMode: string
 }
 
 const SerachCompanys = ({
@@ -28,7 +27,6 @@ const SerachCompanys = ({
   selectCompany,
   SelectCompanyID,
   setIsShowSerachCompany,
-  themeMode,
 }: Props) => {
   const animRef = useRef<AnimatableView>(null)
 
@@ -47,7 +45,6 @@ const SerachCompanys = ({
         contentContainerStyle={styles.listContent}
         renderItem={({ item }) => (
           <ItemCard_CS
-            themeMode={themeMode}
             item={item}
             formik={formik}
             SelectCompanyID={SelectCompanyID}

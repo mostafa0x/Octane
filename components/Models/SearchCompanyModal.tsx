@@ -20,7 +20,6 @@ interface SearchCompanyModalProps {
   SelectCompanyID: any
   selectCompany: any
   getFontSize: number
-  themeMode: string
 }
 
 function SearchCompany_Modal({
@@ -35,7 +34,6 @@ function SearchCompany_Modal({
   SelectCompanyID,
   selectCompany,
   getFontSize,
-  themeMode,
 }: SearchCompanyModalProps) {
   return (
     <Modal
@@ -51,7 +49,7 @@ function SearchCompany_Modal({
             padding: rw(3),
             paddingHorizontal: rw(1),
             borderRadius: rw(4),
-            backgroundColor: themeMode == 'dark' ? 'black' : 'white',
+            backgroundColor: 'white',
           }}>
           <View style={styles.searchContainer}>
             <Searchbar
@@ -65,7 +63,6 @@ function SearchCompany_Modal({
           </View>
 
           <SerachCompanys
-            themeMode={themeMode}
             currentcompanys={currentcompanys}
             formik={formik}
             SelectCompanyID={SelectCompanyID}

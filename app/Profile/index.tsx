@@ -1,5 +1,5 @@
 import { View, TouchableOpacity, ScrollView, Linking } from 'react-native'
-import { ActivityIndicator, Avatar, Button, HelperText, Icon, Text } from 'react-native-paper'
+import { ActivityIndicator, Avatar, HelperText, Icon, Text } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
 import { useRouter } from 'expo-router'
@@ -12,23 +12,23 @@ import ShowImageOptions from 'components/Models/showImageOptions'
 import { useFormik } from 'formik'
 import UploadAvatar from 'Services/UploadAvatar'
 import { changeImageProfile } from 'lib/Store/Slices/UserSlice'
-import { storeUserInfo, UpdataUserInfo } from 'Services/Storage'
+import { UpdataUserInfo } from 'Services/Storage'
 import { responsiveHeight as rh, responsiveWidth as rw } from 'react-native-responsive-dimensions'
 import { RFValue } from 'react-native-responsive-fontsize'
-import { useThemeContext } from 'Providers/ThemeContext'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
+import SpinnerLoading from 'components/SpinnerLoading'
 
 const avatarIcon = require('../../assets/avatar.png')
 const backImg = require('../../assets/backn.png')
 
 export default function Profile() {
-  const { userData } = useSelector((state: StateFace) => state.UserReducer)
+  const { userData, userToken } = useSelector((state: StateFace) => state.UserReducer)
   const router = useRouter()
   const dispatch = useDispatch()
   const [showImageOptions, setShowImageOptions] = useState(false)
   const [isLoadingRes, setIsLoadingRes] = useState(false)
   const [errorRes, setErrorRes] = useState<string | null>(null)
-  const { toggleTheme, themeMode } = useThemeContext()
+  const [loading, setLoading] = useState(true)
 
   async function handleChangeAvatar(formValues: any) {
     if (isLoadingRes) return
@@ -84,7 +84,7 @@ export default function Profile() {
 
   const avatarSize = rw(40)
 
-  return (
+  return userToken ? (
     <Animatable.View animation="fadeIn" duration={200} easing="ease-in-out" style={{ flex: 1 }}>
       <AppBar type="Profile" router={router} userData={userData} />
 
@@ -99,8 +99,10 @@ export default function Profile() {
       <View style={{ position: 'absolute', top: rh(9), left: rw(30), zIndex: 10 }}>
         <TouchableOpacity onPress={() => setShowImageOptions(true)} activeOpacity={0.8}>
           <Avatar.Image
-            source={userData?.image ? { uri: userData?.image } : avatarIcon}
+            source={loading ? avatarIcon : userData?.image ? { uri: userData?.image } : avatarIcon}
             size={avatarSize}
+            onLoadStart={() => loading && setLoading(true)}
+            onLoadEnd={() => setLoading(false)}
           />
         </TouchableOpacity>
       </View>
@@ -111,7 +113,7 @@ export default function Profile() {
           flex: 1,
           borderTopLeftRadius: rw(10),
           borderTopRightRadius: rw(10),
-          backgroundColor: themeMode === 'light' ? 'white' : '#000000',
+          backgroundColor: 'white',
           paddingTop: rh(10),
         }}>
         <View style={{ alignItems: 'center', marginBottom: rh(10) }}>
@@ -195,29 +197,6 @@ export default function Profile() {
               </Text>
             </TouchableOpacity>
           )}
-
-          {/* <TouchableOpacity
-            onPress={toggleTheme}
-            style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
-            <View
-              style={{
-                height: rh(7),
-                width: rh(7),
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderRadius: rw(5),
-                backgroundColor: themeMode == 'dark' ? 'white' : '#000000',
-              }}>
-              <Icon
-                size={RFValue(30)}
-                color={themeMode == 'dark' ? 'black' : 'white'}
-                source="theme-light-dark"
-              />
-            </View>
-            <Text style={{ fontSize: RFValue(14), width: '100%', fontWeight: 'regular' }}>
-              {themeMode == 'dark' ? 'light Mode' : 'Dark Mode'}
-            </Text>
-          </TouchableOpacity> */}
           <TouchableOpacity
             onPress={() => Linking.openURL('https://wa.me/201157231451')}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
@@ -263,5 +242,7 @@ export default function Profile() {
         setShowImageOptions={setShowImageOptions}
       />
     </Animatable.View>
+  ) : (
+    <SpinnerLoading />
   )
 }

@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { TouchableOpacity, View, StyleSheet } from 'react-native'
 import { Text, Avatar, Icon } from 'react-native-paper'
 import { acknowledgmentsFace } from 'Types/Store/MainSliceFace'
@@ -11,10 +11,9 @@ import ImageView from 'react-native-image-viewing'
 
 interface Props {
   item: acknowledgmentsFace
-  themeMode: string
 }
 
-const ItemCard = ({ item, themeMode }: Props) => {
+const ItemCard = ({ item }: Props) => {
   const [visible, setIsVisible] = useState(false)
   const avatarSize = useRef(rw(12))
   const Images = useRef([
@@ -33,11 +32,7 @@ const ItemCard = ({ item, themeMode }: Props) => {
         </TouchableOpacity>
 
         <View style={[styles.companyInfo, { width: rw(26) }]}>
-          <Text
-            style={[
-              styles.companyName,
-              { fontSize: rf(1.5), color: themeMode == 'dark' ? 'white' : '#052224' },
-            ]}>
+          <Text style={[styles.companyName, { fontSize: rf(1.5), color: '#052224' }]}>
             {item.company.name}
           </Text>
           <Text style={[styles.companyCode, { fontSize: rf(1.2) }]}>{item.company.code}</Text>
@@ -48,7 +43,7 @@ const ItemCard = ({ item, themeMode }: Props) => {
           <Text
             style={{
               fontSize: rf(1.6),
-              color: themeMode == 'dark' ? '#f7f7f7' : '#295ce9',
+              color: '#295ce9',
               textAlign: 'center',
             }}>
             {item.cards_submitted}
@@ -63,7 +58,7 @@ const ItemCard = ({ item, themeMode }: Props) => {
               {
                 fontSize: rf(1.4),
                 fontWeight: 'regular',
-                color: themeMode == 'dark' ? '#fafafa' : '#052224',
+                color: '#052224',
               },
             ]}>
             {item.submission_type}
@@ -73,7 +68,7 @@ const ItemCard = ({ item, themeMode }: Props) => {
               {
                 fontSize: rf(1.4),
                 fontWeight: 'regular',
-                color: themeMode == 'dark' ? '#0068FF' : '#0068FF',
+                color: '#0068FF',
               },
             ]}>
             {item.delivery_method}

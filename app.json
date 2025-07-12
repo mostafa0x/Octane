@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "octane",
+    "name": "Octane",
     "scheme": "octane",
     "slug": "octane",
     "version": "1.0.0",
@@ -12,10 +12,10 @@
     },
     "plugins": ["expo-router"],
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo2_omar.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logo2_omar.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -25,8 +25,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/logo2_omar.png",
+        "backgroundColor": "transparent"
       },
       "package": "com.mostafa_ahmed.octane",
       "softwareKeyboardLayoutMode": "pan"

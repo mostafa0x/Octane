@@ -2,7 +2,7 @@ import { View, TouchableOpacity, ScrollView } from 'react-native'
 import { Text, ActivityIndicator } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
-import { useRouter } from 'expo-router'
+import { Href, Route, RouteInputParams, useRouter } from 'expo-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
 import { useEffect, useState } from 'react'
@@ -16,6 +16,8 @@ import {
 } from 'react-native-responsive-dimensions'
 import { useThemeContext } from 'Providers/ThemeContext'
 import { useUserInfoContext } from 'Providers/UserInfo'
+import UsersList from 'components/form/UsersList'
+import { NavigationOptions } from 'expo-router/build/global-state/routing'
 
 const avatarIcon = require('../../assets/avatar.png')
 const backImg = require('../../assets/backn.png')
@@ -77,44 +79,15 @@ export default function Dashboard() {
                 paddingHorizontal: rw(5),
               }}>
               {data?.map((user: UsersFace, index: number) => (
-                <TouchableOpacity
-                  onPress={() => {
-                    setUserRole(user.role)
-                    setUserId(user.id)
-                    router.push({
-                      pathname: `/Dashboard/UserInfo/${user.id}`,
-                      params: { userName: user.name, userImage: user.image },
-                    })
-                  }}
+                <UsersList
+                  setUserRole={setUserRole}
+                  setUserId={setUserId}
+                  user={user}
+                  router={router}
+                  userData={userData}
+                  index={index}
                   key={index}
-                  style={{
-                    width: rw(30), // ✅ 3 عناصر في كل صف
-                    alignItems: 'center',
-                    marginBottom: rh(3),
-                  }}>
-                  <Image
-                    style={{
-                      borderWidth: 0.5,
-                      backgroundColor: '#8d1c47',
-                      borderRadius: 20,
-                      width: rw(25),
-                      height: rw(25),
-                    }}
-                    contentFit="cover"
-                    source={user?.image ? { uri: user.image } : avatarIcon}
-                  />
-                  <Text
-                    style={{
-                      fontSize: rf(1.8),
-                      color: themeMode == 'dark' ? 'white' : 'black',
-                      textAlign: 'center',
-                      marginTop: rh(1),
-                      width: '100%',
-                    }}>
-                    {user.name}
-                    {user.id === userData?.id ? ' (You)' : ''}
-                  </Text>
-                </TouchableOpacity>
+                />
               ))}
             </View>
           )}

@@ -11,11 +11,10 @@ interface Props {
   SelectCompanyID: (id: number, name: string) => void
   selectCompany: number
   setIsShowSerachCompany: any
-  themeMode: string
 }
 
 const ItemCard_CS = memo(
-  ({ item, formik, SelectCompanyID, selectCompany, setIsShowSerachCompany, themeMode }: Props) => {
+  ({ item, formik, SelectCompanyID, selectCompany, setIsShowSerachCompany }: Props) => {
     const isSelected = formik.values?.company_id === item.id
 
     const handlePress = useCallback(() => {
@@ -34,7 +33,7 @@ const ItemCard_CS = memo(
             style={{
               fontSize: RFValue(10),
               fontWeight: '500',
-              color: themeMode == 'dark' ? 'white' : '#333',
+              color: '#333',
             }}>
             {item.name}
           </Text>
@@ -46,7 +45,7 @@ const ItemCard_CS = memo(
               fontSize: RFValue(10),
               width: '100%',
               textAlign: 'center',
-              color: themeMode == 'dark' ? 'white' : '#333',
+              color: '#333',
               fontWeight: '300',
             }}>
             {item.code}

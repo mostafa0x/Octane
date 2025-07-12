@@ -14,10 +14,9 @@ export interface btnArray {
 interface props {
   name: string
   formik: any
-  themeMode: string
 }
 
-function SegmentedBtn({ name, formik, themeMode }: props) {
+function SegmentedBtn({ name, formik }: props) {
   const [currentBtns, setCurrentBtns] = useState<btnArray[]>([])
 
   const cards_SubmittedBtns = useRef<btnArray[]>([
@@ -67,18 +66,18 @@ function SegmentedBtn({ name, formik, themeMode }: props) {
           value: btn.name,
           label: btn.name.split('_').join(' '),
           icon: formik.values?.[name] === btn.name ? 'check-bold' : '',
-          checkedColor: themeMode === 'dark' ? 'green' : 'green',
+          checkedColor: 'green',
           uncheckedColor: 'red',
           style: {
             justifyContent: 'center',
             alignItems: 'center',
           },
           labelStyle: {
-            color: themeMode === 'dark' ? 'white' : 'black',
+            color: 'black',
             textAlign: 'center',
-            textAlignVertical: 'center', // أندرويد فقط
-            fontSize: rf(1.4),
-            includeFontPadding: false, // أندرويد فقط
+            textAlignVertical: 'center',
+            fontSize: formik.values?.[name] === btn.name ? rf(1.4) : rf(1.2),
+            includeFontPadding: false,
           },
         }))}
       />

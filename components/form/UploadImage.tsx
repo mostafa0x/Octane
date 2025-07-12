@@ -11,11 +11,10 @@ import {
 
 interface props {
   formik: any
-  themeMode: string
   setShowImageOptions: (payload: boolean) => void
 }
 
-function UploadImage({ formik, setShowImageOptions, themeMode }: props) {
+function UploadImage({ formik, setShowImageOptions }: props) {
   const styles = createStyles()
 
   return (
@@ -45,7 +44,7 @@ function UploadImage({ formik, setShowImageOptions, themeMode }: props) {
             labelStyle={{
               fontSize: rf(1.7),
               textAlign: 'center',
-              color: themeMode == 'dark' ? 'white' : 'white',
+              color: 'white',
             }}
             onPress={() => {
               Keyboard.dismiss()

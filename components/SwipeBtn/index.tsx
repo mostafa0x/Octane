@@ -11,10 +11,9 @@ import {
 
 interface props {
   router: Router
-  themeMode: string
 }
 
-export default function SwipeBtn({ router, themeMode }: props) {
+export default function SwipeBtn({ router }: props) {
   const handleComplete = useCallback(() => {
     router.push('/Upload')
   }, [router])
@@ -27,9 +26,9 @@ export default function SwipeBtn({ router, themeMode }: props) {
         width={rw(90)}
         goBackToStart={true}
         circleBackgroundColor="#8d1c47"
-        titleContainerStyle={{ backgroundColor: themeMode == 'dark' ? 'black' : 'white' }}
+        titleContainerStyle={{ backgroundColor: 'white' }}
         underlayStyle={{
-          backgroundColor: themeMode == 'dark' ? 'white' : '#c47b9f',
+          backgroundColor: '#c47b9f',
           width: rw(60),
         }}
         underlayTitleStyle={{ fontSize: rf(1.3), width: rw(50) }}
@@ -38,7 +37,7 @@ export default function SwipeBtn({ router, themeMode }: props) {
         titleStyle={{
           width: rw(80),
           fontSize: rf(1.3),
-          color: themeMode == 'dark' ? 'white' : 'black',
+          color: 'black',
         }}
         onComplete={handleComplete}
         iconContainerStyle={{}}

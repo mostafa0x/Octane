@@ -10,10 +10,9 @@ const nfcIcon = require('../../assets/nfc.png')
 interface props {
   submitted: number
   allocated: number
-  themeMode: string
 }
 
-function NfcCard({ submitted, allocated, themeMode }: props) {
+function NfcCard({ submitted, allocated }: props) {
   const cardWidth = responsiveWidth(90)
   const cardHeight = responsiveHeight(18)
   const progressSize = responsiveWidth(18)
@@ -25,7 +24,7 @@ function NfcCard({ submitted, allocated, themeMode }: props) {
         width: cardWidth,
         flexDirection: 'row',
         borderRadius: responsiveWidth(7.5),
-        backgroundColor: themeMode === 'dark' ? '#000000' : '#8d1c47',
+        backgroundColor: '#8d1c47',
         padding: responsiveWidth(5),
       }}>
       <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>

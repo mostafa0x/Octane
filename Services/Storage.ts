@@ -7,6 +7,7 @@ import { changeIsLoadedUserData, fillUserInfo } from 'lib/Store/Slices/UserSlice
 import { CompanyFace } from 'Types/ItemList'
 import { userDataFace } from 'Types/Store/UserSliceFace'
 import handleLoutOut from './handleLogOut'
+import SetCompaniesToStorage from './SetCompaniesToStorage'
 
 export const storeUserInfo = async (
   userToken: string,
@@ -48,32 +49,34 @@ export const getUserInfo = async (dispatch: any) => {
 }
 
 export const GetCompanys = async (dispatch: any, router: Router) => {
+  AsyncStorage.clear()
   try {
     const companys = await AsyncStorage.getItem('@companys')
     if (!companys) {
       const res = await axiosClient.get('/admin/companies')
-      dispatch(SetCompanys(res.data.companies))
-      const date = Date.now()
-      const data = {
-        data: res.data.companies,
-        time: date,
-      }
-      await AsyncStorage.setItem('@companys', await JSON.stringify(data))
+      SetCompaniesToStorage(dispatch, res)
       console.log('done set copmanys')
       return
     }
-    const companysJSON: { data: CompanyFace; time: string } = await JSON.parse(companys)
-    const storedTime = parseInt(companysJSON.time)
-    const now = Date.now()
-    const expirdTime = 7 * 24 * 60 * 60 * 1000
-    if (now - storedTime >= expirdTime) {
-      await AsyncStorage.removeItem('@companys')
-      GetCompanys(dispatch, router)
-      console.log('Should Upate')
-    } else {
+    const companysJSON: { data: CompanyFace; etag: string } = await JSON.parse(companys)
+    const checkRes = await axiosClient.get('/admin/companies', {
+      headers: { 'If-None-Match': companysJSON.etag },
+    })
+    if (checkRes.status == 304) {
       dispatch(SetCompanys(companysJSON.data))
       console.log('found')
+    } else {
+      SetCompaniesToStorage(dispatch, checkRes)
     }
+
+    // if (now - storedTime >= expirdTime) {
+    //   await AsyncStorage.removeItem('@companys')
+    //   GetCompanys(dispatch, router)
+    //   console.log('Should Upate')
+    // } else {
+    //   dispatch(SetCompanys(companysJSON.data))
+    //   console.log('found')
+    // }
   } catch (err: any) {
     console.log(err)
     if (err.status == 403) {

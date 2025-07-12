@@ -1,13 +1,4 @@
-import {
-  View,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  Keyboard,
-  ScrollView,
-} from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { useCallback, useState } from 'react'
 import InputField from 'components/form/InputField'
 import { ActivityIndicator, Button, HelperText } from 'react-native-paper'
@@ -22,7 +13,7 @@ import * as Animatable from 'react-native-animatable'
 import { responsiveWidth, responsiveHeight } from 'react-native-responsive-dimensions'
 import { RFValue } from 'react-native-responsive-fontsize'
 
-export default function SignUp({ setIsLoadingRes, keyboardVisible }: any) {
+export default function SignUp({ setIsLoadingRes }: any) {
   const [errorMes, setErrorMes] = useState<string | null>(null)
   const [isLoadingBtn, setIsLoadingBtn] = useState(false)
   const router = useRouter()

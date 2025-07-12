@@ -1,15 +1,8 @@
-import {
-  View,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from 'react-native'
+import { View, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import { useCallback, useEffect, useState } from 'react'
 import { Image } from 'expo-image'
 import { Button } from 'react-native-paper'
 import { useFocusEffect, useRouter } from 'expo-router'
-import { useDispatch } from 'react-redux'
 import SignIn from 'components/Auth/SignIn'
 import SignUp from 'components/Auth/SignUp'
 import { responsiveWidth, responsiveHeight } from 'react-native-responsive-dimensions'
@@ -20,7 +13,6 @@ const backImg = require('assets/backn.png')
 
 export default function Auth() {
   const router = useRouter()
-  const dispatch = useDispatch()
   const [authMode, setAuthMode] = useState(1)
   const [isLoadingRes, setIsLoadingRes] = useState(false)
   const [keyboardVisible, setKeyboardVisible] = useState(false)

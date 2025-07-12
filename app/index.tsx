@@ -1,11 +1,4 @@
-import {
-  KeyboardAvoidingView,
-  Platform,
-  View,
-  StyleSheet,
-  Keyboard,
-  TouchableWithoutFeedback,
-} from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { Searchbar } from 'react-native-paper'
 import { Image } from 'expo-image'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -15,12 +8,10 @@ import { SearchAcknowledgments, SetAcknowledgments_Current } from 'lib/Store/Sli
 import { usePathname, useRouter } from 'expo-router'
 import NfcCard from 'components/NFC Card'
 import ListButtonHistory from 'components/List Button History'
-import * as Animatable from 'react-native-animatable'
 import ListCard from 'components/List/ListCard'
 import AppBar from 'components/App Bar'
 import SwipeBtn from 'components/SwipeBtn'
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
-import { useThemeContext } from 'Providers/ThemeContext'
 
 export default function Home() {
   const backImg = useRef(require('../assets/backn.png'))
@@ -34,8 +25,6 @@ export default function Home() {
   const searchBoxRef = useRef<React.ComponentRef<typeof Searchbar>>(null)
   const router = useRouter()
   const pathName = usePathname()
-  const { toggleTheme, themeMode }: { toggleTheme: () => void; themeMode: 'light' | 'dark' } =
-    useThemeContext()
 
   const handleSerach = useCallback(
     (text: string) => {
@@ -59,7 +48,7 @@ export default function Home() {
   useEffect(() => {
     handleActive('daily')
     handleSerach('')
-  }, [pathName, themeMode])
+  }, [pathName])
 
   return (
     <View style={styles.animatableView}>
@@ -79,36 +68,28 @@ export default function Home() {
           borderTopRightRadius: responsiveWidth(10),
           padding: responsiveWidth(5),
           paddingTop: responsiveHeight(4),
-          backgroundColor: themeMode == 'dark' ? 'black' : 'white',
+          backgroundColor: 'white',
         }}>
-        <NfcCard themeMode={themeMode} submitted={submitted} allocated={allocated} />
+        <NfcCard submitted={submitted} allocated={allocated} />
 
-        <ListButtonHistory
-          themeMode={themeMode}
-          activeList={activeList}
-          handleActive={handleActive}
-        />
+        <ListButtonHistory activeList={activeList} handleActive={handleActive} />
 
         <View style={styles.searchContainer}>
           <Searchbar
             ref={searchBoxRef}
             placeholder="Search"
             placeholderTextColor={'gray'}
-            style={{ backgroundColor: themeMode == 'dark' ? '#111111' : '#f1f1f1' }}
+            style={{ backgroundColor: '#f1f1f1' }}
             value={searchQuery}
             onChangeText={handleSerach}
             onClearIconPress={() => handleActive(activeList)}
           />
         </View>
 
-        <ListCard
-          themeMode={themeMode}
-          type="Home"
-          acknowledgments_Current={acknowledgments_Current}
-        />
+        <ListCard type="Home" acknowledgments_Current={acknowledgments_Current} />
 
         <View style={styles.swipeBtnContainer}>
-          <SwipeBtn themeMode={themeMode} router={router} />
+          <SwipeBtn router={router} />
         </View>
       </View>
     </View>

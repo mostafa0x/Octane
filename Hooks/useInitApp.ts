@@ -16,7 +16,7 @@ export const useInitApp = () => {
       GetAcknowledgments('weekly', dispatch, router),
       GetAcknowledgments('daily', dispatch, router),
     ])
-    await console.log('loaded data ✅')
+    console.log('loaded data ✅')
     await GetCompanys(dispatch, router)
     dispatch(ChangeLoadedData(true))
   }
