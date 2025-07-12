@@ -1,5 +1,13 @@
 import { View, TouchableOpacity, ScrollView, Linking } from 'react-native'
-import { ActivityIndicator, Avatar, HelperText, Icon, Text } from 'react-native-paper'
+import {
+  ActivityIndicator,
+  Avatar,
+  HelperText,
+  Icon,
+  Portal,
+  Snackbar,
+  Text,
+} from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
 import { useRouter } from 'expo-router'
@@ -29,6 +37,7 @@ export default function Profile() {
   const [isLoadingRes, setIsLoadingRes] = useState(false)
   const [errorRes, setErrorRes] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isMessageBar, setIsMessageBar] = useState<string | null>(null)
 
   async function handleChangeAvatar(formValues: any) {
     if (isLoadingRes) return
@@ -53,6 +62,7 @@ export default function Profile() {
         dispatch(changeImageProfile(data.image))
         await UpdataUserInfo(userData, data.image)
       }
+      setIsMessageBar('The picture has been changed')
     } catch (err: any) {
       console.log(err)
       setErrorRes(err.response?.data?.message ?? 'Error Upload Image !')
@@ -98,8 +108,14 @@ export default function Profile() {
 
       <View style={{ position: 'absolute', top: rh(9), left: rw(30), zIndex: 10 }}>
         <TouchableOpacity onPress={() => setShowImageOptions(true)} activeOpacity={0.8}>
+          {loading && (
+            <View style={{ position: 'absolute', zIndex: 1, top: rh(6), left: rw(12) }}>
+              <ActivityIndicator size={80} color="#0077ff" />
+            </View>
+          )}
           <Avatar.Image
-            source={loading ? avatarIcon : userData?.image ? { uri: userData?.image } : avatarIcon}
+            style={{ backgroundColor: 'black' }}
+            source={loading ? null : userData?.image ? { uri: userData?.image } : avatarIcon}
             size={avatarSize}
             onLoadStart={() => loading && setLoading(true)}
             onLoadEnd={() => setLoading(false)}
@@ -217,7 +233,7 @@ export default function Profile() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={callLogOut}
-            style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 16, marginBottom: 30 }}>
             <View
               style={{
                 height: rh(7),
@@ -241,6 +257,14 @@ export default function Profile() {
         showImageOptions={showImageOptions}
         setShowImageOptions={setShowImageOptions}
       />
+      <Portal>
+        <Snackbar
+          visible={!!isMessageBar}
+          onDismiss={() => setIsMessageBar(null)}
+          action={{ label: 'done', onPress: () => setIsMessageBar(null) }}>
+          <Text style={{ color: 'white' }}>{isMessageBar}</Text>
+        </Snackbar>
+      </Portal>
     </Animatable.View>
   ) : (
     <SpinnerLoading />

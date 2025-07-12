@@ -49,37 +49,30 @@ export const getUserInfo = async (dispatch: any) => {
 }
 
 export const GetCompanys = async (dispatch: any, router: Router) => {
-  AsyncStorage.clear()
   try {
     const companys = await AsyncStorage.getItem('@companys')
+
     if (!companys) {
       const res = await axiosClient.get('/admin/companies')
       SetCompaniesToStorage(dispatch, res)
-      console.log('done set copmanys')
+      console.log('not found')
       return
     }
-    const companysJSON: { data: CompanyFace; etag: string } = await JSON.parse(companys)
+    const companysJSON: { data: CompanyFace[]; etag: string } = await JSON.parse(companys)
     const checkRes = await axiosClient.get('/admin/companies', {
       headers: { 'If-None-Match': companysJSON.etag },
+      validateStatus: (status) => (status >= 200 && status < 300) || status === 304,
     })
     if (checkRes.status == 304) {
       dispatch(SetCompanys(companysJSON.data))
       console.log('found')
     } else {
       SetCompaniesToStorage(dispatch, checkRes)
+      console.log('update')
     }
-
-    // if (now - storedTime >= expirdTime) {
-    //   await AsyncStorage.removeItem('@companys')
-    //   GetCompanys(dispatch, router)
-    //   console.log('Should Upate')
-    // } else {
-    //   dispatch(SetCompanys(companysJSON.data))
-    //   console.log('found')
-    // }
   } catch (err: any) {
     console.log(err)
-    if (err.status == 403) {
+    if (err.status == 403 || err.status == 401) {
       handleLoutOut(dispatch, router)
     }
     throw err
@@ -90,18 +83,10 @@ export const UpdateCompanys = async (dispatch: any) => {
   try {
     const res = await axiosClient.get('/admin/companies')
     await AsyncStorage.removeItem('@companys')
-    dispatch(SetCompanys(res.data.companies))
-    const date = Date.now()
-    const data = {
-      data: res.data.companies,
-      time: date,
-    }
-    await AsyncStorage.setItem('@companys', await JSON.stringify(data))
-    console.log('done set copmanys')
+    SetCompaniesToStorage(dispatch, res)
     return
   } catch (err: any) {
     console.log(err)
-
     throw err
   }
 }
