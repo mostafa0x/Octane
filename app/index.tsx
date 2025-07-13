@@ -89,7 +89,7 @@ export default function Home() {
         <ListCard type="Home" acknowledgments_Current={acknowledgments_Current} />
 
         <View style={styles.swipeBtnContainer}>
-          <SwipeBtn router={router} />
+          <SwipeBtn allocated={allocated} submitted={submitted} router={router} />
         </View>
       </View>
     </View>

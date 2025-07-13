@@ -2,6 +2,11 @@ import { View, Text, Dimensions, useWindowDimensions } from 'react-native'
 import React, { memo } from 'react'
 import { Button } from 'react-native-paper'
 import { Image } from 'expo-image'
+import {
+  responsiveHeight as rh,
+  responsiveWidth as rw,
+  responsiveFontSize as rf,
+} from 'react-native-responsive-dimensions'
 
 interface props {
   isError: string
@@ -9,28 +14,28 @@ interface props {
 }
 
 function ErrorScreen({ isError, GetData }: props) {
-  const { width, height } = useWindowDimensions()
   return (
     <View className="flex-1 items-center justify-center gap-24  ">
-      <Image
-        style={{ height: height * 0.3, width: width * 0.65 }}
-        source={require('assets/noWif.png')}
-      />
+      <Image style={{ height: rh(40), width: rw(80) }} source={require('assets/noWif.png')} />
       <View className="items-center gap-10">
         <Text
           style={{
-            fontSize: width * 0.042,
+            fontSize: rf(2),
             color: 'black',
             textAlign: 'center',
-            width: width * 0.6,
+            width: rw(100),
           }}>
           {isError}
         </Text>
 
         <Button
-          style={{ width: width * 0.65, height: height * 0.08 }}
-          contentStyle={{ height: height * 0.08, justifyContent: 'center' }}
-          labelStyle={{ fontSize: width * 0.042, height: height * 0.03 }}
+          style={{ width: rw(60), height: rh(6) }}
+          contentStyle={{ height: '100%', justifyContent: 'center' }}
+          labelStyle={{
+            fontSize: rw(6),
+            textAlignVertical: 'center',
+            height: '100%',
+          }}
           buttonColor="#8d1c47"
           textColor="white"
           onPress={GetData}>

@@ -80,7 +80,7 @@ export default function Upload() {
       dispatch(PushNewAcknowledgment({ data: data }))
 
       setIsLoadingRes(false)
-      router.push('/')
+      router.replace('/')
     } catch (err: any) {
       setErrorApi(err?.response?.data.message || err.message)
       setIsLoadingRes(false)
