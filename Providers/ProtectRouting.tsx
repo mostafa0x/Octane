@@ -15,13 +15,19 @@ function ProtectRoutingProvider({ children }: { children: React.ReactNode }) {
   const { isMountApp } = useSelector((state: StateFace) => state.AppReducer)
   const [isLoading, setIsLoading] = useState(true)
   const [isError, setIsError] = useState<string | null>(null)
+  const [statusCode, setstatusCode] = useState(0)
   const dispatch = useDispatch()
   const router = useRouter()
   const pathName = usePathname()
   const { init } = useInitApp()
 
   const shouldRedirectToAuth = useMemo(
-    () => !userToken && (pathName === '/' || pathName === '/Profile' || pathName === '/Upload'),
+    () =>
+      !userToken &&
+      (pathName === '/' ||
+        pathName === '/Profile' ||
+        pathName === '/Upload' ||
+        pathName === '/Dashboard'),
     [userToken, pathName]
   )
 
@@ -51,9 +57,13 @@ function ProtectRoutingProvider({ children }: { children: React.ReactNode }) {
 
       setIsLoading(false)
     } catch (err: any) {
-      err.status !== 403 &&
+      if (err.status !== 403) {
         setIsError(err?.response?.data?.message ?? err.message ?? 'Something went wrong !')
-      console.log(err.message ?? 'Something went wrong')
+        setstatusCode(err.status)
+        console.log(err.status)
+
+        console.log(err.message ?? 'Something went wrong')
+      }
     }
   }, [init])
 
@@ -86,7 +96,7 @@ function ProtectRoutingProvider({ children }: { children: React.ReactNode }) {
   ])
 
   if (isError) {
-    return <ErrorScreen isError={isError} GetData={GetData} />
+    return <ErrorScreen isError={isError} statusCode={statusCode} GetData={GetData} />
   }
 
   if (isLoading) {

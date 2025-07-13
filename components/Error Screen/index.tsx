@@ -7,16 +7,26 @@ import {
   responsiveWidth as rw,
   responsiveFontSize as rf,
 } from 'react-native-responsive-dimensions'
+import handleLoutOut from 'Services/handleLogOut'
+import { useRouter } from 'expo-router'
+import { useDispatch } from 'react-redux'
 
 interface props {
   isError: string
   GetData: any
+  statusCode: number
 }
 
-function ErrorScreen({ isError, GetData }: props) {
+function ErrorScreen({ isError, GetData, statusCode }: props) {
+  const authError = statusCode == 403 || statusCode == 402
+  const router = useRouter()
+  const dispatch = useDispatch()
   return (
     <View className="flex-1 items-center justify-center gap-24  ">
-      <Image style={{ height: rh(40), width: rw(80) }} source={require('assets/noWif.png')} />
+      {!authError && (
+        <Image style={{ height: rh(40), width: rw(80) }} source={require('assets/noWif.png')} />
+      )}
+
       <View className="items-center gap-10">
         <Text
           style={{
@@ -29,17 +39,17 @@ function ErrorScreen({ isError, GetData }: props) {
         </Text>
 
         <Button
-          style={{ width: rw(60), height: rh(6) }}
+          style={{ width: rw(40), height: rh(6) }}
           contentStyle={{ height: '100%', justifyContent: 'center' }}
           labelStyle={{
-            fontSize: rw(6),
+            fontSize: rw(4),
             textAlignVertical: 'center',
             height: '100%',
           }}
           buttonColor="#8d1c47"
           textColor="white"
-          onPress={GetData}>
-          Try Again
+          onPress={() => (!authError ? GetData() : handleLoutOut(dispatch, router))}>
+          {authError ? 'Login Again' : 'Try Again'}
         </Button>
       </View>
     </View>

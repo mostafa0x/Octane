@@ -16,6 +16,8 @@ interface props {
 }
 
 export default function SwipeBtn({ router, submitted, allocated }: props) {
+  const allocatedEqualZero = allocated == 0
+  const submittedMoreThanAllocated = submitted !== 0 && submitted >= allocated
   const handleComplete = useCallback(() => {
     router.push('/Upload')
   }, [router])
@@ -27,7 +29,7 @@ export default function SwipeBtn({ router, submitted, allocated }: props) {
         borderRadius={rw(10)}
         width={rw(90)}
         goBackToStart={true}
-        disabled={submitted >= allocated}
+        disabled={submittedMoreThanAllocated || allocatedEqualZero}
         circleBackgroundColor="#8d1c47"
         titleContainerStyle={{ backgroundColor: 'white' }}
         underlayStyle={{
@@ -37,9 +39,11 @@ export default function SwipeBtn({ router, submitted, allocated }: props) {
         underlayTitleStyle={{ fontSize: rf(1.3), width: rw(50) }}
         underlayTitle="Swipe up to open"
         title={
-          submitted >= allocated
-            ? 'You do not have enough allocated !, contact the admin'
-            : 'Swipe to upload acknowledgment'
+          allocatedEqualZero
+            ? 'You do not have enough allocated, contact the admin'
+            : submittedMoreThanAllocated
+              ? 'All allocated has been delivered'
+              : 'Swipe to upload acknowledgment'
         }
         titleStyle={{
           width: rw(80),

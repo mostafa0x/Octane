@@ -1,5 +1,5 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
-import React, { memo, useCallback } from 'react'
+import React, { memo, useCallback, useEffect } from 'react'
 import { Feather } from '@expo/vector-icons'
 import { HelperText } from 'react-native-paper'
 import { responsiveHeight as rh, responsiveWidth as rw } from 'react-native-responsive-dimensions'
@@ -14,16 +14,21 @@ interface Props {
 
 const InputField = memo(({ label, name, formik, errorMes }: Props) => {
   const [showPassword, setShowPassword] = React.useState(false)
-
   const isPassword = ['password', 'repassword'].includes(name)
   const isNumberField = ['cards_submitted'].includes(name)
-  const isErrorEmail = errorMes === 'User already exists' && name === 'email'
+  const isErrorEmail =
+    (errorMes == 'User already exists' ||
+      errorMes == 'Email must be in the form @octane-tech.io') &&
+    name === 'email'
   const hasError =
-    errorMes && errorMes !== 'User already exists'
-      ? errorMes
-      : formik.touched?.[name] && !!formik.errors?.[name]
+    errorMes && isErrorEmail ? errorMes : formik.touched?.[name] && !!formik.errors?.[name]
   const shouldShowError = formik.touched?.[name] && !!formik.errors?.[name]
   const hasSupspend = errorMes === 'Account suspended'
+  useEffect(() => {
+    console.log(isErrorEmail)
+
+    return () => {}
+  }, [isErrorEmail])
 
   const togglePasswordVisibility = useCallback(() => {
     setShowPassword((prev) => !prev)
