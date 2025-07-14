@@ -15,7 +15,7 @@ function ProtectRoutingProvider({ children }: { children: React.ReactNode }) {
   const { isMountApp } = useSelector((state: StateFace) => state.AppReducer)
   const [isLoading, setIsLoading] = useState(true)
   const [isError, setIsError] = useState<string | null>(null)
-  const [statusCode, setstatusCode] = useState(0)
+  const [statusCode, setStatusCode] = useState(0)
   const dispatch = useDispatch()
   const router = useRouter()
   const pathName = usePathname()
@@ -54,13 +54,12 @@ function ProtectRoutingProvider({ children }: { children: React.ReactNode }) {
 
     try {
       await init()
-
       setIsLoading(false)
     } catch (err: any) {
       if (err.status !== 403) {
+        setStatusCode(err.status)
         setIsError(err?.response?.data?.message ?? err.message ?? 'Something went wrong !')
-        setstatusCode(err.status)
-        console.log(err.status)
+        console.log(err)
 
         console.log(err.message ?? 'Something went wrong')
       }

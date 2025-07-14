@@ -86,7 +86,6 @@ export default function Upload() {
       setIsLoadingRes(false)
     }
   }
-
   const formik = useFormik({
     initialValues: {
       company_id: 0,
@@ -203,6 +202,8 @@ export default function Upload() {
               name={'cards_submitted'}
               formik={formik}
               errorMes={null}
+              allocated={allocated}
+              submitted={submitted}
             />
 
             <View style={{ alignItems: 'center', gap: rh(0.3) }}>

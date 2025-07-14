@@ -48,7 +48,7 @@ export default function SwipeBtn({ router, submitted, allocated }: props) {
         titleStyle={{
           width: rw(80),
           fontSize: rf(1.3),
-          color: 'black',
+          color: submittedMoreThanAllocated ? 'green' : 'black',
         }}
         onComplete={handleComplete}
         iconContainerStyle={{}}

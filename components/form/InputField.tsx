@@ -1,7 +1,7 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
-import React, { memo, useCallback, useEffect } from 'react'
+import React, { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { Feather } from '@expo/vector-icons'
-import { HelperText } from 'react-native-paper'
+import { HelperText, Tooltip } from 'react-native-paper'
 import { responsiveHeight as rh, responsiveWidth as rw } from 'react-native-responsive-dimensions'
 import { RFValue } from 'react-native-responsive-fontsize'
 
@@ -10,65 +10,89 @@ interface Props {
   name: string
   formik: any
   errorMes?: string | null
+  allocated?: number
+  submitted?: number
 }
 
-const InputField = memo(({ label, name, formik, errorMes }: Props) => {
-  const [showPassword, setShowPassword] = React.useState(false)
-  const isPassword = ['password', 'repassword'].includes(name)
-  const isNumberField = ['cards_submitted'].includes(name)
-  const isErrorEmail =
-    (errorMes == 'User already exists' ||
-      errorMes == 'Email must be in the form @octane-tech.io') &&
-    name === 'email'
-  const hasError =
-    errorMes && isErrorEmail ? errorMes : formik.touched?.[name] && !!formik.errors?.[name]
-  const shouldShowError = formik.touched?.[name] && !!formik.errors?.[name]
-  const hasSupspend = errorMes === 'Account suspended'
-  useEffect(() => {
-    console.log(isErrorEmail)
+const InputField = memo(
+  ({ label, name, formik, errorMes, allocated = 0, submitted = 0 }: Props) => {
+    const totalCards = useMemo(() => {
+      const value = ++allocated - (++submitted + parseInt(formik.values?.[name]))
 
-    return () => {}
-  }, [isErrorEmail])
+      if (isNaN(value)) {
+        return allocated - submitted
+      } else {
+        return value < 0 ? 0 : value
+      }
+    }, [formik.values, allocated, submitted])
+    const [showPassword, setShowPassword] = React.useState(false)
+    const isPassword = ['password', 'repassword'].includes(name)
+    const isNumberField = ['cards_submitted'].includes(name)
+    const isCardsSubmitted = ['cards_submitted'].includes(name)
+    const isErrorEmail =
+      (errorMes == 'User already exists' ||
+        errorMes == 'Email must be in the form @octane-tech.io') &&
+      name === 'email'
+    const hasError =
+      errorMes && isErrorEmail ? errorMes : formik.touched?.[name] && !!formik.errors?.[name]
+    const shouldShowError = formik.touched?.[name] && !!formik.errors?.[name]
+    const hasSupspend = errorMes === 'Account suspended'
+    const togglePasswordVisibility = useCallback(() => {
+      setShowPassword((prev) => !prev)
+    }, [])
+    const inputRef = useRef<React.ComponentRef<typeof TextInput>>(null)
+    const styles = createStyles(hasError || isErrorEmail, hasSupspend)
+    useEffect(() => {
+      if (!isCardsSubmitted) return
+      if (totalCards <= 0) {
+        formik.setFieldValue(name, (allocated - submitted).toString())
+        return
+      }
 
-  const togglePasswordVisibility = useCallback(() => {
-    setShowPassword((prev) => !prev)
-  }, [])
+      return () => {}
+    }, [formik.values, totalCards])
+    return (
+      <View style={styles.container}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={styles.label}>{label}</Text>
 
-  const styles = createStyles(hasError || isErrorEmail, hasSupspend)
-
-  return (
-    <View style={styles.container}>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Text style={styles.label}>{label}</Text>
-        <HelperText style={styles.helperText} type="error" visible={!!shouldShowError}>
-          {(shouldShowError || hasError) && '*'}
-          {formik.errors?.[name]}
-        </HelperText>
+          <HelperText style={styles.helperText} type="error" visible={!!shouldShowError}>
+            {(shouldShowError || hasError) && '*'}
+            {formik.errors?.[name]}
+          </HelperText>
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            ref={inputRef}
+            keyboardType={isNumberField ? 'numeric' : 'default'}
+            onSubmitEditing={() => isPassword && formik.handleSubmit()}
+            onChangeText={formik.handleChange(name)}
+            onBlur={() => formik.handleBlur(name)}
+            value={isNumberField ? formik.values?.[name] : formik.values?.[name]?.toString()}
+            style={styles.input}
+            placeholder={isNumberField ? '0' : label}
+            secureTextEntry={isPassword && !showPassword}
+            placeholderTextColor="#ACB5BB"
+          />
+          {isCardsSubmitted && (
+            <Tooltip enterTouchDelay={0} leaveTouchDelay={2500} title="remaining allocated">
+              <TouchableOpacity style={styles.eyeIcon}>
+                <Text style={styles.labelNFC}>
+                  {totalCards}/{allocated - submitted}
+                </Text>
+              </TouchableOpacity>
+            </Tooltip>
+          )}
+          {isPassword && (
+            <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
+              <Feather name={showPassword ? 'eye' : 'eye-off'} color="#ACB5BB" size={RFValue(20)} />
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          keyboardType={isNumberField ? 'numeric' : 'default'}
-          onSubmitEditing={() => isPassword && formik.handleSubmit()}
-          onChangeText={formik.handleChange(name)}
-          onBlur={() => formik.handleBlur(name)}
-          value={
-            isNumberField ? parseInt(formik.values?.[name]) : formik.values?.[name]?.toString()
-          }
-          style={styles.input}
-          placeholder={isNumberField ? '0' : label}
-          secureTextEntry={isPassword && !showPassword}
-          placeholderTextColor="#ACB5BB"
-        />
-
-        {isPassword && (
-          <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
-            <Feather name={showPassword ? 'eye' : 'eye-off'} color="#ACB5BB" size={RFValue(20)} />
-          </TouchableOpacity>
-        )}
-      </View>
-    </View>
-  )
-})
+    )
+  }
+)
 
 const createStyles = (hasError: boolean, hasSupspend: boolean) =>
   StyleSheet.create({
@@ -79,7 +103,11 @@ const createStyles = (hasError: boolean, hasSupspend: boolean) =>
       marginBottom: rh(0.5),
       fontSize: RFValue(14),
       color: '#6C7278',
-      width: rw(40),
+      width: rw(30),
+    },
+    labelNFC: {
+      fontSize: RFValue(12),
+      color: '#6C7278',
     },
     inputContainer: {
       flexDirection: 'row',
@@ -103,11 +131,12 @@ const createStyles = (hasError: boolean, hasSupspend: boolean) =>
       marginLeft: rw(2),
     },
     helperText: {
+      flexWrap: 'wrap',
       fontSize: RFValue(10),
-      width: rw(60),
+      width: rw(83),
       color: 'red',
       textAlign: 'right',
-      paddingRight: rw(20),
+      paddingRight: rw(25),
     },
   })
 
