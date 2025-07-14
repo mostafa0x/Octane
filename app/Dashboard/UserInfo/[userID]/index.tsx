@@ -150,7 +150,7 @@ export default function UserInfo() {
           <Text style={{ textAlign: 'center', fontSize: rf(2.1) }}>{userName}</Text>
           {isLoading ? (
             <ActivityIndicator size={rf(2)} />
-          ) : data?.status === 'active' ? null : (
+          ) : isError ? null : data?.status === 'active' ? null : (
             <>
               <Text>{'  '}</Text>
               <Icon size={rf(3)} color="red" source={'block-helper'} />

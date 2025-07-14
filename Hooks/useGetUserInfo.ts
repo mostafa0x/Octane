@@ -7,7 +7,6 @@ export default function useGetUserInfo(userID: number) {
       const res = await axiosClient.get(`/admin/users/acknowledgments/${userID}`)
       return res.data
     } catch (err: any) {
-      console.error(err)
       throw err
     }
   }

@@ -198,7 +198,7 @@ export default function Upload() {
             {segmentedButtons}
 
             <InputField
-              label={'card submitted'}
+              label={'NFC submitted'}
               name={'cards_submitted'}
               formik={formik}
               errorMes={null}
@@ -251,10 +251,10 @@ export default function Upload() {
                 loading={isLoadingRes}
                 onPress={() => {
                   Keyboard.dismiss()
-                  if (formik.isValid && formik.dirty && formik.values.image) {
+                  if (formik.isValid && formik.values.image) {
                     return setShowConfirmModal(true)
                   }
-                  // formik.submitForm()
+                  formik.submitForm()
                 }}
                 textColor="white"
                 buttonColor="#8d1c47">
