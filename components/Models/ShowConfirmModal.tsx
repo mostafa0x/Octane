@@ -62,32 +62,49 @@ function ShowConfirmModal_Modle({
             </View>
           ) : (
             <View style={styles.detailsContainer}>
-              <Text style={styles.textItem}>
-                📦 Company Name: <Text style={styles.boldText}>{currCompany?.name}</Text>
-              </Text>
-              <Text style={styles.textItem}>
-                📦 Company Code: <Text style={styles.boldText}>{currCompany?.code}</Text>
-              </Text>
-              <Text style={styles.textItem}>
-                📝 Submission Type:{' '}
+              <View style={{ alignContent: 'center', flexDirection: 'row', gap: rw(1) }}>
+                <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                  <Icon size={rf(3)} source={'rename-box'} />
+                  <Text style={styles.textItem}> Company Name:</Text>
+                </View>
+                <Text style={styles.boldText}>{currCompany?.name}</Text>
+              </View>
+
+              <View style={{ alignContent: 'center', flexDirection: 'row', gap: rw(1) }}>
+                <Icon size={rf(3)} source={'numeric'} />
+
+                <Text style={styles.textItem}>Company Code:</Text>
+                <Text style={styles.boldText}>{currCompany?.code}</Text>
+              </View>
+
+              <View style={{ alignContent: 'center', flexDirection: 'row', gap: rw(1) }}>
+                <Icon size={rf(3)} source={'newspaper-variant-outline'} />
+
+                <Text style={styles.textItem}>Submission Type: </Text>
                 <Text style={styles.boldText}>
                   {formik.values.submission_type.split('_').join(' ')}
                 </Text>
-              </Text>
-              <Text style={styles.textItem}>
-                🚚 Delivery Method:{' '}
+              </View>
+
+              <View style={{ alignContent: 'center', flexDirection: 'row', gap: rw(1) }}>
+                <Icon size={rf(3)} source={'truck-fast-outline'} />
+                <Text style={styles.textItem}>Delivery Method: </Text>
                 <Text style={styles.boldText}>
                   {formik.values.delivery_method.split('_').join(' ')}
                 </Text>
-              </Text>
-              <Text style={styles.textItem}>
-                🕒 State Time:{' '}
+              </View>
+              <View style={{ alignContent: 'center', flexDirection: 'row', gap: rw(1) }}>
+                <Icon size={rf(3)} source={'clipboard-text-clock-outline'} />
+
+                <Text style={styles.textItem}>State Time: </Text>
                 <Text style={styles.boldText}>{formik.values.state_time.split('_').join(' ')}</Text>
-              </Text>
-              <Text style={styles.textItem}>
-                💳 Cards Submitted:{' '}
+              </View>
+              <View style={{ alignContent: 'center', flexDirection: 'row', gap: rw(1) }}>
+                <Icon size={rf(3)} source={'nfc'} />
+
+                <Text style={styles.textItem}>Cards Submitted: </Text>
                 <Text style={styles.boldText}>{parseInt(formik.values.cards_submitted)}</Text>
-              </Text>
+              </View>
             </View>
           )}
 
@@ -153,10 +170,13 @@ const styles = StyleSheet.create({
   },
   textItem: {
     fontSize: rf(1.5),
+    textAlignVertical: 'center',
+    width: rw(27),
   },
   boldText: {
     fontWeight: '300',
     fontSize: rf(1.7),
+    width: rw(40),
     textDecorationLine: 'underline',
   },
   errorContainer: {

@@ -50,7 +50,7 @@ function NfcCardDashboard({ submitted, allocated, userID, refetch }: props) {
       setIsShowModel(false)
       setValueNum(0)
     } catch (err: any) {
-      setErrorRes(err.response?.data?.message ?? err.message ?? 'Error upload!')
+      setErrorRes(err.response?.data?.message ?? err.message ?? 'Error upload allocated!')
     } finally {
       setIsLoadingRes(false)
     }
@@ -140,9 +140,12 @@ function NfcCardDashboard({ submitted, allocated, userID, refetch }: props) {
                 style={styles.inputField}
                 keyboardType="numeric"
                 autoFocus={true}
+                onSubmitEditing={handleAddAllocate}
               />
               {isLoadingRes ? (
-                <ActivityIndicator size={50} />
+                <View style={{ marginTop: rh(4) }}>
+                  <ActivityIndicator size={50} />
+                </View>
               ) : (
                 <>
                   <Button

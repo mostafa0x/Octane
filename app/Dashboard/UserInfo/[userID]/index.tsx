@@ -34,10 +34,13 @@ export interface UserInfoFace {
   status: 'active' | 'suspend'
 }
 
-const ErrorFC = ({ error }: { error: Error }) => {
+const ErrorFC = ({ error, refetch }: { error: Error; refetch: any }) => {
   return (
-    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ color: 'red' }}>{error.message}</Text>
+    <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: rh(20), gap: rh(5) }}>
+      <Text style={{ color: 'red', fontSize: rf(3) }}>{error.message}</Text>
+      <Button onPress={refetch} buttonColor="#8d1c47" textColor="white">
+        Try Again
+      </Button>
     </View>
   )
 }
@@ -165,7 +168,7 @@ export default function UserInfo() {
           paddingHorizontal: rw(5),
         }}>
         {isError ? (
-          <ErrorFC error={error} />
+          <ErrorFC refetch={refetch} error={error} />
         ) : isLoading ? (
           <View style={{ marginTop: rh(20) }}>
             <ActivityIndicator size={70} />

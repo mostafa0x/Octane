@@ -254,7 +254,7 @@ export default function Upload() {
                   if (formik.isValid && formik.dirty && formik.values.image) {
                     return setShowConfirmModal(true)
                   }
-                  formik.submitForm()
+                  // formik.submitForm()
                 }}
                 textColor="white"
                 buttonColor="#8d1c47">

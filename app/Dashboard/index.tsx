@@ -34,7 +34,7 @@ export default function Dashboard() {
       //   console.log(res.data.users)
       return res.data.users
     } catch (err: any) {
-      console.log(err)
+      //    console.log(err)
       throw err
     }
   }
