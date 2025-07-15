@@ -12,7 +12,6 @@ import { useRouter } from 'expo-router'
 import * as Animatable from 'react-native-animatable'
 import { LoginSchema } from 'lib/Vaildtions/SignInValid'
 import { deleteLastLogin, getLastLogin, storeUserInfo } from 'Services/Storage'
-import SwipeBtn from 'components/SwipeBtn'
 import { SwipeButton } from 'react-native-expo-swipe-button'
 
 export type InfoLoginType = { email: string; password: string; image: string }
@@ -27,8 +26,10 @@ export default function SignIn({ setIsLoadingRes }: any) {
 
   const formik = useFormik({
     initialValues: {
-      email: 'sasa@octane-tech.io',
-      password: '123456789',
+      email: '',
+      password: '',
+      //     email: 'sasa@octane-tech.io',
+      // password: '123456789',
     },
     validationSchema: LoginSchema,
     onSubmit: async (formValues) => {
@@ -67,7 +68,10 @@ export default function SignIn({ setIsLoadingRes }: any) {
     if (!infoLogin) return
     formik.setFieldValue('email', infoLogin.email)
     formik.setFieldValue('password', infoLogin.password)
-    formik.handleSubmit()
+    const time = setTimeout(() => {
+      formik.handleSubmit()
+      clearTimeout(time)
+    }, 250)
   }
   async function callDeleteLastLogin() {
     try {
@@ -138,7 +142,7 @@ export default function SignIn({ setIsLoadingRes }: any) {
         </HelperText>
       )}
       {infoLogin && (
-        <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: rh(4) }}>
+        <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: rh(8) }}>
           <View
             style={{
               flexDirection: 'row',
@@ -149,9 +153,14 @@ export default function SignIn({ setIsLoadingRes }: any) {
               width: rw(90),
             }}>
             <View
-              style={{ flexDirection: 'row', alignItems: 'center', gap: rw(2), flexWrap: 'wrap' }}>
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: rw(2),
+                flexWrap: 'wrap',
+              }}>
               <Avatar.Image
-                size={RFValue(25)}
+                size={RFValue(30)}
                 source={infoLogin.image ? { uri: infoLogin.image } : avatarDef.current}
               />
 
@@ -188,39 +197,6 @@ export default function SignIn({ setIsLoadingRes }: any) {
           </View>
         </View>
       )}
-      <View style={{ alignItems: 'center', marginTop: 2 }}>
-        <SwipeButton
-          height={rh(4)}
-          borderRadius={rw(10)}
-          underlayTitleStyle={{ fontSize: RFValue(1.3), width: rw(50) }}
-          width={rw(89)}
-          onSwipeStart={() => {
-            console.log('st')
-          }}
-          goBackToStart={true}
-          circleSize={RFValue(40)}
-          circleBackgroundColor="#8d1c47"
-          titleStyle={{
-            width: rw(80),
-            fontSize: RFValue(12),
-            marginLeft: rw(10),
-          }}
-          underlayStyle={{
-            backgroundColor: '#c47b9f',
-            width: rw(60),
-          }}
-          onComplete={function (): void {
-            console.log('x')
-          }}
-          Icon={
-            <Avatar.Image
-              size={RFValue(40)}
-              source={infoLogin?.image ? { uri: infoLogin.image } : avatarDef.current}
-            />
-          }
-          title={'Login'}
-        />
-      </View>
     </Animatable.View>
   )
 }

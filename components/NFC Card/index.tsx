@@ -15,7 +15,7 @@ interface props {
 function NfcCard({ submitted, allocated }: props) {
   const cardWidth = responsiveWidth(90)
   const cardHeight = responsiveHeight(18)
-  const progressSize = responsiveWidth(18)
+  const progressSize = responsiveWidth(14)
 
   return (
     <View
@@ -53,10 +53,55 @@ function NfcCard({ submitted, allocated }: props) {
           </View>
         </View>
 
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: responsiveHeight(1),
+            gap: responsiveWidth(5),
+          }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+            <Text
+              style={{
+                color: '#bdcdce',
+                fontSize: RFValue(14),
+                textAlign: 'center',
+              }}>
+              {allocated - submitted}{' '}
+            </Text>
+            <Icon size={RFValue(15)} color="white" source={'nfc'} />
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text
+              style={{
+                color: '#bdcdce',
+                fontSize: RFValue(14),
+                textAlign: 'center',
+              }}>
+              {((submitted / allocated) * 100).toFixed(2) + '%'}
+            </Text>
+          </View>
+        </View>
+        <View
+          style={{
+            marginTop: responsiveHeight(1),
+
+            marginLeft: responsiveWidth(2),
+            backgroundColor: '#ffffff',
+            width: responsiveWidth(30),
+            height: responsiveHeight(0.2),
+            borderRadius: 50,
+          }}></View>
         <Text
           style={{
             color: '#bdcdce',
-            marginTop: responsiveHeight(2),
+            marginTop: responsiveHeight(1),
             fontSize: RFValue(14),
             width: responsiveWidth(30),
             textAlign: 'center',

@@ -43,7 +43,7 @@ export default function SwipeBtn({ router, submitted, allocated }: props) {
             ? 'You do not have enough allocated, contact the admin'
             : submittedMoreThanAllocated
               ? 'All allocated has been delivered'
-              : `Swipe to upload acknowledgment ,\n  ${allocated > 0 ? `It has been delivered  ` + ((submitted / allocated) * 100).toFixed(2) + '%' : null}`
+              : `Swipe to upload acknowledgment `
         }
         titleStyle={{
           width: rw(80),
