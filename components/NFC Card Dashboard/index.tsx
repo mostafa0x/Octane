@@ -8,9 +8,11 @@ import {
   responsiveWidth as rw,
   responsiveFontSize as rf,
 } from 'react-native-responsive-dimensions'
+
 import { SetAllocated } from 'lib/Store/Slices/MainSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFace } from 'Types/Store/StateFace'
+import { useUserInfoContext } from 'Providers/UserInfo'
 
 const nfcIcon = require('../../assets/nfc.png')
 
@@ -22,13 +24,15 @@ interface props {
 }
 
 function NfcCardDashboard({ submitted, allocated, userID, refetch }: props) {
+  const cardWidth = rw(90)
+  const cardHeight = rh(18)
   const progressSize = rw(18)
   const { userData } = useSelector((state: StateFace) => state.UserReducer)
   const [valueNum, setValueNum] = useState<any>(0)
-  const [isShowModel, setIsShowModel] = useState(false)
   const [isLoadingRes, setIsLoadingRes] = useState(false)
   const [errorRes, setErrorRes] = useState<string | null>(null)
   const [isMessageBar, setIsMessageBar] = useState<string | null>(null)
+  const { isShowModel, setIsShowModel } = useUserInfoContext()
 
   const dispatch = useDispatch()
   async function handleAddAllocate() {
@@ -63,48 +67,118 @@ function NfcCardDashboard({ submitted, allocated, userID, refetch }: props) {
         borderRadius: rf(2),
         backgroundColor: '#8d1c47',
         padding: rw(5),
-        width: rw(90),
-        height: rh(18),
+        width: cardWidth,
+        height: cardHeight,
       }}>
-      <TouchableOpacity onPress={() => setIsShowModel(true)} style={styles.leftSection}>
+      {/* <TouchableOpacity onPress={() => setIsShowModel(true)} style={styles.leftSection}>
         <View style={{ position: 'relative', width: progressSize, height: progressSize }}>
           <Progress.Circle
             size={progressSize}
             progress={allocated > 0 ? submitted / allocated : 0}
-            showsText={false}
+            showsText={true}
+            formatText={() => ((submitted / allocated) * 100).toFixed(2)}
+            textStyle={{ color: 'white', fontSize: rf(2), fontWeight: 'bold' }}
             color="#0068FF"
             unfilledColor="#ffffff"
             borderWidth={0.5}
             thickness={progressSize * 0.07}
           />
-
-          <View
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: progressSize,
-              height: progressSize,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Icon source={nfcIcon} color="white" size={progressSize * 0.9} />
-          </View>
         </View>
 
         <Text style={styles.addText}>Add Allocated</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
+      <View style={{ position: 'absolute', top: rh(15), left: rw(0) }}>
+        <View
+          style={{
+            position: 'absolute',
+            top: rh(0),
+            left: rw(30),
+            zIndex: 1,
+          }}>
+          <Text
+            style={{
+              color: '#6c7879',
+              fontSize: rf(2),
+              width: rw(30),
+              textAlign: 'center',
+            }}>
+            {(submitted / allocated) * 100 >= 1
+              ? ((submitted / allocated) * 100).toFixed(2) + '%'
+              : ''}
+          </Text>
+        </View>
+        <Progress.Bar
+          animationConfig={{ BounceIn: 5 }}
+          animationType="timing"
+          progress={submitted / allocated}
+          borderColor="#8d1c47"
+          borderWidth={1}
+          color="white"
+          height={cardHeight / 6}
+          width={cardWidth - rw(0)}
+          unfilledColor="#8d1c47"
+          style={{
+            borderRadius: rw(0.1),
+            borderBottomLeftRadius: rw(2),
+            borderBottomRightRadius: rw(2),
+          }}
+        />
+      </View>
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          flex: 1,
+          gap: rh(2),
+        }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: rh(1),
+          }}>
+          <Text
+            style={{
+              color: '#ffffff',
+              fontSize: rf(2.2),
+              textAlign: 'center',
+            }}>
+            {allocated - submitted}{' '}
+          </Text>
+          <Icon size={rf(3)} color="white" source={'nfc'} />
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: rh(0),
+            gap: rw(5),
+          }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+            <Text
+              style={{
+                color: '#bdcdce',
+                fontSize: rf(2),
+                textAlign: 'center',
+              }}>
+              remaining.
+            </Text>
+          </View>
+        </View>
+      </View>
 
       <View style={styles.separator}></View>
 
       <View style={styles.rightSection}>
-        <View style={styles.infoRow}>
+        <TouchableOpacity onPress={() => setIsShowModel(true)} style={styles.infoRow}>
           <Icon size={rf(6)} color="#bdcdce" source={nfcIcon} />
           <View style={styles.infoTextBox}>
             <Text style={styles.labelText}>Allocated</Text>
             <Text style={[styles.valueText, { color: '#f7f7f7' }]}>{allocated}</Text>
           </View>
-        </View>
+        </TouchableOpacity>
 
         <View style={styles.subSeparator}></View>
 
@@ -195,7 +269,7 @@ const styles = StyleSheet.create({
   separator: {
     backgroundColor: '#ffffff',
     width: rw(0.4),
-    height: rh(14),
+    height: rh(12),
     borderRadius: 50,
   },
   rightSection: {
@@ -209,7 +283,8 @@ const styles = StyleSheet.create({
   },
   infoTextBox: {
     alignItems: 'center',
-    gap: rh(0.5),
+    gap: rh(0.2),
+    marginBottom: rh(1),
   },
   labelText: {
     color: '#bdcdce',

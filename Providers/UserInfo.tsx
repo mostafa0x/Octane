@@ -14,6 +14,8 @@ interface UserInfoContextType {
   setUserRole: any
   isLoadingApi: boolean
   setIsLoadingApi: any
+  isShowModel: boolean
+  setIsShowModel: any
 }
 
 export const UserInfoContext = createContext<UserInfoContextType>({
@@ -27,6 +29,8 @@ export const UserInfoContext = createContext<UserInfoContextType>({
   setUserRole: () => {},
   isLoadingApi: false,
   setIsLoadingApi: () => {},
+  isShowModel: false,
+  setIsShowModel: () => {},
 })
 
 export const useUserInfoContext = () => useContext(UserInfoContext)
@@ -37,6 +41,7 @@ export default function UserInfoProvider({ children }: any) {
   const [userId, setUserId] = useState<number | null>(null)
   const [userRole, setUserRole] = useState<RoleType | null>(null)
   const [isLoadingApi, setIsLoadingApi] = useState(false)
+  const [isShowModel, setIsShowModel] = useState(false)
 
   return (
     <UserInfoContext.Provider
@@ -51,6 +56,8 @@ export default function UserInfoProvider({ children }: any) {
         setUserRole,
         isLoadingApi,
         setIsLoadingApi,
+        isShowModel,
+        setIsShowModel,
       }}>
       {children}
     </UserInfoContext.Provider>

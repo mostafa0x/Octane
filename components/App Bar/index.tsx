@@ -81,8 +81,15 @@ const ProfileContent = React.memo(({ router }: props) => {
 
 const DashboardContent = React.memo(({ router, label }: props) => {
   const [visible, setVisible] = useState(false)
-  const { userInfo, setIsCallSupspend, userId, userRole, isLoadingApi, setIsLoadingApi } =
-    useUserInfoContext()
+  const {
+    userInfo,
+    setIsCallSupspend,
+    userId,
+    userRole,
+    isLoadingApi,
+    setIsLoadingApi,
+    setIsShowModel,
+  } = useUserInfoContext()
   const { userData } = useSelector((state: StateFace) => state.UserReducer)
   useEffect(() => {
     console.log(userRole)
@@ -141,7 +148,7 @@ const DashboardContent = React.memo(({ router, label }: props) => {
           <Menu
             visible={visible}
             onDismiss={() => setVisible(false)}
-            style={{ marginTop: rh(3.5), width: rw(28) }}
+            style={{ marginTop: rh(3.5), marginLeft: rw(0), width: rw(35) }}
             contentStyle={{ backgroundColor: 'white', gap: rh(0.5) }}
             anchor={
               <TouchableOpacity onPress={() => setVisible(true)}>
@@ -178,7 +185,7 @@ const DashboardContent = React.memo(({ router, label }: props) => {
             )}
             {userRole === 'user' && <Divider />}
             <Menu.Item
-              style={{ width: rw(12), height: rh(5) }}
+              style={{ width: '100%', height: rh(5) }}
               titleStyle={{ color: 'black', fontSize: RFValue(12) }}
               leadingIcon={() => (
                 <View
@@ -195,6 +202,23 @@ const DashboardContent = React.memo(({ router, label }: props) => {
                 downloadExcelFile()
               }}
               title={'Export'}
+            />
+            <Menu.Item
+              style={{ width: '100%', height: rh(5) }}
+              titleStyle={{ color: 'black', fontSize: RFValue(12) }}
+              leadingIcon={() => (
+                <View
+                  style={{
+                    width: rw(6),
+                    height: rh(3),
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Icon source={'nfc'} size={RFValue(16)} color="black" />
+                </View>
+              )}
+              onPress={() => setIsShowModel(true)}
+              title={'Add allocated'}
             />
           </Menu>
         </TouchableOpacity>

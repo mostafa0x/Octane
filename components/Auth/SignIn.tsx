@@ -199,7 +199,12 @@ export default function SignIn({ setIsLoadingRes }: any) {
               ) : (
                 <ActivityIndicator size={RFValue(20)} />
               )}
-              <TouchableOpacity onPress={() => !isLoadingBtn && callDeleteLastLogin()}>
+              <TouchableOpacity
+                onPress={() => {
+                  if (isLoadingBtn) return
+                  setIsMainLoader(true)
+                  callDeleteLastLogin()
+                }}>
                 <Icon
                   color={isLoadingBtn ? '#ACB5BB' : 'black'}
                   size={RFValue(30)}
