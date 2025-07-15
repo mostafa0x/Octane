@@ -1,7 +1,7 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
 import React, { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { Feather } from '@expo/vector-icons'
-import { HelperText, Tooltip } from 'react-native-paper'
+import { HelperText, Icon, Tooltip } from 'react-native-paper'
 import { responsiveHeight as rh, responsiveWidth as rw } from 'react-native-responsive-dimensions'
 import { RFValue } from 'react-native-responsive-fontsize'
 
@@ -10,12 +10,13 @@ interface Props {
   name: string
   formik: any
   errorMes?: string | null
+  setErrorMes?: any
   allocated?: number
   submitted?: number
 }
 
 const InputField = memo(
-  ({ label, name, formik, errorMes, allocated = 0, submitted = 0 }: Props) => {
+  ({ label, name, formik, errorMes, allocated = 0, submitted = 0, setErrorMes }: Props) => {
     const totalCards = useMemo(() => {
       const value = ++allocated - (++submitted + parseInt(formik.values?.[name]))
 
@@ -29,10 +30,8 @@ const InputField = memo(
     const isPassword = ['password', 'repassword'].includes(name)
     const isNumberField = ['cards_submitted'].includes(name)
     const isCardsSubmitted = ['cards_submitted'].includes(name)
-    const isErrorEmail =
-      (errorMes == 'User already exists' ||
-        errorMes == 'Email must be in the form @octane-tech.io') &&
-      name === 'email'
+    const isWrongEmail = errorMes == 'Email must be in the form @octane-tech.io'
+    const isErrorEmail = (errorMes == 'User already exists' || isWrongEmail) && name === 'email'
     const hasError =
       errorMes && isErrorEmail ? errorMes : formik.touched?.[name] && !!formik.errors?.[name]
     const shouldShowError = formik.touched?.[name] && !!formik.errors?.[name]
@@ -42,6 +41,15 @@ const InputField = memo(
     }, [])
     const inputRef = useRef<React.ComponentRef<typeof TextInput>>(null)
     const styles = createStyles(hasError || isErrorEmail, hasSupspend)
+
+    function ChangeEmailToOctane() {
+      if (!formik.values.email) return
+      const email: string = formik.values.email
+      const newEmail = email.split('@')[0] + '@octane-tech.io'
+      formik.setFieldValue(name, newEmail)
+      setErrorMes(null)
+    }
+
     useEffect(() => {
       if (!isCardsSubmitted) return
       if (totalCards <= 0) {
@@ -80,6 +88,13 @@ const InputField = memo(
                 <Text style={styles.labelNFC}>
                   {totalCards}/{allocated - submitted}
                 </Text>
+              </TouchableOpacity>
+            </Tooltip>
+          )}
+          {name == 'email' && isWrongEmail && (
+            <Tooltip enterTouchDelay={100} title="change email to @octane-tech.io">
+              <TouchableOpacity onPress={ChangeEmailToOctane}>
+                <Icon size={RFValue(20)} color="#ACB5BB" source={'email-sync-outline'} />
               </TouchableOpacity>
             </Tooltip>
           )}
@@ -136,7 +151,7 @@ const createStyles = (hasError: boolean, hasSupspend: boolean) =>
       width: rw(83),
       color: 'red',
       textAlign: 'right',
-      paddingRight: rw(25),
+      paddingRight: rw(36),
     },
   })
 

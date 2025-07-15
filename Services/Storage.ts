@@ -8,17 +8,20 @@ import { CompanyFace } from 'Types/ItemList'
 import { userDataFace } from 'Types/Store/UserSliceFace'
 import handleLoutOut from './handleLogOut'
 import SetCompaniesToStorage from './SetCompaniesToStorage'
+import { InfoLoginType } from 'components/Auth/SignIn'
 
 export const storeUserInfo = async (
   userToken: string,
   userData: userDataFace,
   router: Router,
-  dispatch: any
+  dispatch: any,
+  infoLogin: InfoLoginType
 ) => {
   try {
     await AsyncStorage.multiSet([
       ['@userData', JSON.stringify(userData)],
       ['@userToken', userToken],
+      ['@lastLogin', JSON.stringify(infoLogin)],
     ])
     dispatch(fillUserInfo({ userToken, userData }))
     dispatch(changeIsLoadedUserData(true))
@@ -45,6 +48,21 @@ export const getUserInfo = async (dispatch: any) => {
   } catch (error) {
     console.error('Error reading user info:', error)
     return null
+  }
+}
+
+export const getLastLogin = async () => {
+  const infoLoginRow = await AsyncStorage.getItem('@lastLogin')
+  if (!infoLoginRow) throw 'not found data'
+  const infoLogin = await JSON.parse(infoLoginRow)
+  return infoLogin
+}
+export const deleteLastLogin = async () => {
+  try {
+    await AsyncStorage.removeItem('@lastLogin')
+    return true
+  } catch (err: any) {
+    throw false
   }
 }
 

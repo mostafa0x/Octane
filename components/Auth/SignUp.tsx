@@ -56,13 +56,18 @@ export default function SignUp({ setIsLoadingRes }: any) {
       }
     }, [])
   )
-
   return (
     <View style={styles.container}>
       <Animatable.View style={styles.inner} animation="fadeIn" duration={400} easing="ease-in-out">
         <View style={styles.form}>
           <InputField label="Username" name="name" formik={formik} errorMes={errorMes} />
-          <InputField label="Email" name="email" formik={formik} errorMes={errorMes} />
+          <InputField
+            label="Email"
+            name="email"
+            formik={formik}
+            errorMes={errorMes}
+            setErrorMes={setErrorMes}
+          />
           <InputField label="Password" name="password" formik={formik} errorMes={errorMes} />
         </View>
 
