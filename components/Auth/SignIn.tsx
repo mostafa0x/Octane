@@ -14,7 +14,7 @@ import { LoginSchema } from 'lib/Vaildtions/SignInValid'
 import { deleteLastLogin, getLastLogin, storeUserInfo } from 'Services/Storage'
 import { SwipeButton } from 'react-native-expo-swipe-button'
 
-export type InfoLoginType = { email: string; password: string; image: string }
+export type InfoLoginType = { email: string; password: string; image?: string }
 
 export default function SignIn({ setIsLoadingRes }: any) {
   const avatarDef = useRef(require('../../assets/avatar.png'))
@@ -23,37 +23,40 @@ export default function SignIn({ setIsLoadingRes }: any) {
   const [infoLogin, setinfoLogin] = useState<InfoLoginType | null>(null)
   const router = useRouter()
   const dispatch = useDispatch()
+  const [isMainLoader, setIsMainLoader] = useState(true)
 
   const formik = useFormik({
     initialValues: {
-      email: '',
-      password: '',
-      //     email: 'sasa@octane-tech.io',
-      // password: '123456789',
+      //  email: '',
+      //   password: '',
+      email: 'sasa@octane-tech.io',
+      password: '123456789',
     },
     validationSchema: LoginSchema,
-    onSubmit: async (formValues) => {
-      if (isLoadingBtn) return
-      setIsLoadingBtn(true)
-      setIsLoadingRes(true)
-      setErrorMes(null)
-      try {
-        const res = await axios.post(`${API_BASE_URL}/auth/login`, formValues)
-        const data = res.data
-
-        await storeUserInfo(data.token, data.user, router, dispatch, {
-          email: formik.values.email,
-          password: formik.values.password,
-          image: data.user.image,
-        })
-      } catch (err: any) {
-        setErrorMes(err.response?.data?.message ?? 'Login Error')
-      } finally {
-        setIsLoadingBtn(false)
-        setIsLoadingRes(false)
-      }
-    },
+    onSubmit: handleLogin,
   })
+
+  async function handleLogin(formValues: InfoLoginType) {
+    if (isLoadingBtn) return
+    setIsLoadingBtn(true)
+    setIsLoadingRes(true)
+    setErrorMes(null)
+    try {
+      const res = await axios.post(`${API_BASE_URL}/auth/login`, formValues)
+      const data = res.data
+
+      await storeUserInfo(data.token, data.user, router, dispatch, {
+        email: formValues.email,
+        password: formValues.password,
+        image: data.user.image,
+      })
+    } catch (err: any) {
+      setErrorMes(err.response?.data?.message ?? 'Login Error')
+    } finally {
+      setIsLoadingBtn(false)
+      setIsLoadingRes(false)
+    }
+  }
 
   async function callLastLogin() {
     try {
@@ -66,12 +69,13 @@ export default function SignIn({ setIsLoadingRes }: any) {
 
   function LoginByLastLogin() {
     if (!infoLogin) return
-    formik.setFieldValue('email', infoLogin.email)
-    formik.setFieldValue('password', infoLogin.password)
-    const time = setTimeout(() => {
-      formik.handleSubmit()
-      clearTimeout(time)
-    }, 250)
+    handleLogin({ email: infoLogin.email, password: infoLogin.password })
+    // formik.setFieldValue('email', infoLogin.email)
+    // formik.setFieldValue('password', infoLogin.password)
+    // const time = setTimeout(() => {
+    //   formik.handleSubmit()
+    //   clearTimeout(time)
+    // }, 250)
   }
   async function callDeleteLastLogin() {
     try {
@@ -107,10 +111,15 @@ export default function SignIn({ setIsLoadingRes }: any) {
 
       <View style={{ alignItems: 'center', marginTop: rh(2) }}>
         {isLoadingBtn ? (
-          <ActivityIndicator size={RFValue(28)} />
+          isMainLoader ? (
+            <ActivityIndicator size={RFValue(28)} />
+          ) : null
         ) : (
           <Button
-            onPress={() => formik.handleSubmit()}
+            onPress={() => {
+              setIsMainLoader(true)
+              formik.handleSubmit()
+            }}
             style={{
               borderRadius: rw(5),
               height: rh(6),
@@ -173,18 +182,22 @@ export default function SignIn({ setIsLoadingRes }: any) {
                 justifyContent: 'space-between',
                 width: rw(28),
               }}>
-              {isLoadingBtn ? (
-                <ActivityIndicator size={RFValue(20)} />
-              ) : (
+              {isMainLoader ? (
                 <Button
+                  disabled={isLoadingBtn}
                   style={{ width: rw(15), height: rh(4) }}
                   contentStyle={{ height: '100%' }}
                   labelStyle={{ fontSize: RFValue(12) }}
-                  onPress={LoginByLastLogin}
+                  onPress={() => {
+                    setIsMainLoader(false)
+                    LoginByLastLogin()
+                  }}
                   textColor="white"
                   buttonColor="#8d1c47">
                   Login
                 </Button>
+              ) : (
+                <ActivityIndicator size={RFValue(20)} />
               )}
               <TouchableOpacity onPress={() => !isLoadingBtn && callDeleteLastLogin()}>
                 <Icon
