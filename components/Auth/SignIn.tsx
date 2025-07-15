@@ -151,7 +151,7 @@ export default function SignIn({ setIsLoadingRes }: any) {
         </HelperText>
       )}
       {infoLogin && (
-        <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: rh(8) }}>
+        <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: rh(4) }}>
           <View
             style={{
               flexDirection: 'row',

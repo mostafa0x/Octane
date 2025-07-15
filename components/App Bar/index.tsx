@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React, { memo, useEffect, useRef, useState } from 'react'
 import { Image } from 'expo-image'
-import { Router, useLocalSearchParams } from 'expo-router'
+import { Router, useLocalSearchParams, usePathname } from 'expo-router'
 import { userDataFace } from 'Types/Store/UserSliceFace'
 import { Divider, Icon, Menu } from 'react-native-paper'
 import { useUserInfoContext } from 'Providers/UserInfo'
@@ -90,6 +90,7 @@ const DashboardContent = React.memo(({ router, label }: props) => {
     setIsLoadingApi,
     setIsShowModel,
   } = useUserInfoContext()
+  const pathName = usePathname()
   const { userData } = useSelector((state: StateFace) => state.UserReducer)
   useEffect(() => {
     console.log(userRole)
@@ -131,7 +132,7 @@ const DashboardContent = React.memo(({ router, label }: props) => {
     <>
       <TouchableOpacity
         onPress={() => {
-          router.back()
+          pathName.startsWith('/Dashboard/UserInfo') ? router.replace('/Dashboard') : router.back()
         }}
         style={{ position: 'absolute', left: rw(3), top: rh(1), zIndex: 10 }}>
         <View style={{ marginTop: 8 }}>

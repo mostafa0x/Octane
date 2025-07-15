@@ -24,7 +24,7 @@ function NfcCard({ submitted, allocated }: props) {
     useCallback(() => {
       const time = setTimeout(() => {
         setProgressValuse(submitted / allocated)
-      }, 500)
+      }, 200)
       return () => {
         clearTimeout(time)
         setProgressValuse(0)

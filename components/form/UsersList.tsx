@@ -29,7 +29,7 @@ function UsersList({ setUserRole, setUserId, user, router, userData, index }: pr
       onPress={() => {
         setUserRole(user.role)
         setUserId(user.id)
-        router.push({
+        router.replace({
           pathname: `/Dashboard/UserInfo/${user.id}`,
           params: { userName: user.name, userImage: user.image },
         })

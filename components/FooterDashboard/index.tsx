@@ -20,7 +20,7 @@ function FooterDashboard({ pathName, height, router }: Props) {
     <View style={[styles.container, { borderColor: isDark ? '#444' : '#ccc' }]}>
       <FooterButton
         icon="account-outline"
-        isActive={pathName === '/Dashboard'}
+        isActive={pathName === '/Dashboard' || pathName.startsWith('/Dashboard/UserInfo')}
         onPress={() => pathName !== '/Dashboard' && router.replace('/Dashboard')}
         theme={themeMode}
       />
