@@ -99,7 +99,7 @@ export default function Reposts() {
           borderTopLeftRadius: rw(10),
           borderTopRightRadius: rw(10),
           backgroundColor: themeMode == 'dark' ? 'black' : 'white',
-          padding: rw(5),
+          padding: rw(4),
         }}>
         <View style={{ marginTop: rh(1), marginBottom: rh(5), gap: rw(2) }}>
           <View style={{ padding: rw(2) }}>

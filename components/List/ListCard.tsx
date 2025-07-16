@@ -89,7 +89,7 @@ function ListCard({
         height: type === 'Home' ? rh(30) : type === 'Reports' ? rh(65) : rh(40),
         width: '100%',
         marginTop: 0,
-        paddingHorizontal: type === 'Reports' ? rw(2) : rw(0),
+        paddingHorizontal: type === 'Reports' ? rw(1) : rw(0),
       }}>
       <FlashList
         data={acknowledgments_Current}
@@ -97,7 +97,7 @@ function ListCard({
         estimatedItemSize={70}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={{
-          paddingBottom: type === 'Home' ? rh(2) : type === 'Reports' ? rh(3) : rh(8),
+          paddingBottom: type === 'Home' ? rh(9) : type === 'Reports' ? rh(3) : rh(19),
         }}
         renderItem={({ item }: { item: acknowledgmentsFace }) => <ItemCard item={item} />}
         ListEmptyComponent={() => (
@@ -124,7 +124,7 @@ function ListCard({
             acknowledgments_Current.length > 0 && (
               <View
                 style={{
-                  marginTop: type === 'Home' ? rh(9) : type === 'Reports' ? rh(5) : rh(14),
+                  marginTop: type === 'Home' ? rh(5) : type === 'Reports' ? rh(5) : rh(14),
                   paddingLeft: rw(4),
                   paddingRight: rw(1),
                   gap: rh(2),
@@ -143,7 +143,7 @@ function ListCard({
                     alignItems: 'center',
                     justifyContent: 'space-between',
                   }}>
-                  <Text style={{ fontWeight: '300', fontSize: rf(1.4) }}>Number of NFC raised</Text>
+                  <Text style={{ fontWeight: '300', fontSize: rf(1.4) }}>Number of Companies</Text>
                   <Text
                     style={{
                       paddingRight: rw(2),

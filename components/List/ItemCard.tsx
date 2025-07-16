@@ -31,7 +31,7 @@ const ItemCard = ({ item }: Props) => {
           <Avatar.Image size={avatarSize.current} source={indexImg.current} />
         </TouchableOpacity>
 
-        <View style={[styles.companyInfo, { width: rw(26) }]}>
+        <View style={[styles.companyInfo, { width: rw(24) }]}>
           <Text style={[styles.companyName, { fontSize: rf(1.5), color: '#052224' }]}>
             {item.company.name}
           </Text>
@@ -56,7 +56,7 @@ const ItemCard = ({ item }: Props) => {
             style={[
               styles.deliveryMethod,
               {
-                fontSize: rf(1.4),
+                fontSize: rf(1.2),
                 fontWeight: 'regular',
                 color: '#052224',
               },
@@ -66,7 +66,7 @@ const ItemCard = ({ item }: Props) => {
           <Text
             style={[
               {
-                fontSize: rf(1.4),
+                fontSize: rf(1.2),
                 fontWeight: 'regular',
                 color: '#0068FF',
               },
