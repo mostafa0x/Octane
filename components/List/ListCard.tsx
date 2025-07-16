@@ -72,6 +72,16 @@ function ListCard({
     const total = acknowledgments_Current.forEach((item) => (count += item.cards_submitted))
     return count
   }, [acknowledgments_Current])
+  const totalAsOnTime = useMemo(() => {
+    if (acknowledgments_Current.length <= 0) return { countOnTime: 0, countLate: 0 }
+    let countOnTime = 0
+    let countLate = 0
+
+    const res = acknowledgments_Current.forEach((item) =>
+      item.state_time == 'on_Time' ? countOnTime++ : countLate++
+    )
+    return { countOnTime, countLate }
+  }, [acknowledgments_Current])
 
   const lowerNfc = useMemo(() => {
     if (acknowledgments_Current.length <= 0) return 0
@@ -86,7 +96,7 @@ function ListCard({
       animation="fadeIn"
       easing="ease-in-out"
       style={{
-        height: type === 'Home' ? rh(30) : type === 'Reports' ? rh(65) : rh(40),
+        height: type === 'Home' ? rh(30) : type === 'Reports' ? rh(65) : rh(37),
         width: '100%',
         marginTop: 0,
         paddingHorizontal: type === 'Reports' ? rw(1) : rw(0),
@@ -97,7 +107,7 @@ function ListCard({
         estimatedItemSize={70}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={{
-          paddingBottom: type === 'Home' ? rh(7) : type === 'Reports' ? rh(3) : rh(17),
+          paddingBottom: type === 'Home' ? rh(2) : type === 'Reports' ? rh(8) : rh(5),
         }}
         renderItem={({ item }: { item: acknowledgmentsFace }) => <ItemCard item={item} />}
         ListEmptyComponent={() => (
@@ -124,7 +134,7 @@ function ListCard({
             acknowledgments_Current.length > 0 && (
               <View
                 style={{
-                  marginTop: type === 'Home' ? rh(5) : type === 'Reports' ? rh(5) : rh(14),
+                  marginTop: type === 'Home' ? rh(20) : type === 'Reports' ? rh(5) : rh(20),
                   paddingLeft: rw(4),
                   paddingRight: rw(1),
                   gap: rh(2),
@@ -216,6 +226,26 @@ function ListCard({
                       textAlign: 'right',
                     }}>
                     {lowerNfc}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Text style={{ fontWeight: '300', fontSize: rf(1.6) }}>
+                    Total of NFC onTime-Late
+                  </Text>
+                  <Text
+                    style={{
+                      paddingRight: rw(2),
+                      width: rw(15),
+                      fontWeight: 'regular',
+                      fontSize: rf(2),
+                      textAlign: 'right',
+                    }}>
+                    {totalAsOnTime.countOnTime}-{totalAsOnTime.countLate}
                   </Text>
                 </View>
                 {/* {type !== 'Reports' && (

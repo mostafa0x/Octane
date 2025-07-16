@@ -60,8 +60,14 @@ export default function Dashboard() {
           borderTopLeftRadius: rw(10),
           borderTopRightRadius: rw(10),
           backgroundColor: themeMode == 'dark' ? 'black' : 'white',
-          paddingTop: rh(5),
+          paddingTop: rh(3),
         }}>
+        <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: rh(3) }}>
+          <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: rf(2) }}>
+            Total allocated : x99999999999999999999999x
+          </Text>
+        </View>
+
         <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: rh(10) }}>
           {isError ? (
             <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: rh(10) }}>
