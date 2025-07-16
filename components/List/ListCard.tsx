@@ -49,7 +49,7 @@ function ListCard({
   }
 
   const analayz = useMemo(() => {
-    if (acknowledgments_Current.length <= 0) return
+    if (acknowledgments_Current.length <= 0) return 0
 
     ScrollToTop()
     if (activeList == 'daily') {
@@ -63,19 +63,27 @@ function ListCard({
   }, [activeList, allocated, acknowledgments_Current])
 
   const MaxCard = useMemo(() => {
-    if (acknowledgments_Current.length <= 0) return
+    if (acknowledgments_Current.length <= 0) return 0
     ScrollToTop()
     const avg = acknowledgments_Current.reduce((prev, current) =>
       prev.cards_submitted >= current.cards_submitted ? prev : current
     )
-    return avg
+    return avg.cards_submitted
   }, [acknowledgments_Current])
   const totalSubmitted = useMemo(() => {
-    if (acknowledgments_Current.length <= 0) return
+    if (acknowledgments_Current.length <= 0) return 0
 
     let count = 0
     const total = acknowledgments_Current.forEach((item) => (count += item.cards_submitted))
     return count
+  }, [acknowledgments_Current])
+
+  const lowerNfc = useMemo(() => {
+    if (acknowledgments_Current.length <= 0) return 0
+    const count = acknowledgments_Current.reduce((perv, current) =>
+      perv.cards_submitted <= current.cards_submitted ? perv : current
+    )
+    return count.cards_submitted
   }, [acknowledgments_Current])
   return (
     <Animatable.View
@@ -94,7 +102,7 @@ function ListCard({
         estimatedItemSize={70}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={{
-          paddingBottom: type === 'Home' ? rh(5) : type === 'Reports' ? rh(10) : rh(5),
+          paddingBottom: type === 'Home' ? rh(2) : type === 'Reports' ? rh(3) : rh(8),
         }}
         renderItem={({ item }: { item: acknowledgmentsFace }) => <ItemCard item={item} />}
         ListEmptyComponent={() => (
@@ -117,29 +125,37 @@ function ListCard({
         )}
         ListFooterComponent={() => {
           return (
-            footerList && (
+            footerList &&
+            acknowledgments_Current.length > 0 && (
               <View
                 style={{
-                  marginTop: rh(5),
+                  marginTop: rh(6),
                   paddingLeft: rw(4),
                   paddingRight: rw(1),
                   gap: rh(2),
                 }}>
+                <Text style={{ fontWeight: '300', fontSize: rf(1.3) }}>
+                  <Text style={{ fontWeight: 'bold', fontSize: rf(1.6) }}>
+                    {type === 'Reports'
+                      ? 'Report'
+                      : activeList.charAt(0).toLocaleUpperCase() + activeList.slice(1)}
+                  </Text>{' '}
+                  statistics
+                </Text>
                 <View
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                   }}>
-                  <Text style={{ fontWeight: '300', fontSize: rf(1.4) }}>
-                    Number of NFC raised this {activeList}
-                  </Text>
+                  <Text style={{ fontWeight: '300', fontSize: rf(1.4) }}>Number of NFC raised</Text>
                   <Text
                     style={{
                       paddingRight: rw(2),
-                      width: rw(9),
+                      width: rw(15),
                       fontWeight: '300',
                       fontSize: rf(1.3),
+                      textAlign: 'right',
                     }}>
                     {acknowledgments_Current.length}
                   </Text>
@@ -150,15 +166,14 @@ function ListCard({
                     alignItems: 'center',
                     justifyContent: 'space-between',
                   }}>
-                  <Text style={{ fontWeight: '300', fontSize: rf(1.4) }}>
-                    Total of NFC raised this {activeList}
-                  </Text>
+                  <Text style={{ fontWeight: '300', fontSize: rf(1.4) }}>Total of NFC raised</Text>
                   <Text
                     style={{
                       paddingRight: rw(2),
-                      width: rw(9),
+                      width: rw(15),
                       fontWeight: '300',
                       fontSize: rf(1.3),
+                      textAlign: 'right',
                     }}>
                     {totalSubmitted}
                   </Text>
@@ -170,17 +185,16 @@ function ListCard({
                     alignItems: 'center',
                     justifyContent: 'space-between',
                   }}>
-                  <Text style={{ fontWeight: '300', fontSize: rf(1.4) }}>
-                    Highest NFC raised in {activeList}
-                  </Text>
+                  <Text style={{ fontWeight: '300', fontSize: rf(1.4) }}>Highest NFC raised</Text>
                   <Text
                     style={{
                       paddingRight: rw(2),
-                      width: rw(9),
+                      width: rw(15),
                       fontWeight: '300',
                       fontSize: rf(1.3),
+                      textAlign: 'right',
                     }}>
-                    {MaxCard?.cards_submitted ?? 0}
+                    {MaxCard}
                   </Text>
                 </View>
                 <View
@@ -189,20 +203,40 @@ function ListCard({
                     alignItems: 'center',
                     justifyContent: 'space-between',
                   }}>
-                  <Text style={{ fontWeight: '300', fontSize: rf(1.4) }}>
-                    The raised percentage is finished in {activeList}
+                  <Text style={{ fontWeight: '300', fontSize: rf(1.4) }}>Lowest NFC raised</Text>
+                  <Text
+                    style={{
+                      paddingRight: rw(2),
+                      width: rw(15),
+                      fontWeight: '300',
+                      fontSize: rf(1.3),
+                      textAlign: 'right',
+                    }}>
+                    {lowerNfc}
                   </Text>
-                  <View style={{ alignItems: 'center', paddingRight: rw(2) }}>
-                    <Text
-                      style={{
-                        fontWeight: '300',
-                        fontSize: rf(1.3),
-                      }}>
-                      {((analayz ?? 0) * 100).toFixed(1)}
-                    </Text>
-                    <Progress.Pie progress={analayz} />
-                  </View>
                 </View>
+                {type !== 'Reports' && (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    }}>
+                    <Text style={{ fontWeight: '300', fontSize: rf(1.4) }}>
+                      The raised percentage is finished
+                    </Text>
+                    <View style={{ alignItems: 'center', paddingRight: rw(0) }}>
+                      <Text
+                        style={{
+                          fontWeight: '300',
+                          fontSize: rf(1.3),
+                        }}>
+                        {((analayz ?? 0) * 100).toFixed(1)}
+                      </Text>
+                      <Progress.Pie progress={analayz} />
+                    </View>
+                  </View>
+                )}
               </View>
             )
           )
