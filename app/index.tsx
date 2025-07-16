@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     height: '50%',
   },
   imageContainer: {
-    height: responsiveHeight(22),
+    height: responsiveHeight(19),
   },
   fullImage: {
     width: '100%',
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     width: responsiveWidth(90),
   },
   swipeBtnContainer: {
-    marginTop: responsiveHeight(0.8),
+    marginTop: responsiveHeight(1.5),
     marginBottom: responsiveHeight(0),
   },
 })

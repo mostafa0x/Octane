@@ -62,11 +62,13 @@ export default function Dashboard() {
           backgroundColor: themeMode == 'dark' ? 'black' : 'white',
           paddingTop: rh(3),
         }}>
-        <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: rh(3) }}>
-          <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: rf(2) }}>
-            Total allocated : x99999999999999999999999x
-          </Text>
-        </View>
+        {!isLoading && (
+          <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: rh(3) }}>
+            <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: rf(2) }}>
+              Total allocated : x99999999999999999999999x
+            </Text>
+          </View>
+        )}
 
         <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: rh(10) }}>
           {isError ? (

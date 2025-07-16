@@ -96,7 +96,7 @@ function ListCard({
       animation="fadeIn"
       easing="ease-in-out"
       style={{
-        height: type === 'Home' ? rh(28) : type === 'Reports' ? rh(65) : rh(37),
+        height: type === 'Home' ? rh(30) : type === 'Reports' ? rh(65) : rh(37),
         width: '100%',
         marginTop: 0,
         paddingHorizontal: type === 'Reports' ? rw(1) : rw(0),
@@ -134,7 +134,7 @@ function ListCard({
             acknowledgments_Current.length > 0 && (
               <View
                 style={{
-                  marginTop: type === 'Home' ? rh(20) : type === 'Reports' ? rh(5) : rh(20),
+                  marginTop: type === 'Home' ? rh(10) : type === 'Reports' ? rh(5) : rh(13),
                   paddingLeft: rw(4),
                   paddingRight: rw(1),
                   gap: rh(2),
