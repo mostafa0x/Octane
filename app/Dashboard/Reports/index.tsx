@@ -69,6 +69,7 @@ export default function Reposts() {
 
   useEffect(() => {
     if (data) setCurrData(data.acknowledgments)
+
     return () => setCurrData([])
   }, [data])
 
@@ -169,7 +170,6 @@ export default function Reposts() {
                   borderBottomWidth: 0,
                 }}>
                 <ListCard
-                  themeMode={themeMode}
                   type="Reports"
                   acknowledgments_Current={currData.reverse() ?? []}
                   emptyTXT={emptyTXT}

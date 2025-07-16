@@ -22,6 +22,7 @@ interface props {
   emptyTXT?: string
   activeList?: activeListType
   allocated?: number
+  submitted?: number
 }
 
 function ListCard({
@@ -30,6 +31,7 @@ function ListCard({
   emptyTXT,
   activeList = 'daily',
   allocated = 0,
+  submitted = 0,
 }: props) {
   const animRef = useRef<AnimatableView>(null)
   const listRef = useRef<React.ComponentRef<typeof FlashList<acknowledgmentsFace>>>(null)
@@ -49,17 +51,10 @@ function ListCard({
   }
 
   const analayz = useMemo(() => {
-    if (acknowledgments_Current.length <= 0) return 0
+    if ((acknowledgments_Current.length <= 0 && !allocated) || !submitted) return 0
 
     ScrollToTop()
-    if (activeList == 'daily') {
-      return (acknowledgments_Current.length / allocated) * 100
-    } else if (activeList == 'weekly') {
-      return (acknowledgments_Current.length / allocated) * 100
-    } else if (activeList == 'monthly') {
-      return (acknowledgments_Current.length / allocated) * 100
-    }
-    return 0
+    return submitted / allocated
   }, [activeList, allocated, acknowledgments_Current])
 
   const MaxCard = useMemo(() => {
@@ -129,7 +124,7 @@ function ListCard({
             acknowledgments_Current.length > 0 && (
               <View
                 style={{
-                  marginTop: rh(6),
+                  marginTop: type === 'Home' ? rh(9) : type === 'Reports' ? rh(5) : rh(14),
                   paddingLeft: rw(4),
                   paddingRight: rw(1),
                   gap: rh(2),
@@ -166,7 +161,9 @@ function ListCard({
                     alignItems: 'center',
                     justifyContent: 'space-between',
                   }}>
-                  <Text style={{ fontWeight: '300', fontSize: rf(1.4) }}>Total of NFC raised</Text>
+                  <Text style={{ fontWeight: '300', fontSize: rf(1.4) }}>
+                    Total of Cards Submitted raised
+                  </Text>
                   <Text
                     style={{
                       paddingRight: rw(2),
@@ -185,7 +182,9 @@ function ListCard({
                     alignItems: 'center',
                     justifyContent: 'space-between',
                   }}>
-                  <Text style={{ fontWeight: '300', fontSize: rf(1.4) }}>Highest NFC raised</Text>
+                  <Text style={{ fontWeight: '300', fontSize: rf(1.4) }}>
+                    Highest Cards Submitted raised
+                  </Text>
                   <Text
                     style={{
                       paddingRight: rw(2),
@@ -203,7 +202,9 @@ function ListCard({
                     alignItems: 'center',
                     justifyContent: 'space-between',
                   }}>
-                  <Text style={{ fontWeight: '300', fontSize: rf(1.4) }}>Lowest NFC raised</Text>
+                  <Text style={{ fontWeight: '300', fontSize: rf(1.4) }}>
+                    Lowest Cards Submitted raised
+                  </Text>
                   <Text
                     style={{
                       paddingRight: rw(2),
@@ -215,7 +216,7 @@ function ListCard({
                     {lowerNfc}
                   </Text>
                 </View>
-                {type !== 'Reports' && (
+                {/* {type !== 'Reports' && (
                   <View
                     style={{
                       flexDirection: 'row',
@@ -236,7 +237,7 @@ function ListCard({
                       <Progress.Pie progress={analayz} />
                     </View>
                   </View>
-                )}
+                )} */}
               </View>
             )
           )

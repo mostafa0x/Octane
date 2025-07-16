@@ -88,7 +88,6 @@ export default function Home() {
         </View>
 
         <ListCard
-          allocated={allocated}
           activeList={activeList || 'daily'}
           type="Home"
           acknowledgments_Current={acknowledgments_Current}
