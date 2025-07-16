@@ -96,7 +96,7 @@ function ListCard({
       animation="fadeIn"
       easing="ease-in-out"
       style={{
-        height: type === 'Home' ? rh(30) : type === 'Reports' ? rh(65) : rh(37),
+        height: type === 'Home' ? rh(28) : type === 'Reports' ? rh(65) : rh(37),
         width: '100%',
         marginTop: 0,
         paddingHorizontal: type === 'Reports' ? rw(1) : rw(0),
