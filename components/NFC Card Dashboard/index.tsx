@@ -236,11 +236,15 @@ function NfcCardDashboard({ submitted, allocated, userID, refetch }: props) {
                       }}
                       buttonColor="#d6d6d6"
                       textColor="black"
+                      contentStyle={{ height: '100%' }}
+                      labelStyle={{ height: '50%' }}
                       style={styles.modalButton}>
                       cancel
                     </Button>
                     <Button
                       onPress={handleAddAllocate}
+                      contentStyle={{ height: '100%' }}
+                      labelStyle={{ height: '50%' }}
                       buttonColor="#000000"
                       textColor="white"
                       style={styles.modalButton}>

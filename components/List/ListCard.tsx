@@ -97,7 +97,7 @@ function ListCard({
         estimatedItemSize={70}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={{
-          paddingBottom: type === 'Home' ? rh(9) : type === 'Reports' ? rh(3) : rh(19),
+          paddingBottom: type === 'Home' ? rh(7) : type === 'Reports' ? rh(3) : rh(17),
         }}
         renderItem={({ item }: { item: acknowledgmentsFace }) => <ItemCard item={item} />}
         ListEmptyComponent={() => (
@@ -129,8 +129,8 @@ function ListCard({
                   paddingRight: rw(1),
                   gap: rh(2),
                 }}>
-                <Text style={{ fontWeight: '300', fontSize: rf(1.3) }}>
-                  <Text style={{ fontWeight: 'bold', fontSize: rf(1.6) }}>
+                <Text style={{ fontWeight: '300', fontSize: rf(1.7) }}>
+                  <Text style={{ fontWeight: 'bold', fontSize: rf(2) }}>
                     {type === 'Reports'
                       ? 'Report'
                       : activeList.charAt(0).toLocaleUpperCase() + activeList.slice(1)}
@@ -143,13 +143,15 @@ function ListCard({
                     alignItems: 'center',
                     justifyContent: 'space-between',
                   }}>
-                  <Text style={{ fontWeight: '300', fontSize: rf(1.4) }}>Number of Companies</Text>
+                  <Text style={{ fontWeight: 'regular', fontSize: rf(1.6) }}>
+                    Number of Companies
+                  </Text>
                   <Text
                     style={{
                       paddingRight: rw(2),
                       width: rw(15),
                       fontWeight: '300',
-                      fontSize: rf(1.3),
+                      fontSize: rf(2),
                       textAlign: 'right',
                     }}>
                     {acknowledgments_Current.length}
@@ -161,7 +163,7 @@ function ListCard({
                     alignItems: 'center',
                     justifyContent: 'space-between',
                   }}>
-                  <Text style={{ fontWeight: '300', fontSize: rf(1.4) }}>
+                  <Text style={{ fontWeight: 'regular', fontSize: rf(1.6) }}>
                     Total of Cards Submitted raised
                   </Text>
                   <Text
@@ -169,7 +171,7 @@ function ListCard({
                       paddingRight: rw(2),
                       width: rw(15),
                       fontWeight: '300',
-                      fontSize: rf(1.3),
+                      fontSize: rf(2),
                       textAlign: 'right',
                     }}>
                     {totalSubmitted}
@@ -182,15 +184,15 @@ function ListCard({
                     alignItems: 'center',
                     justifyContent: 'space-between',
                   }}>
-                  <Text style={{ fontWeight: '300', fontSize: rf(1.4) }}>
+                  <Text style={{ fontWeight: '300', fontSize: rf(1.6) }}>
                     Highest Cards Submitted raised
                   </Text>
                   <Text
                     style={{
                       paddingRight: rw(2),
                       width: rw(15),
-                      fontWeight: '300',
-                      fontSize: rf(1.3),
+                      fontWeight: 'regular',
+                      fontSize: rf(2),
                       textAlign: 'right',
                     }}>
                     {MaxCard}
@@ -202,15 +204,15 @@ function ListCard({
                     alignItems: 'center',
                     justifyContent: 'space-between',
                   }}>
-                  <Text style={{ fontWeight: '300', fontSize: rf(1.4) }}>
+                  <Text style={{ fontWeight: '300', fontSize: rf(1.6) }}>
                     Lowest Cards Submitted raised
                   </Text>
                   <Text
                     style={{
                       paddingRight: rw(2),
                       width: rw(15),
-                      fontWeight: '300',
-                      fontSize: rf(1.3),
+                      fontWeight: 'regular',
+                      fontSize: rf(2),
                       textAlign: 'right',
                     }}>
                     {lowerNfc}

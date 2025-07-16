@@ -74,6 +74,7 @@ function LastAuthCard({
                 height: '100%',
               }}
               labelStyle={{
+                height: '50%',
                 fontSize: RFValue(12),
               }}
               onPress={() => {

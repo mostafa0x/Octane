@@ -249,11 +249,21 @@ export default function Upload() {
                 contentStyle={{ height: rh(5) }}
                 labelStyle={{ fontWeight: 'bold', fontSize: rf(1.7) }}
                 loading={isLoadingRes}
-                onPress={() => {
+                onPress={async () => {
                   Keyboard.dismiss()
-                  if (formik.isValid && formik.values.image) {
+
+                  const errors = await formik.validateForm()
+                  const isValid = Object.keys(errors).length === 0
+
+                  if (isValid && formik.dirty && formik.values.image) {
                     return setShowConfirmModal(true)
                   }
+                  console.log({
+                    isValid,
+                    dirty: formik.dirty,
+                    image: formik.values.image,
+                  })
+
                   formik.submitForm()
                 }}
                 textColor="white"
