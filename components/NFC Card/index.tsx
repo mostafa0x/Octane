@@ -167,15 +167,17 @@ function NfcCard({ submitted, allocated }: props) {
             left: responsiveWidth(30),
             zIndex: 1,
           }}>
-          <Text
-            style={{
-              color: '#6c7879',
-              fontSize: RFValue(14),
-              width: responsiveWidth(30),
-              textAlign: 'center',
-            }}>
-            {((submitted / allocated) * 100).toFixed(2) + '%'}
-          </Text>
+          {allocated > 0 && (
+            <Text
+              style={{
+                color: '#6c7879',
+                fontSize: RFValue(14),
+                width: responsiveWidth(30),
+                textAlign: 'center',
+              }}>
+              {allocated == 0 ? 0 + '%' : ((submitted / allocated) * 100).toFixed(2) + '%'}
+            </Text>
+          )}
         </View>
         <Progress.Bar
           animationConfig={{ BounceIn: 5 }}

@@ -27,7 +27,11 @@ export default function SignUp({ setIsLoadingRes }: any) {
       try {
         const res = await axios.post(`${API_BASE_URL}/auth/signup`, formValues)
         const data = res.data
-        await storeUserInfo(data.token, data.user, router, dispatch)
+        await storeUserInfo(data.token, data.user, router, dispatch, {
+          email: formValues.email,
+          password: formValues.password,
+          image: data.user.image,
+        })
       } catch (err: any) {
         setIsLoadingBtn(false)
         setErrorMes(err.response?.data?.message ?? 'Error Sign up')

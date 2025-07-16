@@ -2,6 +2,21 @@ import React, { memo, useRef } from 'react'
 import { TouchableOpacity, View } from 'react-native'
 import { ActivityIndicator, Avatar, Button, Icon, Text } from 'react-native-paper'
 
+interface props {
+  rh: (value: number) => number
+  rw: (value: number) => number
+  RFValue: (value: number) => number
+  isMainLoader: boolean
+  isLoadingBtn: boolean
+  setIsMainLoader: (value: boolean) => void
+  LoginByLastLogin: () => void
+  callDeleteLastLogin: () => void
+  infoLogin: {
+    email: string
+    image?: string
+  }
+}
+
 function LastAuthCard({
   rh,
   rw,
@@ -12,7 +27,7 @@ function LastAuthCard({
   LoginByLastLogin,
   callDeleteLastLogin,
   infoLogin,
-}: any) {
+}: props) {
   const avatarDef = useRef(require('../../assets/avatar.png'))
 
   return (
@@ -50,10 +65,10 @@ function LastAuthCard({
           />
           <Text
             style={{
-              fontSize: RFValue(12),
+              fontSize: RFValue(11),
               width: rw(45),
             }}>
-            {infoLogin.email}
+            {infoLogin.email.split('@')[0]}
           </Text>
         </View>
         <View
