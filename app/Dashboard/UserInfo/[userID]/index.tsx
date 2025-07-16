@@ -21,6 +21,7 @@ import {
   responsiveWidth as rw,
   responsiveFontSize as rf,
 } from 'react-native-responsive-dimensions'
+import { activeListType } from 'app'
 
 const avatarIcon = require('../../../../assets/avatar.png')
 const backImg = require('../../../../assets/backn.png')
@@ -50,7 +51,7 @@ export default function UserInfo() {
   const [isLoadingRes, setIsLoadingRes] = useState(false)
   const dispatch = useDispatch()
   const currUserID = isArray(userID) ? parseInt(userID[0]) : parseInt(userID)
-  const [activeList, setActiveList] = useState('daily')
+  const [activeList, setActiveList] = useState<activeListType>('daily')
   const [currData, setCurrData] = useState<acknowledgmentsFace[]>([])
   const { setUserInfo, isCallSupspend, setIsCallSupspend, isLoadingApi, setIsLoadingApi } =
     useUserInfoContext()
@@ -68,13 +69,12 @@ export default function UserInfo() {
   }, [data])
 
   const handleActive = useCallback(
-    (period: string) => {
-      const nameLower = period.toLowerCase()
-      setActiveList(nameLower)
+    (period: activeListType) => {
+      setActiveList(period)
       if (!data?.acknowledgments) return
       const now = dayjs()
       let filteredData: acknowledgmentsFace[] = []
-      switch (nameLower) {
+      switch (period) {
         case 'daily':
           filteredData = data.acknowledgments.filter((item) =>
             dayjs(item.submission_date).isSame(now, 'day')
@@ -181,7 +181,12 @@ export default function UserInfo() {
               refetch={refetch}
             />
             <ListButtonHistory activeList={activeList} handleActive={handleActive} />
-            <ListCard type="Dashboard" acknowledgments_Current={currData ?? []} />
+            <ListCard
+              activeList={activeList}
+              type="Dashboard"
+              acknowledgments_Current={currData ?? []}
+              allocated={data?.allocated ?? 0}
+            />
           </View>
         )}
       </View>
