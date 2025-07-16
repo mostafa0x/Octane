@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Modal, TextInput, StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity, Modal, TextInput, StyleSheet, Keyboard } from 'react-native'
 import React, { memo, useState } from 'react'
 import * as Progress from 'react-native-progress'
 import { ActivityIndicator, Button, HelperText, Icon, Portal, Snackbar } from 'react-native-paper'
@@ -37,6 +37,7 @@ function NfcCardDashboard({ submitted, allocated, userID, refetch }: props) {
   const dispatch = useDispatch()
   async function handleAddAllocate() {
     if (isLoadingRes) return
+    Keyboard.dismiss()
     if (!valueNum || valueNum <= 0) {
       return setErrorRes('Should be more Than 0')
     }
@@ -217,25 +218,35 @@ function NfcCardDashboard({ submitted, allocated, userID, refetch }: props) {
                 onSubmitEditing={handleAddAllocate}
               />
               {isLoadingRes ? (
-                <View style={{ marginTop: rh(4) }}>
+                <View style={{ marginTop: rh(2) }}>
                   <ActivityIndicator size={50} />
                 </View>
               ) : (
                 <>
-                  <Button
-                    onPress={handleAddAllocate}
-                    buttonColor="#8d1c47"
-                    textColor="white"
-                    style={styles.modalButton}>
-                    Submit
-                  </Button>
-                  <Button
-                    onPress={() => setIsShowModel(false)}
-                    buttonColor="#d2e6d4"
-                    textColor="black"
-                    style={styles.modalButton}>
-                    cancel
-                  </Button>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      gap: rw(2),
+                    }}>
+                    <Button
+                      onPress={() => {
+                        setValueNum(0)
+                        setErrorRes(null)
+                        setIsShowModel(false)
+                      }}
+                      buttonColor="#d6d6d6"
+                      textColor="black"
+                      style={styles.modalButton}>
+                      cancel
+                    </Button>
+                    <Button
+                      onPress={handleAddAllocate}
+                      buttonColor="#000000"
+                      textColor="white"
+                      style={styles.modalButton}>
+                      Submit
+                    </Button>
+                  </View>
                   <HelperText style={styles.errorText} type="error" visible={!!errorRes}>
                     {errorRes}
                   </HelperText>
@@ -311,17 +322,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContainer: {
-    width: rw(80),
-    height: rh(35),
+    width: rw(70),
+    height: rh(25),
     backgroundColor: '#fff',
-    padding: rw(5),
     borderRadius: rf(4),
-    elevation: 5,
+    alignItems: 'center',
   },
   modalContent: {
     alignItems: 'center',
     marginTop: rh(1),
-    gap: rh(1.5),
+    gap: rh(2),
   },
   modalTitle: {
     width: rw(50),
@@ -331,15 +341,16 @@ const styles = StyleSheet.create({
   },
   inputField: {
     borderWidth: 2,
-    borderRadius: rf(3),
+    borderRadius: rf(2),
     width: rw(50),
     height: rh(6),
     textAlign: 'center',
     fontSize: rf(2),
   },
   modalButton: {
-    width: rw(40),
-    height: rh(5),
+    width: rw(24),
+    height: rh(4),
+    borderRadius: rf(0.8),
     justifyContent: 'center',
   },
   errorText: {

@@ -13,6 +13,8 @@ import AppBar from 'components/App Bar'
 import SwipeBtn from 'components/SwipeBtn'
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
 
+export type activeListType = 'daily' | 'weekly' | 'monthly'
+
 export default function Home() {
   const backImg = useRef(require('../assets/backn.png'))
   const { acknowledgments_Current, allocated, submitted } = useSelector(
@@ -20,7 +22,7 @@ export default function Home() {
   )
   const { userData } = useSelector((state: StateFace) => state.UserReducer)
   const dispatch = useDispatch()
-  const [activeList, setActiveList] = useState('daily')
+  const [activeList, setActiveList] = useState<activeListType>('daily')
   const [searchQuery, setSearchQuery] = useState('')
   const searchBoxRef = useRef<React.ComponentRef<typeof Searchbar>>(null)
   const router = useRouter()
@@ -35,12 +37,11 @@ export default function Home() {
   )
 
   const handleActive = useCallback(
-    (period: string) => {
-      const nameLower = period.toLowerCase()
+    (period: activeListType) => {
       setSearchQuery('')
       searchBoxRef.current?.blur()
-      setActiveList(nameLower)
-      dispatch(SetAcknowledgments_Current(nameLower))
+      setActiveList(period)
+      dispatch(SetAcknowledgments_Current(period))
     },
     [dispatch]
   )
@@ -86,7 +87,12 @@ export default function Home() {
           />
         </View>
 
-        <ListCard type="Home" acknowledgments_Current={acknowledgments_Current} />
+        <ListCard
+          allocated={allocated}
+          activeList={activeList || 'daily'}
+          type="Home"
+          acknowledgments_Current={acknowledgments_Current}
+        />
 
         <View style={styles.swipeBtnContainer}>
           <SwipeBtn allocated={allocated} submitted={submitted} router={router} />

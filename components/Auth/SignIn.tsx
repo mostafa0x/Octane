@@ -1,8 +1,8 @@
-import { TouchableOpacity, View } from 'react-native'
-import { useEffect, useRef, useState } from 'react'
+import { View } from 'react-native'
+import { useEffect, useState } from 'react'
 import { useFormik } from 'formik'
 import InputField from 'components/form/InputField'
-import { ActivityIndicator, Avatar, Button, HelperText, Icon, Text } from 'react-native-paper'
+import { ActivityIndicator, Button, HelperText } from 'react-native-paper'
 import { responsiveWidth as rw, responsiveHeight as rh } from 'react-native-responsive-dimensions'
 import { RFValue } from 'react-native-responsive-fontsize'
 import axios from 'axios'
@@ -12,12 +12,11 @@ import { useRouter } from 'expo-router'
 import * as Animatable from 'react-native-animatable'
 import { LoginSchema } from 'lib/Vaildtions/SignInValid'
 import { deleteLastLogin, getLastLogin, storeUserInfo } from 'Services/Storage'
-import { SwipeButton } from 'react-native-expo-swipe-button'
+import LastAuthCard from 'components/form/LastAuthCard'
 
 export type InfoLoginType = { email: string; password: string; image?: string }
 
 export default function SignIn({ setIsLoadingRes }: any) {
-  const avatarDef = useRef(require('../../assets/avatar.png'))
   const [errorMes, setErrorMes] = useState<string | null>(null)
   const [isLoadingBtn, setIsLoadingBtn] = useState(false)
   const [infoLogin, setinfoLogin] = useState<InfoLoginType | null>(null)
@@ -151,69 +150,17 @@ export default function SignIn({ setIsLoadingRes }: any) {
         </HelperText>
       )}
       {infoLogin && (
-        <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: rh(4) }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              backgroundColor: 'rgba(100, 8, 62, 0.2)',
-              borderRadius: rw(2),
-              padding: rw(1),
-              width: rw(90),
-            }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: rw(2),
-                flexWrap: 'wrap',
-              }}>
-              <Avatar.Image
-                size={RFValue(30)}
-                source={infoLogin.image ? { uri: infoLogin.image } : avatarDef.current}
-              />
-
-              <Text style={{ fontSize: RFValue(12), width: rw(45) }}>{infoLogin.email}</Text>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                width: rw(28),
-              }}>
-              {isMainLoader ? (
-                <Button
-                  disabled={isLoadingBtn}
-                  style={{ width: rw(15), height: rh(4) }}
-                  contentStyle={{ height: '100%' }}
-                  labelStyle={{ fontSize: RFValue(12) }}
-                  onPress={() => {
-                    setIsMainLoader(false)
-                    LoginByLastLogin()
-                  }}
-                  textColor="white"
-                  buttonColor="#8d1c47">
-                  Login
-                </Button>
-              ) : (
-                <ActivityIndicator size={RFValue(20)} />
-              )}
-              <TouchableOpacity
-                onPress={() => {
-                  if (isLoadingBtn) return
-                  setIsMainLoader(true)
-                  callDeleteLastLogin()
-                }}>
-                <Icon
-                  color={isLoadingBtn ? '#ACB5BB' : 'black'}
-                  size={RFValue(30)}
-                  source={'delete'}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
+        <LastAuthCard
+          rh={rh}
+          rw={rw}
+          RFValue={RFValue}
+          isMainLoader={isMainLoader}
+          isLoadingBtn={isLoadingBtn}
+          setIsMainLoader={setIsMainLoader}
+          LoginByLastLogin={LoginByLastLogin}
+          callDeleteLastLogin={callDeleteLastLogin}
+          infoLogin={infoLogin}
+        />
       )}
     </Animatable.View>
   )

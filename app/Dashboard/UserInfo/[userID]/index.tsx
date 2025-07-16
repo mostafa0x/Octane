@@ -21,7 +21,6 @@ import {
   responsiveWidth as rw,
   responsiveFontSize as rf,
 } from 'react-native-responsive-dimensions'
-import { useThemeContext } from 'Providers/ThemeContext'
 
 const avatarIcon = require('../../../../assets/avatar.png')
 const backImg = require('../../../../assets/backn.png')

@@ -1,7 +1,7 @@
 import { View } from 'react-native'
 import { Text } from 'react-native-paper'
 
-import React, { memo, useEffect, useRef } from 'react'
+import React, { memo, useEffect, useMemo, useRef } from 'react'
 import * as Animatable from 'react-native-animatable'
 import { FlashList } from '@shopify/flash-list'
 import ItemCard from './ItemCard'
@@ -11,6 +11,7 @@ import {
   responsiveWidth as rw,
   responsiveFontSize as rf,
 } from 'react-native-responsive-dimensions'
+import * as Progress from 'react-native-progress'
 
 type AnimatableView = Animatable.View
 
@@ -18,15 +19,33 @@ interface props {
   acknowledgments_Current: acknowledgmentsFace[]
   type: string
   emptyTXT?: string
+  activeList?: 'daily' | 'weekly' | 'monthly'
+  allocated?: number
 }
 
-function ListCard({ acknowledgments_Current, type, emptyTXT }: props) {
+function ListCard({
+  acknowledgments_Current,
+  type,
+  emptyTXT,
+  activeList = 'daily',
+  allocated = 0,
+}: props) {
   const animRef = useRef<AnimatableView>(null)
 
   useEffect(() => {
     if (animRef.current?.fadeIn) animRef.current.fadeIn(100)
   }, [acknowledgments_Current])
 
+  const analayz = useMemo(() => {
+    if (activeList == 'daily') {
+      return (acknowledgments_Current.length / allocated) * 100
+    } else if (activeList == 'weekly') {
+      return (acknowledgments_Current.length / allocated) * 100
+    } else if (activeList == 'monthly') {
+      return (acknowledgments_Current.length / allocated) * 100
+    }
+    return 0
+  }, [activeList])
   return (
     <Animatable.View
       ref={animRef}
@@ -64,6 +83,24 @@ function ListCard({ acknowledgments_Current, type, emptyTXT }: props) {
             </Text>
           </View>
         )}
+        ListFooterComponent={() => {
+          return (
+            <View
+              style={{
+                marginTop: rh(1),
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                paddingLeft: rw(4),
+              }}>
+              <Text>Status of {activeList}</Text>
+              <View style={{ alignItems: 'center' }}>
+                <Text>{(analayz * 100).toFixed(1)}</Text>
+                <Progress.Pie progress={analayz} />
+              </View>
+            </View>
+          )
+        }}
       />
     </Animatable.View>
   )

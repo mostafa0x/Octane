@@ -6,10 +6,11 @@ import {
   responsiveWidth as rw,
   responsiveFontSize as rf,
 } from 'react-native-responsive-dimensions'
+import { activeListType } from 'app'
 
 interface props {
   activeList: string
-  handleActive: (period: string) => void
+  handleActive: any
 }
 
 function ListButtonHistory({ activeList, handleActive }: props) {
