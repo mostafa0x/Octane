@@ -53,6 +53,8 @@ export default function UserInfo() {
   const currUserID = isArray(userID) ? parseInt(userID[0]) : parseInt(userID)
   const [activeList, setActiveList] = useState<activeListType>('daily')
   const [currData, setCurrData] = useState<acknowledgmentsFace[]>([])
+  const [loading, setLoading] = useState(true)
+
   const { setUserInfo, isCallSupspend, setIsCallSupspend, isLoadingApi, setIsLoadingApi } =
     useUserInfoContext()
   const { data, isLoading, isError, error, refetch }: UseQueryResult<UserInfoFace> =
@@ -143,7 +145,12 @@ export default function UserInfo() {
           gap: rh(0.5),
         }}>
         <TouchableOpacity activeOpacity={0.8}>
-          <Avatar.Image source={userImage ? { uri: userImage } : avatarIcon} size={rw(30)} />
+          <Avatar.Image
+            onLoadStart={() => loading && setLoading(true)}
+            onLoadEnd={() => setLoading(false)}
+            source={loading ? avatarIcon : userImage ? { uri: userImage } : avatarIcon}
+            size={rw(30)}
+          />
         </TouchableOpacity>
         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
           <Text style={{ textAlign: 'center', fontSize: rf(2.1) }}>{userName}</Text>

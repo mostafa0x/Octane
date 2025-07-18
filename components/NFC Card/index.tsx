@@ -170,7 +170,7 @@ function NfcCard({ submitted, allocated }: props) {
           {allocated > 0 && (
             <Text
               style={{
-                color: '#6c7879',
+                color: '#96a1a1',
                 fontSize: RFValue(14),
                 width: responsiveWidth(30),
                 textAlign: 'center',

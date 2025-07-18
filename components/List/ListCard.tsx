@@ -235,7 +235,7 @@ function ListCard({
                     justifyContent: 'space-between',
                   }}>
                   <Text style={{ fontWeight: '300', fontSize: rf(1.6) }}>
-                    Total of NFC onTime-Late
+                    Total of NFC (OnTime-Late)
                   </Text>
                   <Text
                     style={{

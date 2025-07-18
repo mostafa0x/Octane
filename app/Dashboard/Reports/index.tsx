@@ -183,6 +183,7 @@ export default function Reposts() {
               onConfirm={(date) => {
                 setFromDate(date)
                 setFromVisible(false)
+                toDate && refetch()
               }}
               onCancel={() => setFromVisible(false)}
             />

@@ -1,5 +1,5 @@
 import { View, TouchableOpacity, ScrollView } from 'react-native'
-import { Text, ActivityIndicator } from 'react-native-paper'
+import { Text, ActivityIndicator, Icon } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import { Image } from 'expo-image'
 import { Href, Route, RouteInputParams, useRouter } from 'expo-router'
@@ -22,6 +22,11 @@ import { NavigationOptions } from 'expo-router/build/global-state/routing'
 const avatarIcon = require('../../assets/avatar.png')
 const backImg = require('../../assets/backn.png')
 
+interface UsersDataType {
+  users: UsersFace[]
+  total: number
+}
+
 export default function Dashboard() {
   const { userData } = useSelector((state: StateFace) => state.UserReducer)
   const router = useRouter()
@@ -31,15 +36,15 @@ export default function Dashboard() {
   async function handleGetUsers() {
     try {
       const res = await axiosClient.get('/admin/users/')
-      //   console.log(res.data.users)
-      return res.data.users
+      //console.log(res.data)
+      return res.data
     } catch (err: any) {
       //    console.log(err)
       throw err
     }
   }
 
-  const { data, isLoading, isFetching, isError, error } = useQuery({
+  const { data, isLoading, isFetching, isError, error } = useQuery<UsersDataType>({
     queryKey: ['users'],
     queryFn: handleGetUsers,
     staleTime: 30000,
@@ -62,11 +67,18 @@ export default function Dashboard() {
           backgroundColor: themeMode == 'dark' ? 'black' : 'white',
           paddingTop: rh(3),
         }}>
-        {!isLoading && (
-          <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: rh(3) }}>
+        {!isLoading && !isError && (
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginBottom: rh(3),
+              flexDirection: 'row',
+            }}>
             <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: rf(2) }}>
-              Total allocated : x99999999999999999999999x
+              Total allocated : {data?.total ?? 0}{' '}
             </Text>
+            <Icon source={'nfc'} color="#000000" size={rf(2)} />
           </View>
         )}
 
@@ -87,7 +99,7 @@ export default function Dashboard() {
                 justifyContent: 'flex-start',
                 paddingHorizontal: rw(5),
               }}>
-              {data?.map((user: UsersFace, index: number) => (
+              {data?.users?.map((user: UsersFace, index: number) => (
                 <UsersList
                   setUserRole={setUserRole}
                   setUserId={setUserId}
