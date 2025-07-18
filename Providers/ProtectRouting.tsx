@@ -7,6 +7,7 @@ import { useInitApp } from 'Hooks/useInitApp'
 import SpinnerLoading from 'components/SpinnerLoading'
 import ErrorScreen from 'components/Error Screen'
 import { ChangeIsMountApp } from 'lib/Store/Slices/AppSlice'
+import handleLoutOut from 'Services/handleLogOut'
 
 function ProtectRoutingProvider({ children }: { children: React.ReactNode }) {
   const { userToken, isLoadedData, isLoadedUserData } = useSelector(
@@ -56,6 +57,10 @@ function ProtectRoutingProvider({ children }: { children: React.ReactNode }) {
       await init()
       setIsLoading(false)
     } catch (err: any) {
+      if (err?.response?.data?.message == 'User not found') {
+        return handleLoutOut(dispatch, router)
+      }
+
       if (err.status !== 403) {
         setStatusCode(err.status)
         setIsError(err?.response?.data?.message ?? err.message ?? 'Something went wrong !')

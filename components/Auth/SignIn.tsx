@@ -37,6 +37,7 @@ export default function SignIn({ setIsLoadingRes }: any) {
 
   async function handleLogin(formValues: InfoLoginType) {
     if (isLoadingBtn) return
+    setIsMainLoader(true)
     setIsLoadingBtn(true)
     setIsLoadingRes(true)
     setErrorMes(null)
