@@ -26,10 +26,10 @@ export default function SignIn({ setIsLoadingRes }: any) {
 
   const formik = useFormik({
     initialValues: {
-      //  email: '',
-      //   password: '',
-      email: 'sasa@octane-tech.io',
-      password: '123456789',
+      email: '',
+      password: '',
+      // email: 'sasa@octane-tech.io',
+      // password: '123456789',
     },
     validationSchema: LoginSchema,
     onSubmit: handleLogin,

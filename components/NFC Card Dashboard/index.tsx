@@ -236,18 +236,45 @@ function NfcCardDashboard({ submitted, allocated, userID, refetch }: props) {
                       }}
                       buttonColor="#d6d6d6"
                       textColor="black"
-                      contentStyle={{ height: '100%' }}
-                      labelStyle={{ height: '50%' }}
-                      style={styles.modalButton}>
-                      cancel
+                      contentStyle={{
+                        height: '100%',
+                        justifyContent: 'center',
+                      }}
+                      labelStyle={{
+                        fontSize: rf(1.6),
+                        lineHeight: rf(2),
+                        textAlign: 'center',
+                      }}
+                      style={{
+                        width: rw(25),
+                        height: rh(6),
+                        borderRadius: rw(2),
+                        marginHorizontal: rw(2),
+                        justifyContent: 'center',
+                      }}>
+                      Cancel
                     </Button>
+
                     <Button
                       onPress={handleAddAllocate}
-                      contentStyle={{ height: '100%' }}
-                      labelStyle={{ height: '50%' }}
                       buttonColor="#000000"
                       textColor="white"
-                      style={styles.modalButton}>
+                      contentStyle={{
+                        height: '100%',
+                        justifyContent: 'center',
+                      }}
+                      labelStyle={{
+                        fontSize: rf(1.6),
+                        lineHeight: rf(2),
+                        textAlign: 'center',
+                      }}
+                      style={{
+                        width: rw(25),
+                        height: rh(6),
+                        borderRadius: rw(2),
+                        marginHorizontal: rw(2),
+                        justifyContent: 'center',
+                      }}>
                       Submit
                     </Button>
                   </View>
@@ -352,9 +379,10 @@ const styles = StyleSheet.create({
     fontSize: rf(2),
   },
   modalButton: {
-    width: rw(24),
-    height: rh(4),
-    borderRadius: rf(0.8),
+    width: rw(30),
+    height: rh(6),
+    borderRadius: rw(2),
+    marginHorizontal: rw(2),
     justifyContent: 'center',
   },
   errorText: {

@@ -34,6 +34,13 @@ export default function Reposts() {
   const { themeMode } = useThemeContext()
   const formatDate = (date: Date) => date.toISOString().split('T')[0]
 
+  useEffect(() => {
+    if (fromDate && toDate) {
+      refetch()
+    }
+    return () => {}
+  }, [fromDate])
+
   async function handleExportReports() {
     if (isLoadingRes || !fromDate || !toDate) return
     setIsErrorRes(null)
@@ -153,7 +160,7 @@ export default function Reposts() {
 
             {isError ? (
               <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: rh(10) }}>
-                <Text>{error.message}</Text>
+                <Text style={{ fontSize: rf(2), color: 'red' }}>{error.message}</Text>
               </View>
             ) : isLoading ? (
               <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: rh(10) }}>
@@ -183,7 +190,6 @@ export default function Reposts() {
               onConfirm={(date) => {
                 setFromDate(date)
                 setFromVisible(false)
-                toDate && refetch()
               }}
               onCancel={() => setFromVisible(false)}
             />

@@ -65,7 +65,7 @@ function LastAuthCard({
           />
           <Text
             style={{
-              fontSize: RFValue(11),
+              fontSize: RFValue(16),
               width: rw(45),
             }}>
             {infoLogin.email.split('@')[0]}
@@ -82,15 +82,19 @@ function LastAuthCard({
             <Button
               disabled={isLoadingBtn}
               style={{
-                width: rw(15),
-                height: rh(4),
+                width: rw(25),
+                height: rh(5),
+                borderRadius: rw(2),
+                justifyContent: 'center',
               }}
               contentStyle={{
                 height: '100%',
+                justifyContent: 'center',
               }}
               labelStyle={{
-                height: '50%',
-                fontSize: RFValue(12),
+                fontSize: RFValue(14),
+                lineHeight: RFValue(18),
+                textAlign: 'center',
               }}
               onPress={() => {
                 setIsMainLoader(false)
