@@ -39,7 +39,6 @@ export default function Upload() {
   const [errorApi, setErrorApi] = useState<string | null>(null)
   const [isShowSerachCompany, setIsShowSerachCompany] = useState(false)
   const [currCompany, setCurrCompnay] = useState<CompanyFace | null>(null)
-  const [keyboardVisible, setKeyboardVisible] = useState(false)
   const searchBoxRef = useRef<React.ComponentRef<typeof Searchbar>>(null)
   const dispatch = useDispatch()
 
@@ -138,20 +137,6 @@ export default function Upload() {
     const findCompany = currentcompanys.find((item) => item.id == formik.values.company_id)
     findCompany && setCurrCompnay(findCompany)
   }, [formik.values])
-
-  useEffect(() => {
-    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
-      setKeyboardVisible(true)
-    })
-    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
-      setKeyboardVisible(false)
-    })
-
-    return () => {
-      showSubscription.remove()
-      hideSubscription.remove()
-    }
-  }, [])
 
   const getFontSize = useMemo(() => {
     if (searchQuery.length <= 30) return rf(3.2)
@@ -254,17 +239,27 @@ export default function Upload() {
 
                   const errors = await formik.validateForm()
                   const isValid = Object.keys(errors).length === 0
+                  const hasImage = !!formik.values.image
+                  const isDirty = formik.dirty
 
-                  if (isValid && formik.dirty && formik.values.image) {
+                  if (isValid && isDirty && hasImage) {
                     return setShowConfirmModal(true)
                   }
+
                   console.log({
                     isValid,
-                    dirty: formik.dirty,
+                    dirty: isDirty,
                     image: formik.values.image,
                   })
 
-                  formik.submitForm()
+                  formik.setTouched({
+                    company_id: true,
+                    cards_submitted: true,
+                    submission_type: true,
+                    delivery_method: true,
+                    state_time: true,
+                    image: true,
+                  })
                 }}
                 textColor="white"
                 buttonColor="#8d1c47">
