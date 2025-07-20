@@ -43,13 +43,12 @@ export default function Upload() {
   const dispatch = useDispatch()
 
   const handleUpload = async (formValues: any) => {
+    if (isLoadingRes) return
     if (+submitted + +formValues.cards_submitted > allocated) {
       return setErrorApi('cannot submit more than allocated cards')
     }
-    if (isLoadingRes) return
     setIsLoadingRes(true)
     setErrorApi(null)
-
     try {
       const formData = new FormData()
       formData.append('company_id', formValues.company_id)
@@ -57,18 +56,15 @@ export default function Upload() {
       formData.append('submission_type', formValues.submission_type)
       formData.append('delivery_method', formValues.delivery_method)
       formData.append('state_time', formValues.state_time)
-
       if (formValues.image) {
         const fileName = formValues.image.split('/').pop()
         const fileType = fileName?.split('.').pop()
-
         formData.append('image', {
           uri: formValues.image,
           name: fileName || `photo.${fileType}`,
           type: `image/${fileType}`,
         } as any)
       }
-
       const response = await axiosClient.post(`/users/acknowledgments`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -76,12 +72,11 @@ export default function Upload() {
       })
 
       const data: acknowledgmentsFace = response.data.acknowledgments[0]
-      dispatch(PushNewAcknowledgment({ data: data }))
-
-      setIsLoadingRes(false)
+      dispatch(PushNewAcknowledgment({ data }))
       router.replace('/')
     } catch (err: any) {
       setErrorApi(err?.response?.data.message || err.message)
+    } finally {
       setIsLoadingRes(false)
     }
   }
@@ -134,6 +129,7 @@ export default function Upload() {
   }, [])
 
   useEffect(() => {
+    if (currentcompanys.length <= 0) return
     const findCompany = currentcompanys.find((item) => item.id == formik.values.company_id)
     findCompany && setCurrCompnay(findCompany)
   }, [formik.values])
@@ -237,21 +233,18 @@ export default function Upload() {
                 onPress={async () => {
                   Keyboard.dismiss()
 
-                  const errors = await formik.validateForm()
-                  const isValid = Object.keys(errors).length === 0
+                  const isValid = formik.isValid
                   const hasImage = !!formik.values.image
                   const isDirty = formik.dirty
 
                   if (isValid && isDirty && hasImage) {
                     return setShowConfirmModal(true)
                   }
-
-                  console.log({
-                    isValid,
-                    dirty: isDirty,
-                    image: formik.values.image,
-                  })
-
+                  // console.log({
+                  //   isValid,
+                  //   dirty: isDirty,
+                  //   image: formik.values.image,
+                  // })
                   formik.setTouched({
                     company_id: true,
                     cards_submitted: true,

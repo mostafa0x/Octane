@@ -26,10 +26,10 @@ export default function SignIn({ setIsLoadingRes }: any) {
 
   const formik = useFormik({
     initialValues: {
-      //email: '',
-      //password: '',
-      email: 'sasa@octane-tech.io',
-      password: '123456789',
+      email: '',
+      password: '',
+      // email: 'sasa@octane-tech.io',
+      // password: '123456789',
     },
     validationSchema: LoginSchema,
     onSubmit: handleLogin,
@@ -70,12 +70,6 @@ export default function SignIn({ setIsLoadingRes }: any) {
   function LoginByLastLogin() {
     if (!infoLogin) return
     handleLogin({ email: infoLogin.email, password: infoLogin.password })
-    // formik.setFieldValue('email', infoLogin.email)
-    // formik.setFieldValue('password', infoLogin.password)
-    // const time = setTimeout(() => {
-    //   formik.handleSubmit()
-    //   clearTimeout(time)
-    // }, 250)
   }
   async function callDeleteLastLogin() {
     try {
