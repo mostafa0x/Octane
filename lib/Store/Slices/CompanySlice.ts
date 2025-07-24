@@ -20,6 +20,8 @@ const CompanySlice = createSlice({
       const fillterd = companys.filter((item) => {
         return item.name.toLowerCase().includes(keyword) || item.code.toString().includes(keyword)
       })
+      fillterd.sort((a, b) => a.code - b.code)
+
       state.currentcompanys = fillterd
     },
     SetCompanys: (state, action) => {

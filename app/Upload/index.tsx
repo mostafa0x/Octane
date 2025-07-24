@@ -47,6 +47,7 @@ export default function Upload() {
     if (+submitted + +formValues.cards_submitted > allocated) {
       return setErrorApi('cannot submit more than allocated cards')
     }
+    if (!formValues.image) return
     setIsLoadingRes(true)
     setErrorApi(null)
     try {
