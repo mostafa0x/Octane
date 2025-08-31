@@ -29,9 +29,8 @@ Octane is designed for logistics companies, allowing:
 ### Example Screenshots:
 | Screen | Preview |
 |--------|--------|
-| Home   | ![Home](./screenshots/home.png) |
-| Login  | ![Login](./screenshots/login.png) |
-| Upload | ![Upload](./screenshots/upload.png) |
+| Home   | ![Home](./screenshots/home.jpg) |
+| Upload | ![Upload](./screenshots/upload.jpg) |
 
 ---
 
