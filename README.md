@@ -27,10 +27,10 @@ Octane is designed for logistics companies, allowing:
 - Clear icons for each action (upload, login, deliver, assign).
 
 ### Example Screenshots:
-| Screen | Preview |
-|--------|--------|
-| Home   | ![Home](./screenshots/home.jpg) |
-| Upload | ![Upload](./screenshots/upload.jpg) |
+
+| Home | Login | Upload |
+|------|-------|--------|
+| ![Home](./screenshots/home.png) | ![Login](./screenshots/login.png) | ![Upload](./screenshots/upload.png) |
 
 ---
 
